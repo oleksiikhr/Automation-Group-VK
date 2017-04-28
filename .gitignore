@@ -1,0 +1,14 @@
+# phpstorm project files
+.idea
+
+# windows thumbnail cache
+Thumbs.db
+
+# composer vendor dir
+/vendor
+
+# pictures.
+/img
+
+# passwords.
+config.php

@@ -1,0 +1,7 @@
+Order Deny,Allow
+Allow from 192.168.45.1
+Deny from all
+
+<Files callback.php>
+    Allow from all
+</Files>
