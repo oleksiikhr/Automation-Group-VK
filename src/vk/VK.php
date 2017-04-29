@@ -1,8 +1,8 @@
 <?php
 
-namespace classes\vk;
+namespace gvk\vk;
 
-use classes\Web;
+use gvk\Web;
 
 class VK extends Web
 {
@@ -52,7 +52,7 @@ class VK extends Web
             'message'     => $message,
             'attachments' => $attachments,
             'guid'        => rand()
-        ], TOKEN_ALEXEY, $typeMethod);
+        ], TOKEN_USER, $typeMethod);
     }
 
     /**
@@ -85,7 +85,7 @@ class VK extends Web
         return $this->send('wall.deleteComment', [
             'owner_id'   => '-' . GROUP_ID,
             'comment_id' => $comment_id
-        ], TOKEN_ALEXEY);
+        ], TOKEN_USER);
     }
 
     /**
@@ -104,6 +104,6 @@ class VK extends Web
             'post_id'    => $post_id,
             'guid'       => rand(),
             'from_group' => 1
-        ], TOKEN_ALEXEY);
+        ], TOKEN_USER);
     }
 }

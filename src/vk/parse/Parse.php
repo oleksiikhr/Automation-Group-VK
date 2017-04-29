@@ -1,10 +1,10 @@
 <?php
 
-namespace classes\vk\parse;
+namespace gvk\vk\parse;
 
-use classes\vk\VK;
-use classes\youtube\Youtube;
-use classes\vk\methods\Videos;
+use gvk\vk\VK;
+use gvk\youtube\Youtube;
+use gvk\vk\methods\Videos;
 
 class Parse extends VK
 {
@@ -14,7 +14,7 @@ class Parse extends VK
     {
         parent::__construct();
 
-        require_once ROOT . '/classes/libs/SimpleHtmlDom.php';
+        require_once DIR_ROOT . '/src/libs/SimpleHtmlDom.php';
     }
 
     /**

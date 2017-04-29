@@ -1,11 +1,11 @@
 <?php
 
-namespace classes\vk\callback;
+namespace gvk\vk\callback;
 
-use classes\vk\VK;
-use classes\vk\methods\Polls;
-use classes\vk\methods\Videos;
-use classes\vk\methods\Translate;
+use gvk\vk\VK;
+use gvk\vk\methods\Polls;
+use gvk\vk\methods\Videos;
+use gvk\vk\methods\Translate;
 
 class Board extends VK
 {
@@ -42,14 +42,14 @@ class Board extends VK
             'group_id'   => GROUP_ID,
             'topic_id'   => $topic_id,
             'comment_id' => $data->id
-        ], TOKEN_ALEXEY);
+        ], TOKEN_USER);
 
         $comment = $this->send('board.getComments', [
             'group_id'         => GROUP_ID,
             'topic_id'         => $topic_id,
             'start_comment_id' => $commentIDMessage,
             'count'            => 1
-        ], TOKEN_ALEXEY);
+        ], TOKEN_USER);
 
         $is_add = false;
         if ($topic_id == BOARD_ADD_VIDEO) {
@@ -77,7 +77,7 @@ class Board extends VK
                 'group_id'   => GROUP_ID,
                 'topic_id'   => $topic_id,
                 'comment_id' => $commentIDMessage
-            ], TOKEN_ALEXEY);
+            ], TOKEN_USER);
         }
     }
 
@@ -118,7 +118,7 @@ class Board extends VK
                 'group_id' => GROUP_ID,
                 'topic_id' => $topic_id,
                 'comment_id' => $id
-            ], TOKEN_ALEXEY);
+            ], TOKEN_USER);
         }
     }
 }

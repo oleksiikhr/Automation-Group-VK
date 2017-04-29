@@ -1,6 +1,6 @@
 <?php
 
-namespace classes;
+namespace gvk;
 
 class Web extends DB
 {

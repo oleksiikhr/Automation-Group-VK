@@ -1,8 +1,8 @@
 <?php
 
-namespace classes\vk\methods;
+namespace gvk\vk\methods;
 
-use classes\vk\VK;
+use gvk\vk\VK;
 
 class Polls extends VK
 {
@@ -225,7 +225,7 @@ class Polls extends VK
             'is_anonymous' => 1,
             'owner_id'     => '-' . GROUP_ID,
             'add_answers'  => $answers
-        ], TOKEN_ALEXEY);
+        ], TOKEN_USER);
 
         $attachments = 'poll' . $json->response->owner_id . '_' . $json->response->id;
 

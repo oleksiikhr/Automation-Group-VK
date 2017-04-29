@@ -1,8 +1,8 @@
 <?php
 
-namespace classes\vk\methods;
+namespace gvk\vk\methods;
 
-use classes\vk\VK;
+use gvk\vk\VK;
 
 class Images extends VK
 {
@@ -50,7 +50,7 @@ class Images extends VK
     {
         return $this->send('photos.getWallUploadServer', [
             'group_id' => GROUP_ID
-        ], TOKEN_ALEXEY, true);
+        ], TOKEN_USER, true);
     }
 
     /**
@@ -69,6 +69,6 @@ class Images extends VK
             'server'   => $server,
             'photo'    => $photo,
             'hash'     => $hash
-        ], TOKEN_ALEXEY, true);
+        ], TOKEN_USER, true);
     }
 }

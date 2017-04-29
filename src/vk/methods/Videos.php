@@ -1,9 +1,9 @@
 <?php
 
-namespace classes\vk\methods;
+namespace gvk\vk\methods;
 
-use classes\vk\VK;
-use classes\youtube\Youtube;
+use gvk\vk\VK;
+use gvk\youtube\Youtube;
 
 class Videos extends VK
 {
@@ -44,7 +44,7 @@ class Videos extends VK
             $num_album = $this->send('video.addAlbum', [
                 'group_id' => GROUP_ID,
                 'title'    => $titleAlbum
-            ], TOKEN_ALEXEY);
+            ], TOKEN_USER);
 
             $num_album = $num_album->response->album_id;
         }
@@ -163,7 +163,7 @@ class Videos extends VK
             'link'     => 'https://www.youtube.com/watch?v=' . $link,
             'group_id' => GROUP_ID,
             'album_id' => $album_id
-        ], TOKEN_ALEXEY);
+        ], TOKEN_USER);
     }
 
     /**
@@ -176,7 +176,7 @@ class Videos extends VK
         $albums = $this->send('video.getAlbums', [
             'owner_id' => '-' . GROUP_ID,
             'count'    => 100
-        ], TOKEN_ALEXEY);
+        ], TOKEN_USER);
 
         $albumRND = rand(0, $albums->response->count - 1);
         $albumID = $albums->response->items[$albumRND]->id;
@@ -185,7 +185,7 @@ class Videos extends VK
             'owner_id' => '-' . GROUP_ID,
             'album_id' => $albumID,
             'count'    => 0
-        ], TOKEN_ALEXEY);
+        ], TOKEN_USER);
 
         $albumCount = $albumCount->response->count;
 
@@ -201,7 +201,7 @@ class Videos extends VK
             'album_id' => $albumID,
             'count'    => 10,
             'offset'   => $offset
-        ], TOKEN_ALEXEY);
+        ], TOKEN_USER);
 
         foreach ($album->response->items as $item) {
             $arrVideos[] = 'video-' . GROUP_ID . '_' . $item->id;

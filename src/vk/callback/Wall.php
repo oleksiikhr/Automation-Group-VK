@@ -1,8 +1,8 @@
 <?php
 
-namespace classes\vk\callback;
+namespace gvk\vk\callback;
 
-use classes\vk\VK;
+use gvk\vk\VK;
 
 class Wall extends VK
 {

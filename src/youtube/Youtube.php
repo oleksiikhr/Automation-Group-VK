@@ -1,8 +1,8 @@
 <?php
 
-namespace classes\youtube;
+namespace gvk\youtube;
 
-use classes\Web;
+use gvk\Web;
 
 class Youtube extends Web
 {

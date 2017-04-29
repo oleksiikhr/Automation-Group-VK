@@ -1,8 +1,8 @@
 <?php
 
-namespace classes\vk\callback;
+namespace gvk\vk\callback;
 
-use classes\vk\VK;
+use gvk\vk\VK;
 
 class Group extends VK
 {
@@ -11,7 +11,7 @@ class Group extends VK
         $user = $this->send('users.get', [
             'user_ids' => $data->user_id,
             'fields'   => 'photo_100'
-        ], TOKEN_ALEXEY);
+        ], TOKEN_USER);
 
         $this->generateLogo($user->response[0]->first_name, $user->response[0]->photo_100);
         $this->setNewPhoto();

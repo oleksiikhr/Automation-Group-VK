@@ -1,8 +1,8 @@
 <?php
 
-namespace classes\vk\methods;
+namespace gvk\vk\methods;
 
-use classes\vk\VK;
+use gvk\vk\VK;
 
 class Verbs extends VK
 {

@@ -1,14 +1,16 @@
 <?php // Cron every 30 minutes.
 
-use classes\vk\methods\Exam;
-use classes\vk\methods\Learn;
-use classes\vk\methods\Polls;
-use classes\vk\methods\Verbs;
-use classes\vk\methods\Videos;
-use classes\vk\methods\Images;
-use classes\vk\methods\Translate;
+use gvk\vk\methods\Learn;
+use gvk\vk\methods\Polls;
+use gvk\vk\methods\Verbs;
+use gvk\vk\methods\Videos;
+use gvk\vk\methods\Images;
+use gvk\vk\methods\Translate;
 
 require_once __DIR__ . '/config.php';
+
+$hour = date('G');
+$minute = date('i');
 
 /*
  * Learn       | 12                           : |30|  => 1
@@ -21,11 +23,6 @@ require_once __DIR__ . '/config.php';
  *
  * Count: 35
  */
-
-if ($_GET['secret'] !== SECRET) die;
-
-$hour = date('G');
-$minute = date('i');
 
 $videos = new Videos();
 

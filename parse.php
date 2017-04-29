@@ -1,15 +1,11 @@
 <?php // Cron each hour.
 
-use classes\vk\parse\Parse;
-
 require_once __DIR__ . '/config.php';
 
-if ($_GET['secret'] !== SECRET) die;
-
-$transcription = new Parse();
+$parse = new gvk\vk\parse\Parse();
 
 // Update transcription.
-$transcription->updateTranscription(3);
+$parse->updateTranscription(3);
 
 // Update random playlist from youtube to VK.
-$transcription->updateRandomPlaylist();
+$parse->updateRandomPlaylist();
