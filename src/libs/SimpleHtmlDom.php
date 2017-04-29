@@ -1146,7 +1146,7 @@ class simple_html_dom
 		$this->root->dump($show_attr);
 	}
 
-	// prepare HTML data and init everything
+	// prepare HTML data and init.php everything
 	protected function prepare($str, $lowercase=true, $stripRN=true, $defaultBRText=DEFAULT_BR_TEXT, $defaultSpanText=DEFAULT_SPAN_TEXT)
 	{
 		$this->clear();
