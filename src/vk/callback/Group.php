@@ -11,7 +11,7 @@ class Group extends VK
         $user = $this->send('users.get', [
             'user_ids' => $data->user_id,
             'fields'   => 'photo_100'
-        ], TOKEN_USER);
+        ], T_USR);
 
         $this->generateLogo($user->response[0]->first_name, $user->response[0]->photo_100);
         $this->setNewPhoto();
@@ -41,8 +41,8 @@ class Group extends VK
     public function setNewPhoto()
     {
         $uploadURL = $this->send('photos.getOwnerCoverPhotoUploadServer', [
-            'group_id' => GROUP_ID
-        ], TOKEN_GROUP_IMG);
+            'group_id' => G_ID
+        ], T_IMG);
 
         $upload = $this->request(
             $uploadURL->response->upload_url,
@@ -54,6 +54,6 @@ class Group extends VK
         $this->send('photos.saveOwnerCoverPhoto', [
             'hash'   => $upload->hash,
             'photo'  => $upload->photo
-        ], TOKEN_GROUP_IMG);
+        ], T_IMG);
     }
 }

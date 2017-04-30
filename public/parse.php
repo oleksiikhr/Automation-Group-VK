@@ -1,6 +1,6 @@
 <?php // Cron each hour.
 
-require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/run.php';
 
 $parse = new gvk\vk\parse\Parse();
 

@@ -18,14 +18,14 @@ class Board extends VK
      */
     public function boardPostNew($data)
     {
-        if ($data->from_id != '-' . GROUP_ID) {
+        if ($data->from_id != '-' . G_ID) {
             return; // Если сообщение не от администратора
         }
 
         $topic_id = $data->topic_id;
 
-        if ($topic_id != BOARD_ADD_WORD && $topic_id != BOARD_ADD_VIDEO
-            && $topic_id != BOARD_ADD_POOL && $topic_id != BOARD_ADD_CHOOSE) {
+        if ($topic_id != B_WORD && $topic_id != B_VIDEO
+            && $topic_id != B_POLL && $topic_id != B_CHOOSE) {
             return; // Если топик не от нужных тем
         }
 
@@ -39,45 +39,45 @@ class Board extends VK
         }
 
         $this->send('board.deleteComment', [
-            'group_id'   => GROUP_ID,
+            'group_id'   => G_ID,
             'topic_id'   => $topic_id,
             'comment_id' => $data->id
-        ], TOKEN_USER);
+        ], T_USR);
 
         $comment = $this->send('board.getComments', [
-            'group_id'         => GROUP_ID,
+            'group_id'         => G_ID,
             'topic_id'         => $topic_id,
             'start_comment_id' => $commentIDMessage,
             'count'            => 1
-        ], TOKEN_USER);
+        ], T_USR);
 
         $is_add = false;
-        if ($topic_id == BOARD_ADD_VIDEO) {
+        if ($topic_id == B_VIDEO) {
             $video = new Videos();
             $is_add = $video->addBD($comment->response->items[0]->text);
         }
 
-        if ($topic_id == BOARD_ADD_POOL) {
+        if ($topic_id == B_POLL) {
             $polyglot = new Polls('type1');
             $is_add = $polyglot->addBD($comment->response->items[0]->text);
         }
 
-        if ($topic_id == BOARD_ADD_WORD) {
+        if ($topic_id == B_WORD) {
             $words = new Translate();
             $is_add = $words->addBD($comment->response->items[0]->text);
         }
 
-        if ($topic_id == BOARD_ADD_CHOOSE) {
+        if ($topic_id == B_CHOOSE) {
             $choose = new Polls('type2');
             $is_add = $choose->addBD($comment->response->items[0]->text);
         }
 
         if ($is_add) {
             $this->send('board.deleteComment', [
-                'group_id'   => GROUP_ID,
+                'group_id'   => G_ID,
                 'topic_id'   => $topic_id,
                 'comment_id' => $commentIDMessage
-            ], TOKEN_USER);
+            ], T_USR);
         }
     }
 
@@ -93,32 +93,32 @@ class Board extends VK
     public function addContent($text, $topic_id, $id)
     {
         $is_add = false;
-        if ($topic_id == BOARD_ADD_VIDEO) {
+        if ($topic_id == B_VIDEO) {
             $video = new Videos();
             $is_add = $video->addBD($text);
         }
 
-        if ($topic_id == BOARD_ADD_POOL) {
+        if ($topic_id == B_POLL) {
             $polyglot = new Polls('type1');
             $is_add = $polyglot->addBD($text);
         }
 
-        if ($topic_id == BOARD_ADD_WORD) {
+        if ($topic_id == B_WORD) {
             $words = new Translate();
             $is_add = $words->addBD($text);
         }
 
-        if ($topic_id == BOARD_ADD_CHOOSE) {
+        if ($topic_id == B_CHOOSE) {
             $choose = new Polls('type2');
             $is_add = $choose->addBD($text);
         }
 
         if ($is_add) {
             $this->send('board.deleteComment', [
-                'group_id' => GROUP_ID,
+                'group_id' => G_ID,
                 'topic_id' => $topic_id,
                 'comment_id' => $id
-            ], TOKEN_USER);
+            ], T_USR);
         }
     }
 }

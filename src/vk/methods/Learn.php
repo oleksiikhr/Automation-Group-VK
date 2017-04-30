@@ -24,7 +24,7 @@ class Learn extends VK
 
         return $this->createPost(
             "&#128221; " . $title . "\n\n" . $text . "\n\n#learn@eng_day",
-            'photo-' . GROUP_ID . '_' . $photo_id,
+            'photo-' . G_ID . '_' . $photo_id,
             'POST'
         );
     }

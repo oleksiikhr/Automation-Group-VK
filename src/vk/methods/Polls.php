@@ -212,25 +212,25 @@ class Polls extends VK
             . ( new Verbs() )->getRandomVerb() . "\n"
             . $this->getHashtags();
 
-        $answers = unserialize( base64_decode($answers) ); // Приводим в нормальный вид
-        shuffle($answers); // Перемешиваем массив
-        $answers = array_slice($answers, 0, 2); // Берём 2 неправильный ответа
-        array_unshift($answers, $correct_answer); // Добавляем правильный ответ
-        shuffle($answers); // Перемешиваем массив с правильным результатом
-        $answers[count($answers)] = 'Узнать результаты.'; // Добавляем последний элемент
-        $answers = '["' . implode('","', $answers) . '"]'; // Делаем строку
+        $answers = unserialize( base64_decode($answers) );
+        shuffle($answers);
+        $answers = array_slice($answers, 0, 2);
+        array_unshift($answers, $correct_answer);
+        shuffle($answers);
+        $answers[count($answers)] = 'Узнать результаты.';
+        $answers = '["' . implode('","', $answers) . '"]';
 
         $json = $this->send('polls.create', [
             'question'     => $quest,
             'is_anonymous' => 1,
-            'owner_id'     => '-' . GROUP_ID,
+            'owner_id'     => '-' . G_ID,
             'add_answers'  => $answers
-        ], TOKEN_USER);
+        ], T_USR);
 
         $attachments = 'poll' . $json->response->owner_id . '_' . $json->response->id;
 
         if ( ! empty($photo_id) ) {
-            $attachments .= ',photo-' . GROUP_ID . '_' . $photo_id;
+            $attachments .= ',photo-' . G_ID . '_' . $photo_id;
         }
 
         $createPost = $this->createPost($message, $attachments);

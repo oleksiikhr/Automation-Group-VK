@@ -6,17 +6,20 @@ use gvk\Web;
 
 class Youtube extends Web
 {
+    const YOUTUBE_API = 'https://www.googleapis.com/youtube/v3/';
+
     /**
-     * Decode get answer.
+     * Send request to vk.
      *
      * @param string $method
-     * @param array $params
+     * @param array  $params
+     * @param bool   $decode
      *
      * @return object
      */
-    function send($method, $params = [])
+    function send($method, $params, $decode = true)
     {
-        return $this->request( METHOD_YOUTUBE . $method . '?' . http_build_query($params)
-            . '&key=' . TOKEN_GOOGLE, true );
+        return $this->request( self::YOUTUBE_API . $method . '?' . http_build_query($params)
+            . '&key=' . T_GOOGLE, $decode );
     }
 }

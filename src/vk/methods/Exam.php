@@ -22,7 +22,7 @@ class Exam extends VK
         $attachment = null;
 
         if ( ! empty($photo_id) ) {
-            $attachment = 'photo-' . GROUP_ID . '_' . $photo_id;
+            $attachment = 'photo-' . G_ID . '_' . $photo_id;
         }
 
         $message = 'Тестовая функция! #exam@eng_day' . "\n"

@@ -14,7 +14,7 @@ class Parse extends VK
     {
         parent::__construct();
 
-        require_once DIR_ROOT . '/src/libs/SimpleHtmlDom.php';
+        require_once D_ROOT . '/src/libs/SimpleHtmlDom.php';
     }
 
     /**

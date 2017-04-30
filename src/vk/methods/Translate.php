@@ -17,15 +17,15 @@ class Translate extends VK
      */
     public function checkCallback($comment)
     {
-        $words = preg_replace('| +|', ' ', $comment); // Убираем n-пробелы
-        $words = preg_split('/\n/', $words); // Разбиваем на массив
+        $words = preg_replace('/ +/', ' ', $comment);
+        $words = preg_split('/\n/', $words);
 
         if ( count($words) != 3 ) {
             return false;
         }
 
-        $words = array_map('trim', $words); // Убираем пробелы в начале и в конце
-        $words = preg_replace('/[\.|\!\?]/u', '', $words); // Удаляем знаки (. ! ?)
+        $words = array_map('trim', $words);
+        $words = preg_replace('/[\.|\!\?]/u', '', $words);
 
         foreach ($words as $key => $value) {
             $words[$key] = mb_strtolower($value);
@@ -52,6 +52,7 @@ class Translate extends VK
         if (!preg_match('/^[а-я\,\sёЁ]+$/u', $word_rus)) {
             return false;
         }
+
         $words[2] = $this->upperFirst($word_rus);
 
         return $words;
@@ -110,7 +111,7 @@ class Translate extends VK
         }
 
         $message .= "#words@eng_day";
-        $attachments = 'photo-' . GROUP_ID . '_' . $photoID;
+        $attachments = 'photo-' . G_ID . '_' . $photoID;
 
         return $this->createPost($message, $attachments);
     }

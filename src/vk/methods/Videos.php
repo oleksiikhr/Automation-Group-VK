@@ -42,9 +42,9 @@ class Videos extends VK
 
         if ( ! $num_album ) {
             $num_album = $this->send('video.addAlbum', [
-                'group_id' => GROUP_ID,
+                'group_id' => G_ID,
                 'title'    => $titleAlbum
-            ], TOKEN_USER);
+            ], T_USR);
 
             $num_album = $num_album->response->album_id;
         }
@@ -161,9 +161,9 @@ class Videos extends VK
         return $this->send('video.save', [
             'name'     => $name,
             'link'     => 'https://www.youtube.com/watch?v=' . $link,
-            'group_id' => GROUP_ID,
+            'group_id' => G_ID,
             'album_id' => $album_id
-        ], TOKEN_USER);
+        ], T_USR);
     }
 
     /**
@@ -174,18 +174,18 @@ class Videos extends VK
     public function createPostVideos()
     {
         $albums = $this->send('video.getAlbums', [
-            'owner_id' => '-' . GROUP_ID,
+            'owner_id' => '-' . G_ID,
             'count'    => 100
-        ], TOKEN_USER);
+        ], T_USR);
 
         $albumRND = rand(0, $albums->response->count - 1);
         $albumID = $albums->response->items[$albumRND]->id;
 
         $albumCount = $this->send('video.get', [
-            'owner_id' => '-' . GROUP_ID,
+            'owner_id' => '-' . G_ID,
             'album_id' => $albumID,
             'count'    => 0
-        ], TOKEN_USER);
+        ], T_USR);
 
         $albumCount = $albumCount->response->count;
 
@@ -197,14 +197,14 @@ class Videos extends VK
         }
 
         $album = $this->send('video.get', [
-            'owner_id' => '-' . GROUP_ID,
+            'owner_id' => '-' . G_ID,
             'album_id' => $albumID,
             'count'    => 10,
             'offset'   => $offset
-        ], TOKEN_USER);
+        ], T_USR);
 
         foreach ($album->response->items as $item) {
-            $arrVideos[] = 'video-' . GROUP_ID . '_' . $item->id;
+            $arrVideos[] = 'video-' . G_ID . '_' . $item->id;
         }
 
         $comment = "&#128193; " . $albums->response->items[$albumRND]->title . "\n"

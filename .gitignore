@@ -11,4 +11,4 @@ Thumbs.db
 /img
 
 # passwords.
-/public/config.php
+/configs/defines.php

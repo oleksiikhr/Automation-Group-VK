@@ -6,8 +6,11 @@ use gvk\Web;
 
 class VK extends Web
 {
+    const VK_API = 'https://api.vk.com/method/';
+    const VK_VER = '5.63';
+
     /**
-     * Send request form vk.
+     * Send request to vk.
      *
      * @param string $method
      * @param array $params
@@ -18,13 +21,13 @@ class VK extends Web
      */
     public function send($method, $params, $token, $typeMethod = 'GET')
     {
-        $params['v'] = VERSION_VK;
+        $params['v'] = self::VK_VER;
         $params['access_token'] = $token;
 
         if ($typeMethod !== 'POST') {
-            $data = $this->request( METHOD_VK . $method . '?' . http_build_query($params), true );
+            $data = $this->request( self::VK_API . $method . '?' . http_build_query($params), true );
         } else {
-            $data = $this->request( METHOD_VK . $method, true, 'POST', http_build_query($params) );
+            $data = $this->request( self::VK_API . $method, true, 'POST', http_build_query($params) );
         }
 
         if ( ! empty($data->error) && $data->error->error_code == 6 ) {
@@ -36,7 +39,7 @@ class VK extends Web
     }
 
     /**
-     * Create new post.
+     * Create a new post.
      *
      * @param string $message
      * @param string $attachments
@@ -47,16 +50,16 @@ class VK extends Web
     public function createPost($message, $attachments = null, $typeMethod = 'GET')
     {
         return $this->send('wall.post', [
-            'owner_id'    => '-' . GROUP_ID,
+            'owner_id'    => '-' . G_ID,
             'from_group'  => 1,
             'message'     => $message,
             'attachments' => $attachments,
             'guid'        => rand()
-        ], TOKEN_USER, $typeMethod);
+        ], T_USR, $typeMethod);
     }
 
     /**
-     * Send message for User.
+     * Send message to User.
      *
      * @param string $message
      * @param int $user_id
@@ -70,11 +73,11 @@ class VK extends Web
             'user_id'   => $user_id,
             'random_id' => rand(),
             'message'   => $message
-        ], TOKEN_GROUP_MSG, $typeMethod);
+        ], T_MSG, $typeMethod);
     }
 
     /**
-     * Delete comment for post.
+     * Delete comment in post.
      *
      * @param int $comment_id
      *
@@ -83,13 +86,13 @@ class VK extends Web
     public function deleteComment($comment_id)
     {
         return $this->send('wall.deleteComment', [
-            'owner_id'   => '-' . GROUP_ID,
+            'owner_id'   => '-' . G_ID,
             'comment_id' => $comment_id
-        ], TOKEN_USER);
+        ], T_USR);
     }
 
     /**
-     * Post comment for post.
+     * Send comment to post.
      *
      * @param string $message
      * @param int $post_id
@@ -99,11 +102,11 @@ class VK extends Web
     public function sendComment($message, $post_id)
     {
         return $this->send('wall.createComment', [
-            'owner_id'   => '-' . GROUP_ID,
+            'owner_id'   => '-' . G_ID,
             'message'    => $message,
             'post_id'    => $post_id,
             'guid'       => rand(),
             'from_group' => 1
-        ], TOKEN_USER);
+        ], T_USR);
     }
 }

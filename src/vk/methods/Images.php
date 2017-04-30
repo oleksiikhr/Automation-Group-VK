@@ -13,11 +13,11 @@ class Images extends VK
      */
     public function createPostImages()
     {
-        $folders = scandir(DIR_IMAGE);
+        $folders = scandir(D_IMG);
         $count = $folders[count($folders) - 1];
 
         $rnd = rand(1, $count);
-        $images = scandir(DIR_IMAGE . $rnd);
+        $images = scandir(D_IMG . $rnd);
 
         $photo = '';
         foreach ($images as $key => $image) {
@@ -27,7 +27,7 @@ class Images extends VK
                 $this->photosGetWallUploadServer()->response->upload_url,
                 true,
                 'POST',
-                [ 'photo' => curl_file_create( realpath( DIR_IMAGE . $rnd . '/' . $image ) ) ]
+                [ 'photo' => curl_file_create( realpath( D_IMG . $rnd . '/' . $image ) ) ]
             );
 
             $res = $this->photosSaveWallPhoto($upload->server, $upload->photo, $upload->hash);
@@ -49,8 +49,8 @@ class Images extends VK
     public function photosGetWallUploadServer()
     {
         return $this->send('photos.getWallUploadServer', [
-            'group_id' => GROUP_ID
-        ], TOKEN_USER, true);
+            'group_id' => G_ID
+        ], T_USR, true);
     }
 
     /**
@@ -65,10 +65,10 @@ class Images extends VK
     public function photosSaveWallPhoto($server, $photo, $hash)
     {
         return $this->send('photos.saveWallPhoto', [
-            'group_id' => GROUP_ID,
+            'group_id' => G_ID,
             'server'   => $server,
             'photo'    => $photo,
             'hash'     => $hash
-        ], TOKEN_USER, true);
+        ], T_USR, true);
     }
 }

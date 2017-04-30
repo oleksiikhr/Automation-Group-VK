@@ -31,7 +31,7 @@ class Verbs extends VK
         }
 
         $message .= "#verbs@eng_day";
-        $attachments = 'photo-' . GROUP_ID . '_' . $photoID;
+        $attachments = 'photo-' . G_ID . '_' . $photoID;
 
         return $this->createPost($message, $attachments);
     }
