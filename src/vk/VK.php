@@ -13,7 +13,7 @@ class VK extends Web
      * Send request to vk.
      *
      * @param string $method
-     * @param array $params
+     * @param array  $params
      * @param string $token
      * @param string $typeMethod
      *
@@ -62,7 +62,7 @@ class VK extends Web
      * Send message to User.
      *
      * @param string $message
-     * @param int $user_id
+     * @param int    $user_id
      * @param string $typeMethod
      *
      * @return object
@@ -95,7 +95,7 @@ class VK extends Web
      * Send comment to post.
      *
      * @param string $message
-     * @param int $post_id
+     * @param int    $post_id
      *
      * @return object
      */

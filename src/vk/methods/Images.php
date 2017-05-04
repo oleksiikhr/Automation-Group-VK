@@ -6,28 +6,25 @@ use gvk\vk\VK;
 
 class Images extends VK
 {
+    const F_IMG   = 'img';
+    const F_FUNNY = 'funny';
+
     /**
-     * Create new post Images.
+     * Create a new post Images.
      *
      * @return object
      */
     public function createPostImages()
     {
-        $folders = scandir(D_IMG);
-        $count = $folders[count($folders) - 1];
-
-        $rnd = rand(1, $count);
-        $images = scandir(D_IMG . $rnd);
+        $images = $this->getImages(self::F_IMG);
 
         $photo = '';
-        foreach ($images as $key => $image) {
-            if ($key == 0 || $key == 1) continue;
-
+        foreach ($images[1] as $image) {
             $upload = $this->request(
                 $this->photosGetWallUploadServer()->response->upload_url,
                 true,
                 'POST',
-                [ 'photo' => curl_file_create( realpath( D_IMG . $rnd . '/' . $image ) ) ]
+                [ 'photo' => curl_file_create($images[0] . '/' . $image) ]
             );
 
             $res = $this->photosSaveWallPhoto($upload->server, $upload->photo, $upload->hash);
@@ -42,7 +39,7 @@ class Images extends VK
     }
 
     /**
-     * Get upload link from vk api.
+     * Get link to download pictures.
      *
      * @return object
      */
@@ -54,11 +51,11 @@ class Images extends VK
     }
 
     /**
-     * Save photos wall on vk server.
+     * Save photo to the wall.
      *
      * @param string $server
-     * @param $photo
-     * @param $hash
+     * @param string $photo
+     * @param string $hash
      *
      * @return object
      */
@@ -70,5 +67,28 @@ class Images extends VK
             'photo'    => $photo,
             'hash'     => $hash
         ], T_USR, true);
+    }
+
+    /**
+     * Get the directory and pictures from the folder.
+     *
+     * @param string $folder
+     *
+     * @return array|false
+     */
+    public function getImages($folder)
+    {
+        $dir = D_IMG . '/' . $folder;
+
+        if ( ! file_exists($dir) )
+            return false;
+
+        $files = array_slice(scandir($dir), 2);
+
+        if ( is_dir($dir . '/' . $files[0]) ) {
+            return $this->getImages($folder . '/' . $files[array_rand($files)]);
+        }
+
+        return [$dir, $files];
     }
 }
