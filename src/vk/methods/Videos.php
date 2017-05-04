@@ -2,153 +2,135 @@
 
 namespace gvk\vk\methods;
 
+use gvk\Web;
 use gvk\vk\VK;
 use gvk\youtube\Youtube;
 
-class Videos extends VK
+class Videos
 {
-    protected $table = 'videos';
+    const T_VIDEOS  = 'videos';
+    const POST_LINK = 'https://vk.com/videos-' . G_ID;
 
     /**
-     * Add in vk playlist from youtube.
+     * Add a playlist of YouTube to VK.
      *
-     * @param $text
+     * @param string $text
      *
      * @return bool
      */
-    function addBD($text)
+    public static function addBD($text)
     {
-        $youtube = new Youtube();
+        $arr = self::checkCallback($text);
 
-        $words = $this->checkCallback($text);
-        $count = 50; // Temporary*
-
-        if ( is_bool($words) ) {
+        if ( empty($arr) )
             return false;
+
+        $videos = Youtube::getPlaylistItems('id', $arr[0], 0);
+        $numAlbum = \QB::table(self::T_VIDEOS)->where('playlist', $arr[0])->first();
+
+        if ( empty($numAlbum) && empty($arr[1]) )
+            return false;
+
+        if ( empty($numAlbum->album_id) ) {
+            $addedAlbum = self::addAlbum($arr[1]);
+            $numAlbum = $addedAlbum->response->album_id;
+        } else {
+            $numAlbum = $numAlbum->album_id;
         }
 
-        $list = $words[0];
-        $titleAlbum = isset($words[1]) ? $words[1] : 'New Album ' . rand();
-
-        $video = $youtube->send('playlistItems', [
-            'part'       => 'id',
-            'playlistId' => $list,
-            'maxResults' => 0
-        ]);
-
-        // Если нету в БД этого плейлиста, то создаем новый альбом
-        $num_album = $this->getData(['playlist' => $list])[0];
-        $num_album = empty($num_album->album_id) ? 0 : $num_album->album_id;
-
-        if ( ! $num_album ) {
-            $num_album = $this->send('video.addAlbum', [
-                'group_id' => G_ID,
-                'title'    => $titleAlbum
-            ], T_USR);
-
-            $num_album = $num_album->response->album_id;
-        }
-
-        $video = ceil($video->pageInfo->totalResults / $count);
+        $count = 50;
+        $videos = ceil($videos->pageInfo->totalResults / $count);
         $nextPageToken = '';
 
-        for ($i = 0; $i < $video; $i++) {
-            $json = $youtube->send('playlistItems', [
-                'part'       => 'snippet',
-                'playlistId' => $list,
-                'maxResults' => $count,
-                'pageToken'  => $nextPageToken
-            ]);
+        for ($i = 0; $i < $videos; $i++) {
+            $json = Youtube::getPlaylistItems('snippet', $arr[0], $count, $nextPageToken);
 
             foreach ($json->items as $item) {
-                $title = preg_replace('| +|', ' ', $item->snippet->title);
-                $videoYoutubeID = preg_replace('| +|', ' ', $item->snippet->resourceId->videoId);
+                $title = preg_replace('/ +/', ' ', $item->snippet->title);
+                $videoYoutubeID = preg_replace('/ +/', ' ', $item->snippet->resourceId->videoId);
 
-                if ( ! empty( $this->getData(['videoYoutubeID' => $videoYoutubeID]) ) ) {
+                if ( ! empty(\QB::table(self::T_VIDEOS)->where('videoYoutubeID', '=', $videoYoutubeID)->first()) )
                     continue;
-                }
 
-                $this->insert([
-                    'title' => $title,
+                \QB::table(self::T_VIDEOS)->inser([
+                    'title'          => $title,
                     'videoYoutubeID' => $videoYoutubeID,
-                    'album_id' => $num_album,
-                    'playlist' => $list,
-                    'is_added' => 0
+                    'album_id'       => $numAlbum,
+                    'playlist'       => $arr[0],
+                    'is_added'       => 0
                 ]);
             }
+
             $nextPageToken = isset($json->nextPageToken) ? $json->nextPageToken : '';
         }
 
         return true;
-        //https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=PL3KDFIV9zTkzKyHAKHhZSIWfRZwY6UBNX&maxResults=50&key=AIzaSyB3fBIqZ70S2LNqSq6ID8frsNVJESJSQG4
     }
 
     /**
      * Screening.
      *
-     * @param string $words
+     * @param string $text
      *
      * @return array|false
      */
-    function checkCallback($words)
+    public static function checkCallback($text)
     {
-        $words = preg_replace('| +|', ' ', $words); // Убираем n-пробелы
-        $words = preg_split('/\n/', $words); // Разбиваем на массив
+        $text = preg_replace('/ +/', ' ', $text);
+        $text = preg_split('/\n/', $text);
+        $text = array_map('trim', $text);
 
-        if ( count($words) != 2 && count($words) != 1 ) {
+        if ( count($text) != 2 && count($text) != 1 )
             return false;
-        }
 
-        if ( ! preg_match('/^[a-z0-9_-]+$/ui', $words[0]) ) {
+        if ( ! preg_match('/^[a-z0-9_-]+$/ui', $text[0]) )
             return false;
-        }
 
-        return $words;
+        return $text;
     }
 
     /**
-     * Add video in vk form Database.
+     * Add video to VK from DB.
      *
-     * @param int $num
+     * @param int $count
      *
      * @return void
      */
-    function downloadInVK($num)
+    public static function downloadInVK($count)
     {
-        $videos = $this->getData( ['is_added' => 0], \PDO::FETCH_CLASS, (int)$num );
+        $videos = \QB::table(self::T_VIDEOS)->where('is_added', '=', 0)->limit($count)->get();
 
-        if ( ! $videos ) return;
+        if ( empty($videos) )
+            return;
 
         foreach ($videos as $video) {
-            $saveVideo = $this->saveVideoInVK($video->title, $video->videoYoutubeID, $video->album_id);
-            if ( ! empty($saveVideo->error) ) return;
+            $video->album_id = 1;
+            $savedVideo = self::saveVideoInVK($video->title, $video->videoYoutubeID, $video->album_id);
 
-            $videoVKID = $saveVideo->response->video_id;
+            if ( ! empty($savedVideo->error) )
+                return;
 
-            $send = $this->request($saveVideo->response->upload_url, true);
+            $send = Web::request($savedVideo->response->upload_url, true);
             $is_added = 1;
 
-            if ($send->error_code == 7) {
-                $send->response = 1;
+            if ( ! empty($send->error_code) ) {
+                if ($send->error_code != 7)
+                    continue;
+
                 $is_added = 2;
-            } elseif ( ! empty($send->error_code) ) {
-                return;
             }
 
-            if ($send->response) {
-                $isAdded = $this->update(
-                    ['is_added' => $is_added, 'videoVKID' => $videoVKID],
-                    ['videoYoutubeID' => $video->videoYoutubeID]
-                );
-                if ( ! $isAdded ) return;
-                continue;
-            }
-            return;
+            \QB::table(self::T_VIDEOS)
+                ->where('videoYoutubeID', $video->videoYoutubeID)
+                ->update([
+                    'is_added'  => $is_added,
+                    'videoVKID' => $savedVideo->response->video_id
+                ]);
         }
     }
 
     /**
-     * Save video in vk.
+     * Save video in VK from Youtube.
      *
      * @param string $name
      * @param string $link
@@ -156,61 +138,90 @@ class Videos extends VK
      *
      * @return object
      */
-    function saveVideoInVK($name, $link, $album_id)
+    public static function saveVideoInVK($name, $link, $album_id)
     {
-        return $this->send('video.save', [
+        return VK::send('video.save', [
             'name'     => $name,
-            'link'     => 'https://www.youtube.com/watch?v=' . $link,
+            'link'     => Youtube::L_WATCH . $link,
             'group_id' => G_ID,
             'album_id' => $album_id
         ], T_USR);
     }
 
     /**
-     * Get Random Album from vk and post on wall.
+     * Get a random album from VK and create a new post.
      *
      * @return object
      */
-    public function createPostVideos()
+    public static function createPost()
     {
-        $albums = $this->send('video.getAlbums', [
-            'owner_id' => '-' . G_ID,
-            'count'    => 100
-        ], T_USR);
+        $albums = self::getAlbums(0);
+        $albums = self::getAlbums(1, rand(0, $albums->response->count - 1));
 
-        $albumRND = rand(0, $albums->response->count - 1);
-        $albumID = $albums->response->items[$albumRND]->id;
-
-        $albumCount = $this->send('video.get', [
-            'owner_id' => '-' . G_ID,
-            'album_id' => $albumID,
-            'count'    => 0
-        ], T_USR);
-
-        $albumCount = $albumCount->response->count;
+        $albumsCount = self::getVideos($albums->response->items[0]->id, 0);
+        $offset = ($albumsCount->response->count > 10) ? $albumsCount->response->count - 10 : 0;
+        $album = self::getVideos($albums->response->items[0]->id, 10, $offset);
 
         $arrVideos = [];
-        $offset = 0;
-
-        if ($albumCount > 10) {
-            $offset = $albumCount - 10;
-        }
-
-        $album = $this->send('video.get', [
-            'owner_id' => '-' . G_ID,
-            'album_id' => $albumID,
-            'count'    => 10,
-            'offset'   => $offset
-        ], T_USR);
-
         foreach ($album->response->items as $item) {
             $arrVideos[] = 'video-' . G_ID . '_' . $item->id;
         }
 
-        $comment = "&#128193; " . $albums->response->items[$albumRND]->title . "\n"
-            . "&#10133; https://vk.com/videos-132378855?section=album_" . $albumID . "\n"
+        $comment = "&#128193; " . $albums->response->items[0]->title . "\n"
+            . "&#10133; " . self::POST_LINK . "?section=album_" . $albums->response->items[0]->id . "\n"
             . "#videos@eng_day";
 
-        return $this->createPost( $comment, implode( ',', array_reverse($arrVideos) ) );
+        return VK::createPost( $comment, implode( ',', array_reverse($arrVideos) ) );
+    }
+
+    /**
+     * Get an album with video.
+     *
+     * @param int $count
+     * @param int $offset
+     *
+     * @return object
+     */
+    public static function getAlbums($count, $offset = null)
+    {
+        return VK::send('video.getAlbums', [
+            'owner_id' => '-' . G_ID,
+            'count'    => $count,
+            'offset'   => $offset
+        ], T_USR);
+    }
+
+    /**
+     * Get a video from VK.
+     *
+     * @param int $albumID
+     * @param int $count
+     * @param int $offset
+     *
+     * @return object
+     */
+    public static function getVideos($albumID, $count = null, $offset = null)
+    {
+        return VK::send('video.get', [
+            'owner_id' => '-' . G_ID,
+            'album_id' => $albumID,
+            'count'    => $count,
+            'offset'   => $offset
+        ], T_USR);
+    }
+
+    /**
+     * Add a new album.
+     *
+     * @param string $title
+     *
+     * @return object
+     */
+    public static function addAlbum($title)
+    {
+        return VK::send('video.addAlbum', [
+            'group_id' => G_ID,
+            'title'    => $title
+        ], T_USR);
     }
 }

@@ -10,7 +10,7 @@ class VK extends Web
     const VK_VER = '5.63';
 
     /**
-     * Send request to vk.
+     * Send request to VK.
      *
      * @param string $method
      * @param array  $params
@@ -28,11 +28,6 @@ class VK extends Web
             $data = self::request( self::VK_API . $method . '?' . http_build_query($params), true );
         } else {
             $data = self::request( self::VK_API . $method, true, 'POST', http_build_query($params) );
-        }
-
-        if ( !empty($data->error) && $data->error->error_code == 6 ) {
-            sleep(3);
-            return self::send($method, $params, $token, $typeMethod);
         }
 
         return $data;

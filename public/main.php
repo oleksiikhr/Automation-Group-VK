@@ -29,7 +29,7 @@ if ( date('i') == 30 )
         Learn::createPost(456241870);
 
     elseif ( in_array($h, ['8', '20']) )
-        ( new Videos() )->createPostVideos();
+        Videos::createPost();
 
     elseif ( in_array($h, ['9', '16', '21']) )
         ( new Verbs() )->createPostVerbs(20, 456242834);
