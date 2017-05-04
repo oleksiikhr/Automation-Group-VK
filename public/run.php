@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../configs/defines.php';
 
-if ( empty($_REQUEST['secret']) || $_REQUEST['secret'] !== SECRET_KEY ) die;
+//if ( empty($_REQUEST['secret']) || $_REQUEST['secret'] !== SECRET_KEY ) die;
 
 require_once D_ROOT . '/vendor/autoload.php';
 

@@ -19,20 +19,20 @@ class VK extends Web
      *
      * @return object
      */
-    public function send($method, $params, $token, $typeMethod = 'GET')
+    public static function send($method, $params, $token, $typeMethod = 'GET')
     {
         $params['v'] = self::VK_VER;
         $params['access_token'] = $token;
 
         if ($typeMethod !== 'POST') {
-            $data = $this->request( self::VK_API . $method . '?' . http_build_query($params), true );
+            $data = self::request( self::VK_API . $method . '?' . http_build_query($params), true );
         } else {
-            $data = $this->request( self::VK_API . $method, true, 'POST', http_build_query($params) );
+            $data = self::request( self::VK_API . $method, true, 'POST', http_build_query($params) );
         }
 
-        if ( ! empty($data->error) && $data->error->error_code == 6 ) {
+        if ( !empty($data->error) && $data->error->error_code == 6 ) {
             sleep(3);
-            return $this->send($method, $params, $token, $typeMethod);
+            return self::send($method, $params, $token, $typeMethod);
         }
 
         return $data;
@@ -47,9 +47,9 @@ class VK extends Web
      *
      * @return object
      */
-    public function createPost($message, $attachments = null, $typeMethod = 'GET')
+    public static function createPost($message, $attachments = null, $typeMethod = 'GET')
     {
-        return $this->send('wall.post', [
+        return self::send('wall.post', [
             'owner_id'    => '-' . G_ID,
             'from_group'  => 1,
             'message'     => $message,

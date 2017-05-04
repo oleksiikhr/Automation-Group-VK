@@ -2,29 +2,33 @@
 
 namespace gvk\vk\methods;
 
+use gvk\DB;
 use gvk\vk\VK;
 
-class Learn extends VK
+class Learn
 {
-    protected $table = 'learn';
+    const T_LEARN = 'learn';
 
     /**
-     * Create new post learn.
+     * Create a new post learn.
      *
-     * @param int $photo_id
+     * @param int $photoID
      *
      * @return object
      */
-    public function createPostLearn($photo_id)
+    public static function createPost($photoID = null)
     {
-        $data = $this->getRandomSingleData();
+        $data = DB::getRandomData(self::T_LEARN);
 
         $title = $data->title;
-        $text = $this->formatText($data->text);
+        $text = self::formatText($data->text);
 
-        return $this->createPost(
+        if ( is_null($photoID) )
+            $photoID = 'photo-' . G_ID . '_' . $photoID;
+
+        return VK::createPost(
             "&#128221; " . $title . "\n\n" . $text . "\n\n#learn@eng_day",
-            'photo-' . G_ID . '_' . $photo_id,
+            $photoID,
             'POST'
         );
     }
@@ -36,7 +40,7 @@ class Learn extends VK
      *
      * @return string
      */
-    public function formatText($text)
+    public static function formatText($text)
     {
         $text = str_replace('%subtitle%', '&#9642;&#9642;&#9642;&#9642;&#9642;', $text);
         $text = str_replace('%li%', '&#128204;', $text);

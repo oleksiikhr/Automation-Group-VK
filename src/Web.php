@@ -16,7 +16,7 @@ class Web
      *
      * @return object
      */
-    public function request($url, $decode = false, $typeMethod = 'GET', $fields = [])
+    public static function request($url, $decode = false, $typeMethod = 'GET', $fields = [])
     {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

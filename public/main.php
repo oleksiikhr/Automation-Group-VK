@@ -26,7 +26,7 @@ $h = date('G');
 if ( date('i') == 30 )
 {
     if ( in_array($h, ['12']) )
-        ( new Learn() )->createPostLearn(456241870);
+        Learn::createPost(456241870);
 
     elseif ( in_array($h, ['8', '20']) )
         ( new Videos() )->createPostVideos();
@@ -36,6 +36,9 @@ if ( date('i') == 30 )
 
     elseif ( in_array($h, ['4', '10', '13', '17', '22']) )
         ( new Images() )->createPostImages();
+
+    elseif ( in_array($h, []) )
+        return;
 }
 else
 {
