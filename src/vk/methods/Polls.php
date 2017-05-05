@@ -233,12 +233,12 @@ class Polls extends VK
             $attachments .= ',photo-' . G_ID . '_' . $photo_id;
         }
 
-        $createPost = $this->createPost($message, $attachments);
+        $createPost = $this->wallPost($message, $attachments);
 
         $comment = "&#9989; Правильный ответ:\n"
             . str_repeat("&#128315;\n", 8)
             . "&#127468;&#127463; " . $correct_answer;
 
-        return $this->sendComment($comment, $createPost->response->post_id);
+        return $this->wallCreateComment($comment, $createPost->response->post_id);
     }
 }

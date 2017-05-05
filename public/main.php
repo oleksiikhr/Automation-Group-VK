@@ -3,8 +3,8 @@
 use gvk\vk\methods\Learn;
 use gvk\vk\methods\Polls;
 use gvk\vk\methods\Verbs;
-use gvk\vk\methods\Videos;
-use gvk\vk\methods\Images;
+use gvk\vk\methods\Video;
+use gvk\vk\methods\Photos;
 use gvk\vk\methods\Translate;
 
 require_once __DIR__ . '/run.php';
@@ -29,13 +29,13 @@ if ( date('i') == 30 )
         Learn::createPost(456241870);
 
     elseif ( in_array($h, ['8', '20']) )
-        Videos::createPost();
+        Video::createPost();
 
     elseif ( in_array($h, ['9', '16', '21']) )
         Verbs::createPost(20, 456242834);
 
     elseif ( in_array($h, ['4', '10', '13', '17', '22']) )
-        ( new Images() )->createPostImages();
+        Photos::createPost();
 
     elseif ( in_array($h, []) )
         return;
@@ -52,4 +52,4 @@ else
         ( new Translate() )->newPostOnlyWords(20, 456240584);
 }
 
-( new Videos() )->downloadInVK(5);
+( new Video() )->downloadInVK(5);

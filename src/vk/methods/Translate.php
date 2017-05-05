@@ -113,7 +113,7 @@ class Translate extends VK
         $message .= "#words@eng_day";
         $attachments = 'photo-' . G_ID . '_' . $photoID;
 
-        return $this->createPost($message, $attachments);
+        return $this->wallPost($message, $attachments);
     }
 
     /**

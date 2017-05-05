@@ -32,7 +32,7 @@ class Exam extends VK
             . '2. Не блокировать получение сообщений от группы.' . "\n\n"
             . 'В данный момент имеет разница между didn\'t и did not и других сокращений.';
 
-        $newPost = $this->createPost($message,$attachment);
+        $newPost = $this->wallPost($message,$attachment);
 
         $this->table = 'exam';
         return $this->insert([

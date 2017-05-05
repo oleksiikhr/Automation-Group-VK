@@ -4,7 +4,7 @@ namespace gvk\vk\parse;
 
 use gvk\vk\VK;
 use gvk\youtube\Youtube;
-use gvk\vk\methods\Videos;
+use gvk\vk\methods\Video;
 
 class Parse extends VK
 {
@@ -92,7 +92,7 @@ class Parse extends VK
     {
         $this->table = 'videos';
 
-        $video = new Videos();
+        $video = new Video();
         $youtube = new Youtube();
 
         $playlist = $video->getUniquePlaylist();

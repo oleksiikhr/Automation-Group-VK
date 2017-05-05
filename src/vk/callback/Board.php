@@ -4,7 +4,7 @@ namespace gvk\vk\callback;
 
 use gvk\vk\VK;
 use gvk\vk\methods\Polls;
-use gvk\vk\methods\Videos;
+use gvk\vk\methods\Video;
 use gvk\vk\methods\Translate;
 
 class Board extends VK
@@ -53,7 +53,7 @@ class Board extends VK
 
         $is_add = false;
         if ($topic_id == B_VIDEO) {
-            $video = new Videos();
+            $video = new Video();
             $is_add = $video->addBD($comment->response->items[0]->text);
         }
 
@@ -94,7 +94,7 @@ class Board extends VK
     {
         $is_add = false;
         if ($topic_id == B_VIDEO) {
-            $video = new Videos();
+            $video = new Video();
             $is_add = $video->addBD($text);
         }
 

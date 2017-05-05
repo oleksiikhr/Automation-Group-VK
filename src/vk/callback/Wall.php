@@ -28,12 +28,12 @@ class Wall extends VK
             $textCorrect = mb_strtolower( preg_replace('/[^a-z]+/ui', '', $data->correct_answer) );
 
             if ($textUser === $textCorrect) {
-                $this->sendMessage('Ответ верный!', $object->from_id);
+                $this->messageSend('Ответ верный!', $object->from_id);
             } else {
-                $this->sendMessage('Ответ неверный!', $object->from_id);
+                $this->messageSend('Ответ неверный!', $object->from_id);
             }
 
-            return $this->deleteComment($object->id);
+            return $this->wallDeleteComment($object->id);
         }
 
         return false;

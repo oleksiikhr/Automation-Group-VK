@@ -6,10 +6,10 @@ use gvk\Web;
 use gvk\vk\VK;
 use gvk\youtube\Youtube;
 
-class Videos
+class Video
 {
-    const T_VIDEOS  = 'videos';
-    const POST_LINK = 'https://vk.com/videos-' . G_ID;
+    const T_VIDEOS    = 'videos';
+    const VIDEOS_LINK = 'https://vk.com/videos-' . G_ID;
 
     /**
      * Add a playlist of YouTube to VK.
@@ -105,7 +105,7 @@ class Videos
 
         foreach ($videos as $video) {
             $video->album_id = 1;
-            $savedVideo = self::saveVideoInVK($video->title, $video->videoYoutubeID, $video->album_id);
+            $savedVideo = self::save($video->title, $video->videoYoutubeID, $video->album_id);
 
             if ( ! empty($savedVideo->error) )
                 return;
@@ -138,7 +138,7 @@ class Videos
      *
      * @return object
      */
-    public static function saveVideoInVK($name, $link, $album_id)
+    public static function save($name, $link, $album_id)
     {
         return VK::send('video.save', [
             'name'     => $name,
@@ -158,9 +158,9 @@ class Videos
         $albums = self::getAlbums(0);
         $albums = self::getAlbums(1, rand(0, $albums->response->count - 1));
 
-        $albumsCount = self::getVideos($albums->response->items[0]->id, 0);
+        $albumsCount = self::get($albums->response->items[0]->id, 0);
         $offset = ($albumsCount->response->count > 10) ? $albumsCount->response->count - 10 : 0;
-        $album = self::getVideos($albums->response->items[0]->id, 10, $offset);
+        $album = self::get($albums->response->items[0]->id, 10, $offset);
 
         $arrVideos = [];
         foreach ($album->response->items as $item) {
@@ -168,10 +168,10 @@ class Videos
         }
 
         $comment = "&#128193; " . $albums->response->items[0]->title . "\n"
-            . "&#10133; " . self::POST_LINK . "?section=album_" . $albums->response->items[0]->id . "\n"
+            . "&#10133; " . self::VIDEOS_LINK . "?section=album_" . $albums->response->items[0]->id . "\n"
             . "#videos@eng_day";
 
-        return VK::createPost( $comment, implode( ',', array_reverse($arrVideos) ) );
+        return VK::wallPost( $comment, implode( ',', array_reverse($arrVideos) ) );
     }
 
     /**
@@ -200,7 +200,7 @@ class Videos
      *
      * @return object
      */
-    public static function getVideos($albumID, $count = null, $offset = null)
+    public static function get($albumID, $count = null, $offset = null)
     {
         return VK::send('video.get', [
             'owner_id' => '-' . G_ID,

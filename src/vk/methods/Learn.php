@@ -26,11 +26,8 @@ class Learn
         if ( is_null($photoID) )
             $photoID = 'photo-' . G_ID . '_' . $photoID;
 
-        return VK::createPost(
-            "&#128221; " . $title . "\n\n" . $text . "\n\n#learn@eng_day",
-            $photoID,
-            'POST'
-        );
+        $message = "&#128221; {$title}\n\n{$text}\n\n#learn@eng_day";
+        return VK::wallPost($message, $photoID, 'POST');
     }
 
     /**
@@ -42,7 +39,7 @@ class Learn
      */
     public static function formatText($text)
     {
-        $text = str_replace('%subtitle%', '&#9642;&#9642;&#9642;&#9642;&#9642;', $text);
+        $text = str_replace('%subtitle%', '&#128161;', $text);
         $text = str_replace('%li%', '&#128204;', $text);
 
         return $text;

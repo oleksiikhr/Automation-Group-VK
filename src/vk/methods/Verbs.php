@@ -35,7 +35,7 @@ class Verbs
         if ( ! is_null($photoID) )
             $photoID = 'photo-' . G_ID . '_' . $photoID;
 
-        return VK::createPost($message, $photoID);
+        return VK::wallPost($message, $photoID);
     }
 
     /**

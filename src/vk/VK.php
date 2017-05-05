@@ -42,7 +42,7 @@ class VK extends Web
      *
      * @return object
      */
-    public static function createPost($message, $attachments = null, $typeMethod = 'GET')
+    public static function wallPost($message, $attachments = null, $typeMethod = 'GET')
     {
         return self::send('wall.post', [
             'owner_id'    => '-' . G_ID,
@@ -54,7 +54,7 @@ class VK extends Web
     }
 
     /**
-     * Send message to User.
+     * Send a message to the user.
      *
      * @param string $message
      * @param int    $user_id
@@ -62,7 +62,7 @@ class VK extends Web
      *
      * @return object
      */
-    public function sendMessage($message, $user_id, $typeMethod = 'GET')
+    public function messageSend($message, $user_id, $typeMethod = 'GET')
     {
         return $this->send('messages.send', [
             'user_id'   => $user_id,
@@ -72,17 +72,17 @@ class VK extends Web
     }
 
     /**
-     * Delete comment in post.
+     * Delete comment under post.
      *
-     * @param int $comment_id
+     * @param int $commentID
      *
      * @return object
      */
-    public function deleteComment($comment_id)
+    public function wallDeleteComment($commentID)
     {
         return $this->send('wall.deleteComment', [
             'owner_id'   => '-' . G_ID,
-            'comment_id' => $comment_id
+            'comment_id' => $commentID
         ], T_USR);
     }
 
@@ -91,17 +91,18 @@ class VK extends Web
      *
      * @param string $message
      * @param int    $post_id
+     * @param bool   $fromGroup
      *
      * @return object
      */
-    public function sendComment($message, $post_id)
+    public function wallCreateComment($message, $post_id, $fromGroup = true)
     {
         return $this->send('wall.createComment', [
             'owner_id'   => '-' . G_ID,
             'message'    => $message,
             'post_id'    => $post_id,
             'guid'       => rand(),
-            'from_group' => 1
+            'from_group' => $fromGroup
         ], T_USR);
     }
 }
