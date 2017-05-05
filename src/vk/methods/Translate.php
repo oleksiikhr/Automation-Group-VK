@@ -6,7 +6,8 @@ use gvk\vk\VK;
 
 class Translate extends VK
 {
-    protected $table = 'translate';
+    protected $table = 'translate'; // temporary
+    const TABLE = 'translate';
 
     /**
      * Screening.

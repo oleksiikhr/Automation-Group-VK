@@ -1,5 +1,6 @@
 <?php // Cron every 30 minutes.
 
+use gvk\vk\methods\Exam;
 use gvk\vk\methods\Learn;
 use gvk\vk\methods\Polls;
 use gvk\vk\methods\Verbs;
@@ -37,8 +38,8 @@ if ( date('i') == 30 )
     elseif ( in_array($h, ['4', '10', '13', '17', '22']) )
         Photos::createPost();
 
-    elseif ( in_array($h, []) )
-        return;
+    elseif ( in_array($h, ['0']) )
+        Exam::createPost(456242833);
 }
 else
 {
@@ -52,4 +53,4 @@ else
         ( new Translate() )->newPostOnlyWords(20, 456240584);
 }
 
-( new Video() )->downloadInVK(5);
+Video::downloadInVK(5);

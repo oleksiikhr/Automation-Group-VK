@@ -7,7 +7,7 @@ use gvk\vk\VK;
 
 class Verbs
 {
-    const T_VERBS = 'verbs';
+    const TABLE = 'verbs';
 
     /**
      * Get random values from the DB and create a new post.
@@ -19,8 +19,8 @@ class Verbs
      */
     public static function createPost($count, $photoID = null)
     {
-        $data = DB::getDistinctData(self::T_VERBS, $count);
-        $message = "";
+        $data = DB::getDistinctData(self::TABLE, $count);
+        $message = "&#128203; Таблица неправильных глаголов\n\n";
 
         foreach ($data as $key => $item) {
             $i = $key + 1;
@@ -32,10 +32,10 @@ class Verbs
 
         $message .= "#verbs@eng_day";
 
-        if ( ! is_null($photoID) )
+        if ( ! empty($photoID) )
             $photoID = 'photo-' . G_ID . '_' . $photoID;
 
-        return VK::wallPost($message, $photoID);
+        return VK::wallPost($message, $photoID, true);
     }
 
     /**
@@ -45,7 +45,7 @@ class Verbs
      */
     public static function getRandomVerb()
     {
-        $data = DB::getRandomData(self::T_VERBS);
+        $data = DB::getRandomData(self::TABLE);
 
         return "&#128203; {$data->first_form} - {$data->second_form} - {$data->third_form}";
     }

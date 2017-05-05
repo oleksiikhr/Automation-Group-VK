@@ -2,7 +2,7 @@
 
 // DIR
 define('D_ROOT', __DIR__ . '/..');
-define('D_IMG',  D_ROOT . '/img/');
+define('D_IMG',  D_ROOT . '/resources');
 
 // Secret data
 define('CONFIRMATION', '');

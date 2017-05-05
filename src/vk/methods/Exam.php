@@ -2,42 +2,33 @@
 
 namespace gvk\vk\methods;
 
+use gvk\DB;
 use gvk\vk\VK;
 
-class Exam extends VK
+class Exam
 {
-    protected $table = null;
-
     /**
-     * Create new post exam.
+     * Create a new post exam.
      *
-     * @param int $photo_id
+     * @param int $photoID
      *
-     * @return bool
+     * @return object
      */
-    public function createPostExam($photo_id = null)
+    public static function createPost($photoID = null)
     {
-        $this->table = 'polyglot';
-        $data = $this->getRandomSingleData();
-        $attachment = null;
+        if ( ! empty($photoID) )
+            $photoID = 'photo-' . G_ID . '_' . $photoID;
 
-        if ( ! empty($photo_id) ) {
-            $attachment = 'photo-' . G_ID . '_' . $photo_id;
-        }
+        $translate = DB::getRandomData(Translate::TABLE);
+        $verb = DB::getRandomData(Verbs::TABLE);
 
-        $message = 'Тестовая функция! #exam@eng_day' . "\n"
-            . 'Нужно написать ответ на вопрос в комментариях под этой записью.' . "\n\n"
-            . "&#_128293; Переведите: " . $data->quest . "\n\n"
-            . '1. Нужно быть участником группы.' . "\n"
-            . '2. Не блокировать получение сообщений от группы.' . "\n\n"
-            . 'В данный момент имеет разница между didn\'t и did not и других сокращений.';
+        $message = "&#8505; Экспериментальная функция.\n\n"
+            . "Необходимо ответить на вопросы:\n"
+            . "&#127468;&#127463; 1. Переведите слово: {$translate->word_eng}\n"
+            . "&#128203; 2. Вторая форма глагола: {$verb->first_form}\n\n"
+            . "Ответов нет. &#128521;\n"
+            . "#exam@eng_day";
 
-        $newPost = $this->wallPost($message,$attachment);
-
-        $this->table = 'exam';
-        return $this->insert([
-            'id_post' => $newPost->response->post_id,
-            'id_poll' => $data->id
-        ]);
+        return VK::wallPost($message, $photoID);
     }
 }

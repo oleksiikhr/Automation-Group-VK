@@ -8,8 +8,8 @@ use gvk\youtube\Youtube;
 
 class Video
 {
-    const T_VIDEOS    = 'videos';
-    const VIDEOS_LINK = 'https://vk.com/videos-' . G_ID;
+    const TABLE = 'videos';
+    const LINK  = 'https://vk.com/videos-' . G_ID;
 
     /**
      * Add a playlist of YouTube to VK.
@@ -26,7 +26,7 @@ class Video
             return false;
 
         $videos = Youtube::getPlaylistItems('id', $arr[0], 0);
-        $numAlbum = \QB::table(self::T_VIDEOS)->where('playlist', $arr[0])->first();
+        $numAlbum = \QB::table(self::TABLE)->where('playlist', $arr[0])->first();
 
         if ( empty($numAlbum) && empty($arr[1]) )
             return false;
@@ -49,10 +49,10 @@ class Video
                 $title = preg_replace('/ +/', ' ', $item->snippet->title);
                 $videoYoutubeID = preg_replace('/ +/', ' ', $item->snippet->resourceId->videoId);
 
-                if ( ! empty(\QB::table(self::T_VIDEOS)->where('videoYoutubeID', '=', $videoYoutubeID)->first()) )
+                if ( ! empty(\QB::table(self::TABLE)->where('videoYoutubeID', '=', $videoYoutubeID)->first()) )
                     continue;
 
-                \QB::table(self::T_VIDEOS)->inser([
+                \QB::table(self::TABLE)->inser([
                     'title'          => $title,
                     'videoYoutubeID' => $videoYoutubeID,
                     'album_id'       => $numAlbum,
@@ -98,7 +98,7 @@ class Video
      */
     public static function downloadInVK($count)
     {
-        $videos = \QB::table(self::T_VIDEOS)->where('is_added', '=', 0)->limit($count)->get();
+        $videos = \QB::table(self::TABLE)->where('is_added', '=', 0)->limit($count)->get();
 
         if ( empty($videos) )
             return;
@@ -120,7 +120,7 @@ class Video
                 $is_added = 2;
             }
 
-            \QB::table(self::T_VIDEOS)
+            \QB::table(self::TABLE)
                 ->where('videoYoutubeID', $video->videoYoutubeID)
                 ->update([
                     'is_added'  => $is_added,
@@ -168,7 +168,7 @@ class Video
         }
 
         $comment = "&#128193; " . $albums->response->items[0]->title . "\n"
-            . "&#10133; " . self::VIDEOS_LINK . "?section=album_" . $albums->response->items[0]->id . "\n"
+            . "&#10133; " . self::LINK . "?section=album_" . $albums->response->items[0]->id . "\n"
             . "#videos@eng_day";
 
         return VK::wallPost( $comment, implode( ',', array_reverse($arrVideos) ) );
