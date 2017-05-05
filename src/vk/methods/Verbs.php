@@ -2,49 +2,51 @@
 
 namespace gvk\vk\methods;
 
+use gvk\DB;
 use gvk\vk\VK;
 
-class Verbs extends VK
+class Verbs
 {
-    protected $table = 'verbs';
+    const T_VERBS = 'verbs';
 
     /**
-     * New post only Verbs.
+     * Get random values from the DB and create a new post.
      *
      * @param int $count
      * @param int $photoID
      *
      * @return object
      */
-    public function createPostVerbs($count, $photoID)
+    public static function createPost($count, $photoID = null)
     {
-        $data = $this->getRandomCountData($count);
+        $data = DB::getDistinctData(self::T_VERBS, $count);
         $message = "";
 
         foreach ($data as $key => $item) {
             $i = $key + 1;
-            $message .= $i . ". " . $item->first_form . " - " . $item->second_form . " - " . $item->third_form . "\n";
+            $message .= "$i. {$item->first_form} - {$item->second_form} - {$item->third_form}\n";
 
-            if ($i % 5 == 0) {
+            if ($i % 5 == 0)
                 $message .= "\n";
-            }
         }
 
         $message .= "#verbs@eng_day";
-        $attachments = 'photo-' . G_ID . '_' . $photoID;
 
-        return $this->createPost($message, $attachments);
+        if ( ! is_null($photoID) )
+            $photoID = 'photo-' . G_ID . '_' . $photoID;
+
+        return VK::createPost($message, $photoID);
     }
 
     /**
-     * Get random verb for new Post.
+     * Get a random verb for a new post.
      *
      * @return string
      */
-    public function getRandomVerb()
+    public static function getRandomVerb()
     {
-        $data = $this->getRandomSingleData();
+        $data = DB::getRandomData(self::T_VERBS);
 
-        return '&#128203; ' . $data->first_form . ' - ' . $data->second_form . ' - ' . $data->third_form;
+        return "&#128203; {$data->first_form} - {$data->second_form} - {$data->third_form}";
     }
 }

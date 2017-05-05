@@ -32,7 +32,7 @@ if ( date('i') == 30 )
         Videos::createPost();
 
     elseif ( in_array($h, ['9', '16', '21']) )
-        ( new Verbs() )->createPostVerbs(20, 456242834);
+        Verbs::createPost(20, 456242834);
 
     elseif ( in_array($h, ['4', '10', '13', '17', '22']) )
         ( new Images() )->createPostImages();
