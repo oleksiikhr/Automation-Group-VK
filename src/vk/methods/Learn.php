@@ -23,7 +23,7 @@ class Learn
         $title = $data->title;
         $text = self::formatText($data->text);
 
-        if ( is_null($photoID) )
+        if ( ! empty($photoID) )
             $photoID = 'photo-' . G_ID . '_' . $photoID;
 
         $message = "&#128221; {$title}\n\n{$text}\n\n#learn@eng_day";

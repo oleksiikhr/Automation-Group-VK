@@ -2,119 +2,109 @@
 
 namespace gvk\vk\methods;
 
+use gvk\DB;
 use gvk\vk\VK;
+use gvk\Methods;
 
-class Translate extends VK
+class Translate
 {
-    protected $table = 'translate'; // temporary
+    use Methods;
+
     const TABLE = 'translate';
 
     /**
      * Screening.
      *
-     * @param string $comment
+     * @param string $text
      *
      * @return array|false
      */
-    public function checkCallback($comment)
+    public static function checkCallback($text)
     {
-        $words = preg_replace('/ +/', ' ', $comment);
+        $words = preg_replace('/ +/', ' ', $text);
         $words = preg_split('/\n/', $words);
 
-        if ( count($words) != 3 ) {
+        if ( count($words) != 3 )
             return false;
-        }
 
         $words = array_map('trim', $words);
-        $words = preg_replace('/[\.|\!\?]/u', '', $words);
+        $words = preg_replace('/[\.\!\?]/u', '', $words);
 
         foreach ($words as $key => $value) {
             $words[$key] = mb_strtolower($value);
         }
 
-        $word_eng = $words[0];
-        $transcription = $words[1];
-        $word_rus = $words[2];
-
-        // Англ. слово
-        if ( ! preg_match('/^[a-z\s\']+$/u', $word_eng) ) {
+        // Eng word
+        if ( ! preg_match('/^[a-z\s\']+$/u', $words[0]) )
             return false;
-        }
 
-        $word_eng = $this->upperFirst($word_eng);
-        $words[0] = $this->upperI($word_eng);
+        $words[0] = self::upFirst($words[0]);
+        $words[0] = self::upI($words[0]);
 
-        // Транскрипция
-        if (!preg_match('/^[а-я\,\sёЁ]+$/u', $transcription)) {
+        // Transcription
+        if ( ! preg_match('/^[а-я\,\sёЁ]+$/u', $words[1]) )
             return false;
-        }
 
-        // Русское слово
-        if (!preg_match('/^[а-я\,\sёЁ]+$/u', $word_rus)) {
+        // Rus word
+        if ( ! preg_match('/^[а-я\,\sёЁ]+$/u', $words[2]) )
             return false;
-        }
 
-        $words[2] = $this->upperFirst($word_rus);
+        $words[2] = self::upFirst($words[2]);
 
         return $words;
     }
 
     /**
-     * Database Addition.
+     * Add data to the DB.
      *
-     * @param string $comment
+     * @param string $text
      *
      * @return bool
      */
-    public function addBD($comment)
+    public static function addBD($text)
     {
-        $words = $this->checkCallback($comment);
+        $words = self::checkCallback($text);
 
-        if ( is_bool($words) ) {
+        if ( empty($words) )
             return false;
-        }
 
-        $word_eng = array_shift($words);
-        $transcription = array_shift($words);
-        $word_rus = array_shift($words);
-
-        if ( ! empty( $this->getData(['word_eng' => $word_eng], \PDO::FETCH_COLUMN) ) ) {
+        if ( ! empty( \QB::table(self::TABLE)->where('word_eng', '=', $words[0])->first() ) )
             return false;
-        }
 
-        return $this->insert([
-            'word_eng'      => $word_eng,
-            'transcription' => $transcription,
-            'word_rus'      => $word_rus
+        return \QB::table(self::TABLE)->inser([
+            'word_eng'      => $words[0],
+            'transcription' => $words[1],
+            'word_rus'      => $words[2]
         ]);
     }
 
     /**
-     * New post only words.
+     * Get random unique values from the DB and create a new post.
      *
      * @param int $count
      * @param int $photoID
      *
      * @return object
      */
-    public function newPostOnlyWords($count, $photoID)
+    public static function createPost($count, $photoID = null)
     {
-        $data = $this->getRandomCountData($count);
+        $data = DB::getDistinctData(self::TABLE, $count);
         $message = "";
+        $i = 1;
 
-        foreach ($data as $key => $item) {
-            $i = $key + 1;
-            $message .= $i . ". " . $item->word_eng . " [" . $item->transcription . "] - " . $item->word_rus . "\n";
+        foreach ($data as $item) {
+            $message .= "$i. {$item->word_eng} [{$item->transcription}] - {$item->word_rus}\n";
 
-            if ($i % 5 == 0) {
+            if ($i++ % 5 == 0)
                 $message .= "\n";
-            }
         }
 
         $message .= "#words@eng_day";
-        $attachments = 'photo-' . G_ID . '_' . $photoID;
 
-        return $this->wallPost($message, $attachments);
+        if ( ! empty($photoID) )
+            $photoID = 'photo-' . G_ID . '_' . $photoID;
+
+        return VK::wallPost($message, $photoID);
     }
 
     /**
@@ -122,11 +112,10 @@ class Translate extends VK
      *
      * @return string
      */
-    public function getRandomWord()
+    public static function getRandomWord()
     {
-        $data = $this->getRandomSingleData();
+        $data = DB::getRandomData(self::TABLE);
 
-        return '&#127468;&#127463; ' . $data->word_eng
-            . ' [' . $data->transcription . '] - ' . $data->word_rus;
+        return "&#127468;&#127463; {$data->word_eng} [{$data->transcription}] - {$data->word_rus}";
     }
 }

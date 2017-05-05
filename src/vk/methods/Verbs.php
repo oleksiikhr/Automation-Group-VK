@@ -10,7 +10,7 @@ class Verbs
     const TABLE = 'verbs';
 
     /**
-     * Get random values from the DB and create a new post.
+     * Get random unique values from the DB and create a new post.
      *
      * @param int $count
      * @param int $photoID

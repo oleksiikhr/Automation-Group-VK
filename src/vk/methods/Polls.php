@@ -53,7 +53,7 @@ class Polls extends VK
             $lastCharQuest = '.';
         }
 
-        $words[0] = $this->upperFirst($quest);
+        $words[0] = $this->upFirst($quest);
 
         // Для ответов
         foreach ($words as $key => $ans) {
@@ -68,8 +68,8 @@ class Polls extends VK
             if ( ($lastCharAnswer == '!' || $lastCharAnswer == '?' || $lastCharAnswer == '.')
                 && $lastCharAnswer != $lastCharQuest ) return false;
 
-            $words[$key] = $this->upperI($words[$key]);
-            $words[$key] = $this->upperFirst($words[$key]);
+            $words[$key] = $this->upI($words[$key]);
+            $words[$key] = $this->upFirst($words[$key]);
 
             if ($lastCharQuest != $lastCharAnswer) {
                 $words[$key] .= $lastCharQuest;
@@ -105,7 +105,7 @@ class Polls extends VK
 
         $count = substr_count($words[0], '@');
 
-        $words[0] = $this->upperFirst($words[0]);
+        $words[0] = $this->upFirst($words[0]);
         $words[0] = str_replace('@', '___', $words[0]);
 
         $lastCharQuest = mb_substr($words[0], -1);

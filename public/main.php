@@ -50,7 +50,7 @@ else
         ( new Polls('type2') )->createPostPolls(456240698);
 
     elseif ($h % 3 == 2)
-        ( new Translate() )->newPostOnlyWords(20, 456240584);
+        Translate::createPost(20, 456240584);
 }
 
 Video::downloadInVK(5);
