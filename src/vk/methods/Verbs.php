@@ -43,7 +43,7 @@ class Verbs
      *
      * @return string
      */
-    public static function getRandomVerb()
+    public static function getRandom()
     {
         $data = DB::getRandomData(self::TABLE);
 

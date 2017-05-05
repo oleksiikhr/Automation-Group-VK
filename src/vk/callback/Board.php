@@ -64,7 +64,7 @@ class Board extends VK
 
         if ($topic_id == B_WORD) {
             $words = new Translate();
-            $is_add = $words->addBD($comment->response->items[0]->text);
+            $is_add = $words->addToBD($comment->response->items[0]->text);
         }
 
         if ($topic_id == B_CHOOSE) {
@@ -105,7 +105,7 @@ class Board extends VK
 
         if ($topic_id == B_WORD) {
             $words = new Translate();
-            $is_add = $words->addBD($text);
+            $is_add = $words->addToBD($text);
         }
 
         if ($topic_id == B_CHOOSE) {

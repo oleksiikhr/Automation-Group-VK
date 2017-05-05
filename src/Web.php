@@ -4,8 +4,6 @@ namespace gvk;
 
 class Web
 {
-    use Methods;
-
     /**
      * Send request from website.
      *

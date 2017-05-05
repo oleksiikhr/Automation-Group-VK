@@ -208,8 +208,8 @@ class Polls extends VK
         $quest = $data->quest;
         $answers = $data->answers;
         $correct_answer = $data->correct_answer;
-        $message = ( new Translate() )->getRandomWord() . "\n"
-            . ( new Verbs() )->getRandomVerb() . "\n"
+        $message = ( new Translate() )->getRandom() . "\n"
+            . ( new Verbs() )->getRandom() . "\n"
             . $this->getHashtags();
 
         $answers = unserialize( base64_decode($answers) );

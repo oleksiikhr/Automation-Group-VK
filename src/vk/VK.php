@@ -4,7 +4,7 @@ namespace gvk\vk;
 
 use gvk\Web;
 
-class VK extends Web
+class VK
 {
     const VK_API = 'https://api.vk.com/method/';
     const VK_VER = '5.63';
@@ -25,9 +25,9 @@ class VK extends Web
         $params['access_token'] = $token;
 
         if ($typeMethod !== 'POST') {
-            $data = self::request( self::VK_API . $method . '?' . http_build_query($params), true );
+            $data = Web::request( self::VK_API . $method . '?' . http_build_query($params), true );
         } else {
-            $data = self::request( self::VK_API . $method, true, 'POST', http_build_query($params) );
+            $data = Web::request( self::VK_API . $method, true, 'POST', http_build_query($params) );
         }
 
         return $data;
@@ -62,9 +62,9 @@ class VK extends Web
      *
      * @return object
      */
-    public function messageSend($message, $user_id, $typeMethod = 'GET')
+    public static function messageSend($message, $user_id, $typeMethod = 'GET')
     {
-        return $this->send('messages.send', [
+        return self::send('messages.send', [
             'user_id'   => $user_id,
             'random_id' => rand(),
             'message'   => $message
@@ -78,9 +78,9 @@ class VK extends Web
      *
      * @return object
      */
-    public function wallDeleteComment($commentID)
+    public static function wallDeleteComment($commentID)
     {
-        return $this->send('wall.deleteComment', [
+        return self::send('wall.deleteComment', [
             'owner_id'   => '-' . G_ID,
             'comment_id' => $commentID
         ], T_USR);
@@ -95,9 +95,9 @@ class VK extends Web
      *
      * @return object
      */
-    public function wallCreateComment($message, $post_id, $fromGroup = true)
+    public static function wallCreateComment($message, $post_id, $fromGroup = true)
     {
-        return $this->send('wall.createComment', [
+        return self::send('wall.createComment', [
             'owner_id'   => '-' . G_ID,
             'message'    => $message,
             'post_id'    => $post_id,

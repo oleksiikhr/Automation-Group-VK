@@ -31,8 +31,7 @@ class Photos
             $photo .= 'photo' . $res->response[0]->owner_id . '_' . $res->response[0]->id . ',';
         }
 
-        $message = '';
-//        $message = ( new Translate() )->getRandomWord() . "\n" . ( new Verbs() )->getRandomVerb();
+        $message = Translate::getRandom() . "\n" . Verbs::getRandom();
         return VK::wallPost($message . "\n#images@eng_day", $photo);
     }
 

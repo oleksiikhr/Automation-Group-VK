@@ -61,7 +61,7 @@ class Translate
      *
      * @return bool
      */
-    public static function addBD($text)
+    public static function addToBD($text)
     {
         $words = self::checkCallback($text);
 
@@ -108,11 +108,11 @@ class Translate
     }
 
     /**
-     * Get random word for new Post.
+     * Get a random word for a new Post.
      *
      * @return string
      */
-    public static function getRandomWord()
+    public static function getRandom()
     {
         $data = DB::getRandomData(self::TABLE);
 
