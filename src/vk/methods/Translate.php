@@ -11,6 +11,7 @@ class Translate
     use Methods;
 
     const TABLE = 'translate';
+    const SMILE = '&#127468;&#127463;';
 
     /**
      * Screening.
@@ -38,9 +39,6 @@ class Translate
         if ( ! preg_match('/^[a-z\s\']+$/u', $words[0]) )
             return false;
 
-        $words[0] = self::upFirst($words[0]);
-        $words[0] = self::upI($words[0]);
-
         // Transcription
         if ( ! preg_match('/^[а-я\,\sёЁ]+$/u', $words[1]) )
             return false;
@@ -49,6 +47,7 @@ class Translate
         if ( ! preg_match('/^[а-я\,\sёЁ]+$/u', $words[2]) )
             return false;
 
+        $words[0] = self::upFirst( self::upI($words[0]) );
         $words[2] = self::upFirst($words[2]);
 
         return $words;
@@ -71,7 +70,7 @@ class Translate
         if ( ! empty( \QB::table(self::TABLE)->where('word_eng', '=', $words[0])->first() ) )
             return false;
 
-        return \QB::table(self::TABLE)->inser([
+        return \QB::table(self::TABLE)->insert([
             'word_eng'      => $words[0],
             'transcription' => $words[1],
             'word_rus'      => $words[2]
@@ -89,7 +88,7 @@ class Translate
     public static function createPost($count, $photoID = null)
     {
         $data = DB::getDistinctData(self::TABLE, $count);
-        $message = "";
+        $message = self::SMILE . " Перевод английских слов.";
         $i = 1;
 
         foreach ($data as $item) {
@@ -116,6 +115,6 @@ class Translate
     {
         $data = DB::getRandomData(self::TABLE);
 
-        return "&#127468;&#127463; {$data->word_eng} [{$data->transcription}] - {$data->word_rus}";
+        return self::SMILE . " {$data->word_eng} [{$data->transcription}] - {$data->word_rus}";
     }
 }

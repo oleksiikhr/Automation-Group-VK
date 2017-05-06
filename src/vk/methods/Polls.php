@@ -10,9 +10,10 @@ class Polls
 {
     use Methods;
 
-    const TABLE_1 = 'type1';
-    const TABLE_2 = 'type2';
-    const TABLE_3 = 'type3';
+    const TABLE_1 = 'poll_type1';
+    const TABLE_2 = 'poll_type2';
+    const TABLE_3 = 'poll_type3';
+    const SMILE   = '&#128218;';
 
     /**
      * Screening - distribute.
@@ -32,6 +33,8 @@ class Polls
 
 //        if ($table == self::TABLE_3)
 //            return self::checkCallbackType3($text);
+
+        return false;
     }
 
     /**
@@ -124,7 +127,7 @@ class Polls
                 if ($key == 0)
                     continue;
 
-                if ( ! preg_match('/^[a-z\s]+'.str_repeat('\s\/\s[a-z\s]+', $count - 1).'$/ui', $word) )
+                if ( ! preg_match('/^[a-z\s]+' . str_repeat('\s\/\s[a-z\s]+', $count - 1) . '$/ui', $word) )
                     return false;
             }
         }
@@ -149,6 +152,8 @@ class Polls
 
         if ($table == self::TABLE_3)
             return '#polls@eng_day #polls_type3@eng_day';
+
+        return '';
     }
 
     /**
@@ -201,7 +206,7 @@ class Polls
         shuffle($data->answers);
         $data->answers[] = 'Узнать результаты.';
 
-        $createdPoll = self::create($data->quest, $data->answers);
+        $createdPoll = self::create(self::SMILE . ' ' . $data->quest, $data->answers);
         $attachments = 'poll' . $createdPoll->response->owner_id . '_' . $createdPoll->response->id;
 
         if ( ! empty($photo_id) )
@@ -211,7 +216,7 @@ class Polls
 
         $comment = "&#9989; Правильный ответ:\n"
             . str_repeat("&#128315;\n", 8)
-            . "&#127468;&#127463; " . $data->correct_answer;
+            . self::SMILE . " " . $data->correct_answer;
 
         return VK::wallCreateComment($comment, $createdPost->response->post_id);
     }

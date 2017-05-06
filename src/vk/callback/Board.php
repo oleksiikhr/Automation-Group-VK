@@ -14,15 +14,15 @@ class Board
      *
      * @param object $data
      *
-     * @return void
+     * @return bool
      */
     public static function postNew($data)
     {
         if ($data->from_id != '-' . G_ID)
-            return;
+            return false;
 
         if ( ! in_array($data->topic_id, [B_WORD, B_VIDEO, B_POLL, B_CHOOSE]) )
-            return;
+            return false;
 
         $text = trim($data->text);
         $commentID = (int)mb_substr( $text, mb_strpos($text, '_') + 1 );
@@ -46,6 +46,8 @@ class Board
 
         if ($is_add)
             self::deleteComment($data->topic_id, $data->id);
+
+        return $is_add;
     }
 
     /**

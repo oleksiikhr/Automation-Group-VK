@@ -2,10 +2,7 @@
 
 namespace gvk\vk\parse;
 
-use gvk\DB;
 use gvk\Web;
-use gvk\youtube\Youtube;
-use gvk\vk\methods\Video;
 use gvk\vk\methods\Translate;
 
 class Parse

@@ -7,8 +7,11 @@ use gvk\vk\VK;
 
 class Exam
 {
+    const TABLE = 'exam';
+    const SMILE = '&#128193;'; // *
+
     /**
-     * Create a new post exam.
+     * Get random data from different tables and create a post.
      *
      * @param int $photoID
      *
@@ -20,13 +23,17 @@ class Exam
             $photoID = 'photo-' . G_ID . '_' . $photoID;
 
         $translate = DB::getRandomData(Translate::TABLE);
+        $poll = DB::getRandomData(Polls::TABLE_1);
         $verb = DB::getRandomData(Verbs::TABLE);
+//        $exam = DB::getRandomData(self::TABLE);
 
         $message = "&#8505; Экспериментальная функция.\n\n"
             . "Необходимо ответить на вопросы:\n"
-            . "&#127468;&#127463; 1. Переведите слово: {$translate->word_eng}\n"
-            . "&#128203; 2. Вторая форма глагола: {$verb->first_form}\n\n"
-            . "Ответов нет. &#128521;\n"
+            . "1. " . Translate::SMILE . " Переведите слово: {$translate->word_eng}\n"
+            . "2. " . Polls::SMILE . " Переведите предложение: {$poll->quest}\n"
+            . "3. " . Verbs::SMILE . " Вторая форма глагола: {$verb->first_form}\n"
+//            . "4. " . self::SMILE . " {$exam->question}\n"
+            . "\nОтветов нет. &#128521;\n"
             . "#exam@eng_day";
 
         return VK::wallPost($message, $photoID);

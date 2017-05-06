@@ -5,7 +5,7 @@ namespace gvk;
 class Web
 {
     /**
-     * Send request from website.
+     * Send request to website.
      *
      * @param string $url
      * @param bool   $decode

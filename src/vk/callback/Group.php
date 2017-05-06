@@ -42,8 +42,7 @@ class Group
         imagecopymerge($fon, $photo, 638, 49, 0, 0, 100, 100, 100);
 
         imagettftext(
-            $fon, 11, 0,
-            657, 164, 0,
+            $fon, 11, 0, 657, 164, 0,
             __DIR__ . '/header/MarckScript.ttf', $text
         );
 

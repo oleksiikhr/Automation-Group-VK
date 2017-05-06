@@ -16,6 +16,7 @@ $m = date('i');
 /*
  * Exam        | 0                            : |30|  => 1
  * Learn       | 12                           : |30|  => 1
+ * Poll_type3  | 14                           : |30|  => 1
  * Videos      | 8, 20                        : |30|  => 2
  * Verb        | 9, 16, 21                    : |30|  => 3
  * Image       | 4, 10, 13, 17, 22            : |30|  => 5
@@ -23,12 +24,12 @@ $m = date('i');
  * Poll_type2  | 1, 4, 7, 10, 13, 16, 19, 22  : |00|  => 8
  * Words       | 2, 5, 8, 11, 14, 17, 20, 23  : |00|  => 8
  *
- * Count: 36/50
+ * Count: 37/50
  */
 
 if ( $m == 30 )
 {
-    if ( in_array($h, ['12']) )
+    if     ( in_array($h, ['12']) )
         Learn::createPost(456241870);
 
     elseif ( in_array($h, ['8', '20']) )
@@ -42,10 +43,13 @@ if ( $m == 30 )
 
     elseif ( in_array($h, ['0']) )
         Exam::createPost(456242833);
+
+//    elseif ( in_array($h, ['14']) )
+//        Polls::createPost(Polls::TABLE_3, 0);
 }
 else
 {
-    if ($h % 3 == 0)
+    if     ($h % 3 == 0)
         Polls::createPost(Polls::TABLE_1, 456240697);
 
     elseif ($h % 3 == 1)

@@ -137,7 +137,7 @@ class Video
     public static function createPost()
     {
         $albums = self::getAlbums(0);
-        $albums = self::getAlbums(1, rand(0, $albums->response->count - 1));
+        $albums = self::getAlbums( 1, rand(0, $albums->response->count - 1) );
 
         $albumsCount = self::get($albums->response->items[0]->id, 0);
         $offset = ($albumsCount->response->count > 10) ? $albumsCount->response->count - 10 : 0;

@@ -8,6 +8,7 @@ use gvk\vk\VK;
 class Verbs
 {
     const TABLE = 'verbs';
+    const SMILE = '&#128203;';
 
     /**
      * Get random unique values from the DB and create a new post.
@@ -20,7 +21,7 @@ class Verbs
     public static function createPost($count, $photoID = null)
     {
         $data = DB::getDistinctData(self::TABLE, $count);
-        $message = "&#128203; Таблица неправильных глаголов\n\n";
+        $message = self::SMILE . " Таблица неправильных глаголов\n\n";
 
         foreach ($data as $key => $item) {
             $i = $key + 1;
@@ -47,6 +48,6 @@ class Verbs
     {
         $data = DB::getRandomData(self::TABLE);
 
-        return "&#128203; {$data->first_form} - {$data->second_form} - {$data->third_form}";
+        return self::SMILE . " {$data->first_form} - {$data->second_form} - {$data->third_form}";
     }
 }

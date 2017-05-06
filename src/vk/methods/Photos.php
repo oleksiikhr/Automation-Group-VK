@@ -22,7 +22,7 @@ class Photos
         if ( ! $images )
             return false;
 
-        $photo = ''; // Temporary
+        $photo = '';
         foreach ($images[1] as $image) {
             $upload = Web::request(self::getWallUploadServer()->response->upload_url, true, 'POST',
                 ['photo' => curl_file_create($images[0] . '/' . $image)]);
