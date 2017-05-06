@@ -7,8 +7,9 @@ use gvk\vk\VK;
 
 class Exam
 {
-    const TABLE = 'exam';
-    const SMILE = '&#128193;'; // *
+    const TABLE   = 'exam';
+    const SMILE   = '&#128193;'; // *
+    const HASHTAG = '#exam@' . G_URL;
 
     /**
      * Get random data from different tables and create a post.
@@ -34,7 +35,7 @@ class Exam
             . "3. " . Verbs::SMILE . " Вторая форма глагола: {$verb->first_form}\n"
 //            . "4. " . self::SMILE . " {$exam->question}\n"
             . "\nОтветов нет. &#128521;\n"
-            . "#exam@eng_day";
+            . self::HASHTAG;
 
         return VK::wallPost($message, $photoID);
     }

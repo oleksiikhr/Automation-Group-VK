@@ -13,7 +13,7 @@ class Group
      *
      * @param object $data
      *
-     * @return void
+     * @return bool
      */
     public static function groupJoin($data)
     {
@@ -23,7 +23,9 @@ class Group
         ], T_USR);
 
         self::generateLogo($user->response[0]->first_name, $user->response[0]->photo_100);
-        self::setNewPhoto();
+        $photo = self::setNewPhoto();
+
+        return empty($photo->error) ? true : false;
     }
 
     /**
@@ -52,7 +54,7 @@ class Group
     /**
      * Pour the generated photo into the group.
      *
-     * @return void
+     * @return object
      */
     public static function setNewPhoto()
     {
@@ -63,6 +65,6 @@ class Group
             ['photo' => curl_file_create(__DIR__ . '/header/temp.png')]
         );
 
-        Video::saveOwnerCoverPhoto($upload->hash, $upload->photo);
+        return Video::saveOwnerCoverPhoto($upload->hash, $upload->photo);
     }
 }

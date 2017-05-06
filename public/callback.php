@@ -17,7 +17,7 @@ switch ($data->type) {
         break;
 
 //    case 'group_join':
-//        Group::groupJoin($data->object);
+//        $is = Group::groupJoin($data->object);
 //        break;
 }
 

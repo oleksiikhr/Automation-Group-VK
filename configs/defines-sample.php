@@ -9,7 +9,8 @@ define('CONFIRMATION', '');
 define('SECRET_KEY',   '');
 
 // Group
-define('G_ID', '');
+define('G_ID',  '');
+define('G_URL', '');
 
 // Token
 define('T_USR',    '');
