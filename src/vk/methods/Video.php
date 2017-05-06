@@ -18,7 +18,7 @@ class Video
      *
      * @return bool
      */
-    public static function addBD($text)
+    public static function addDB($text)
     {
         $arr = self::checkCallback($text);
 

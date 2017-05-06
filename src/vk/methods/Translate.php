@@ -61,7 +61,7 @@ class Translate
      *
      * @return bool
      */
-    public static function addToBD($text)
+    public static function addDB($text)
     {
         $words = self::checkCallback($text);
 

@@ -171,7 +171,7 @@ class Polls extends VK
      *
      * @return bool
      */
-    public function addBD($text)
+    public function addDB($text)
     {
         $words = $this->checkCallback($text);
 
