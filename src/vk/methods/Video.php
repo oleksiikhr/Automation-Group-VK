@@ -49,10 +49,10 @@ class Video
                 $title = preg_replace('/ +/', ' ', $item->snippet->title);
                 $videoYoutubeID = preg_replace('/ +/', ' ', $item->snippet->resourceId->videoId);
 
-                if ( ! empty(\QB::table(self::TABLE)->where('videoYoutubeID', '=', $videoYoutubeID)->first()) )
+                if ( ! empty( \QB::table(self::TABLE)->where('videoYoutubeID', '=', $videoYoutubeID)->first() ) )
                     continue;
 
-                \QB::table(self::TABLE)->inser([
+                \QB::table(self::TABLE)->insert([
                     'title'          => $title,
                     'videoYoutubeID' => $videoYoutubeID,
                     'album_id'       => $numAlbum,
@@ -127,25 +127,6 @@ class Video
                     'videoVKID' => $savedVideo->response->video_id
                 ]);
         }
-    }
-
-    /**
-     * Save video in VK from Youtube.
-     *
-     * @param string $name
-     * @param string $link
-     * @param int $album_id
-     *
-     * @return object
-     */
-    public static function save($name, $link, $album_id)
-    {
-        return VK::send('video.save', [
-            'name'     => $name,
-            'link'     => Youtube::L_WATCH . $link,
-            'group_id' => G_ID,
-            'album_id' => $album_id
-        ], T_USR);
     }
 
     /**
@@ -251,5 +232,24 @@ class Video
             'hash'   => $hash,
             'photo'  => $photo
         ], T_IMG);
+    }
+
+    /**
+     * Save video in VK from Youtube.
+     *
+     * @param string $name
+     * @param string $link
+     * @param int $album_id
+     *
+     * @return object
+     */
+    public static function save($name, $link, $album_id)
+    {
+        return VK::send('video.save', [
+            'name'     => $name,
+            'link'     => Youtube::L_WATCH . $link,
+            'group_id' => G_ID,
+            'album_id' => $album_id
+        ], T_USR);
     }
 }

@@ -30,6 +30,7 @@ class Board
         // [id100000000:bp-100000000_100|Admin], - Example
         if ( preg_match('/^\[(id|club)[0-9]+:bp-[0-9]+_[0-9]+\|.+],$/ui', $text) ) {
             self::deleteComment($data->topic_id, $data->id);
+
             $text = self::getComments($data->topic_id, $commentID);
             $text = $text->response->items[0]->text;
             $data->id = $commentID;
@@ -37,10 +38,10 @@ class Board
 
         $is_add = false;
         switch ($data->topic_id) {
-            case B_VIDEO:   $is_add = Video::addDB($text);      break;
-            case B_POLL:    $is_add = Polls::addDB($text);      break;
-            case B_WORD:    $is_add = Translate::addDB($text);  break;
-            case B_CHOOSE:  $is_add = Polls::addDB($text);      break;
+            case B_VIDEO:   $is_add = Video::addDB($text); break;
+            case B_POLL:    $is_add = Polls::addDB($text, Polls::TABLE_1); break;
+            case B_WORD:    $is_add = Translate::addDB($text); break;
+            case B_CHOOSE:  $is_add = Polls::addDB($text, Polls::TABLE_2); break;
         }
 
         if ($is_add)

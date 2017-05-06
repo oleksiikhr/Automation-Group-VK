@@ -11,8 +11,10 @@ use gvk\vk\methods\Translate;
 require_once __DIR__ . '/run.php';
 
 $h = date('G');
+$m = date('i');
 
 /*
+ * Exam        | 0                            : |30|  => 1
  * Learn       | 12                           : |30|  => 1
  * Videos      | 8, 20                        : |30|  => 2
  * Verb        | 9, 16, 21                    : |30|  => 3
@@ -21,10 +23,10 @@ $h = date('G');
  * Poll_type2  | 1, 4, 7, 10, 13, 16, 19, 22  : |00|  => 8
  * Words       | 2, 5, 8, 11, 14, 17, 20, 23  : |00|  => 8
  *
- * Count: 35/50
+ * Count: 36/50
  */
 
-if ( date('i') == 30 )
+if ( $m == 30 )
 {
     if ( in_array($h, ['12']) )
         Learn::createPost(456241870);
@@ -44,10 +46,10 @@ if ( date('i') == 30 )
 else
 {
     if ($h % 3 == 0)
-        ( new Polls('type1') )->createPostPolls(456240697);
+        Polls::createPost(Polls::TABLE_1, 456240697);
 
     elseif ($h % 3 == 1)
-        ( new Polls('type2') )->createPostPolls(456240698);
+        Polls::createPost(Polls::TABLE_2, 456240698);
 
     elseif ($h % 3 == 2)
         Translate::createPost(20, 456240584);

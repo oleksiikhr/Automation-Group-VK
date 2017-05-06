@@ -2,243 +2,236 @@
 
 namespace gvk\vk\methods;
 
+use gvk\DB;
 use gvk\vk\VK;
+use gvk\Methods;
 
-class Polls extends VK
+class Polls
 {
-    protected $table = null;
+    use Methods;
+
+    const TABLE_1 = 'type1';
+    const TABLE_2 = 'type2';
+    const TABLE_3 = 'type3';
 
     /**
-     * Constructor.
+     * Screening - distribute.
      *
+     * @param string $text
      * @param string $table
+     *
+     * @return array|false
      */
-    public function __construct($table)
+    public static function checkCallback($text, $table)
     {
-        parent::__construct();
+        if ($table == self::TABLE_1)
+            return self::checkCallbackType1($text);
 
-        if ($table == 'type1') {
-            $this->table = 'polyglot';
-        } elseif ($table == 'type2') {
-            $this->table = 'choose';
-        }
+        if ($table == self::TABLE_2)
+            return self::checkCallbackType2($text);
+
+//        if ($table == self::TABLE_3)
+//            return self::checkCallbackType3($text);
     }
 
     /**
-     * Screening Polyglot.
+     * Screening Type 1.
      *
      * @param string $text
      *
      * @return array|false
      */
-    public function checkCallbackPolyglot($text)
+    public static function checkCallbackType1($text)
     {
-        $words = preg_replace('| +|', ' ', $text); // Убираем n-пробелы
-        $words = preg_split('/\n/', $words); // Разбиваем на массив
+        $words = preg_replace('/ +/', ' ', $text);
+        $words = preg_split('/\n/', $words);
 
-        if ( count($words) < 4 ) {
+        if ( count($words) < 4 )
             return false;
-        }
 
         $words = array_map('trim', $words);
-        $quest = $words[0];
-        $lastCharQuest = mb_substr($quest, -1);
+        $lastCharQuest = mb_substr($words[0], -1);
 
-        if ( preg_match('/[a-z]+/ui', $quest) ) {
+        if ( preg_match('/[a-z]+/ui', $words[0]) )
             return false;
-        }
 
         if ($lastCharQuest != '!' && $lastCharQuest != '?' && $lastCharQuest != '.') {
-            $quest .= '.';
+            $words[0] .= '.';
             $lastCharQuest = '.';
         }
 
-        $words[0] = $this->upFirst($quest);
+        $words[0] = self::upFirst($words[0]);
 
-        // Для ответов
         foreach ($words as $key => $ans) {
-            if ($key == 0) continue;
+            if ($key == 0)
+                continue;
 
-            if ( preg_match('/[а-яёЁ]+/ui', $ans) ) { // Если есть рус. символы
+            if ( preg_match('/[а-яёЁ]+/ui', $ans) )
                 return false;
-            }
 
             $lastCharAnswer = mb_substr($ans, -1);
 
             if ( ($lastCharAnswer == '!' || $lastCharAnswer == '?' || $lastCharAnswer == '.')
-                && $lastCharAnswer != $lastCharQuest ) return false;
+                    && $lastCharAnswer != $lastCharQuest )
+                return false;
 
-            $words[$key] = $this->upI($words[$key]);
-            $words[$key] = $this->upFirst($words[$key]);
+            $words[$key] = self::upI( self::upFirst($words[$key]) );
 
-            if ($lastCharQuest != $lastCharAnswer) {
+            if ($lastCharQuest != $lastCharAnswer)
                 $words[$key] .= $lastCharQuest;
-            }
         }
 
         return $words;
     }
 
     /**
-     * Screening Choose.
+     * Screening type 2.
      *
      * @param string $text
      *
      * @return array|false
      */
-    public function checkCallbackChoose($text)
+    public static function checkCallbackType2($text)
     {
-        $words = preg_replace('| +|', ' ', $text); // Убираем n-пробелы
-        $words = preg_split('/\n/', $words); // Разбиваем на массив
+        $words = preg_replace('/ +/', ' ', $text);
+        $words = preg_split('/\n/', $words);
 
-        if ( count($words) < 3 ) {
+        if ( count($words) < 3 )
             return false;
-        }
 
         $words = array_map('trim', $words);
 
         foreach ($words as $word) {
-            if ( preg_match('/[а-яёЁ]+/ui', $word) ) {
+            if ( preg_match('/[а-яёЁ]+/ui', $word) )
                 return false;
-            }
         }
 
         $count = substr_count($words[0], '@');
 
-        $words[0] = $this->upFirst($words[0]);
+        $words[0] = self::upFirst($words[0]);
         $words[0] = str_replace('@', '___', $words[0]);
 
         $lastCharQuest = mb_substr($words[0], -1);
-        if ($lastCharQuest != '!' && $lastCharQuest != '?' && $lastCharQuest != '.') {
-            $words[0] .= '.';
-        }
 
-        if ( empty($count) ) {
+        if ($lastCharQuest != '!' && $lastCharQuest != '?' && $lastCharQuest != '.')
+            $words[0] .= '.';
+
+        if ( empty($count) )
             return false;
-        }
 
         if ($count > 1) {
             foreach ($words as $key => $word) {
-                if ($key == 0) continue;
+                if ($key == 0)
+                    continue;
 
-                if ( ! preg_match('/^[a-z\s]+'.str_repeat('\s\/\s[a-z\s]+', $count - 1).'$/ui', $word) ) {
+                if ( ! preg_match('/^[a-z\s]+'.str_repeat('\s\/\s[a-z\s]+', $count - 1).'$/ui', $word) )
                     return false;
-                }
             }
         }
 
         return $words;
-    }
-
-    /**
-     * Screening.
-     *
-     * @param string $text
-     *
-     * @return array|false
-     */
-    public function checkCallback($text)
-    {
-        if ($this->table === 'polyglot') {
-            return $this->checkCallbackPolyglot($text);
-        } elseif ($this->table === 'choose') {
-            return $this->checkCallbackChoose($text);
-        } else {
-            return false;
-        }
     }
 
     /**
      * Get Hashtags for post Poll.
      *
+     * @param string $table
+     *
      * @return string
      */
-    public function getHashtags()
+    public static function getHashtags($table)
     {
-        if ($this->table === 'type1') {
+        if ($table == self::TABLE_1)
             return '#polls@eng_day #polls_type1@eng_day';
-        } elseif ($this->table === 'type2') {
+
+        if ($table == self::TABLE_2)
             return '#polls@eng_day #polls_type2@eng_day';
-        } else {
-            return false;
-        }
+
+        if ($table == self::TABLE_3)
+            return '#polls@eng_day #polls_type3@eng_day';
     }
 
     /**
      * Database Addition.
      *
      * @param string $text
+     * @param string $table
      *
      * @return bool
      */
-    public function addDB($text)
+    public static function addDB($text, $table)
     {
-        $words = $this->checkCallback($text);
+        $words = self::checkCallback($text, $table);
 
-        if ( is_bool($words) ) {
+        if ( empty($words) )
             return false;
-        }
 
         $quest = array_shift($words);
         $correct_answer = array_shift($words);
         $answers = base64_encode( serialize($words) );
 
-        if ( ! empty( $this->getData(['quest' => $quest], \PDO::FETCH_COLUMN) ) ) {
+        if ( ! empty( \QB::table($table)->where('quest', '=', $quest)->first() ) )
             return false;
-        }
 
-        return $this->insert([
-            'quest' => $quest,
+        // TABLE 3!
+        return \QB::table($table)->insert([
+            'quest'          => $quest,
             'correct_answer' => $correct_answer,
-            'answers' => $answers
+            'answers'        => $answers
         ]);
     }
 
     /**
-     * Create new post poll.
+     * Create a new post with poll.
      *
-     * @param int $photo_id
+     * @param string $table
+     * @param int    $photo_id
      *
      * @return object
      */
-    public function createPostPolls($photo_id = null)
+    public static function createPost($table, $photo_id = null)
     {
-        $data = $this->getRandomSingleData();
+        $data = DB::getRandomData($table);
+        $message = Translate::getRandom() . "\n" . Verbs::getRandom() . "\n" . self::getHashtags($table);
 
-        $quest = $data->quest;
-        $answers = $data->answers;
-        $correct_answer = $data->correct_answer;
-        $message = ( new Translate() )->getRandom() . "\n"
-            . ( new Verbs() )->getRandom() . "\n"
-            . $this->getHashtags();
+        $data->answers = unserialize( base64_decode($data->answers) );
+        shuffle($data->answers);
+        $data->answers = array_slice($data->answers, 0, 2);
+        array_unshift($data->answers, $data->correct_answer);
+        shuffle($data->answers);
+        $data->answers[] = 'Узнать результаты.';
 
-        $answers = unserialize( base64_decode($answers) );
-        shuffle($answers);
-        $answers = array_slice($answers, 0, 2);
-        array_unshift($answers, $correct_answer);
-        shuffle($answers);
-        $answers[count($answers)] = 'Узнать результаты.';
-        $answers = '["' . implode('","', $answers) . '"]';
+        $createdPoll = self::create($data->quest, $data->answers);
+        $attachments = 'poll' . $createdPoll->response->owner_id . '_' . $createdPoll->response->id;
 
-        $json = $this->send('polls.create', [
-            'question'     => $quest,
-            'is_anonymous' => 1,
-            'owner_id'     => '-' . G_ID,
-            'add_answers'  => $answers
-        ], T_USR);
-
-        $attachments = 'poll' . $json->response->owner_id . '_' . $json->response->id;
-
-        if ( ! empty($photo_id) ) {
+        if ( ! empty($photo_id) )
             $attachments .= ',photo-' . G_ID . '_' . $photo_id;
-        }
 
-        $createPost = $this->wallPost($message, $attachments);
+        $createdPost = VK::wallPost($message, $attachments);
 
         $comment = "&#9989; Правильный ответ:\n"
             . str_repeat("&#128315;\n", 8)
-            . "&#127468;&#127463; " . $correct_answer;
+            . "&#127468;&#127463; " . $data->correct_answer;
 
-        return $this->wallCreateComment($comment, $createPost->response->post_id);
+        return VK::wallCreateComment($comment, $createdPost->response->post_id);
+    }
+
+    /**
+     * Create a new poll.
+     *
+     * @param string $quest
+     * @param array  $answers
+     * @param bool   $isAnonymous
+     *
+     * @return object
+     */
+    public static function create($quest, $answers, $isAnonymous = true)
+    {
+        return VK::send('polls.create', [
+            'question'     => $quest,
+            'owner_id'     => '-' . G_ID,
+            'add_answers'  => json_encode($answers),
+            'is_anonymous' => $isAnonymous
+        ], T_USR);
     }
 }
