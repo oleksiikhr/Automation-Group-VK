@@ -7,7 +7,7 @@ use gvk\vk\VK;
 
 class Learn
 {
-    const T_LEARN = 'learn';
+    const TABLE = 'learn';
 
     /**
      * Create a new post learn.
@@ -18,7 +18,7 @@ class Learn
      */
     public static function createPost($photoID = null)
     {
-        $data = DB::getRandomData(self::T_LEARN);
+        $data = DB::getRandomData(self::TABLE);
 
         $title = $data->title;
         $text = self::formatText($data->text);
