@@ -1,9 +1,4 @@
-<?php
-
-require_once __DIR__ . '/run.php';
-$key = \gvk\Config::setRandomSecretKey();
-
-?>
+<?php require_once __DIR__ . '/run.php'; ?>
 
 <!DOCTYPE html>
 <html>
@@ -19,13 +14,13 @@ $key = \gvk\Config::setRandomSecretKey();
 
 <div class="section polls_type1">
     <h2>Poll Type 1</h2>
-    <form id="polls_type1">
-        <input type="text" name="quest" placeholder="Quest">
+    <form id="poll_type1">
+        <input type="text" name="quest" placeholder="Quest" onblur="help();">
         <input type="text" name="correct_answer" placeholder="Correct_answer">
         <textarea name="answers" title="Ответы" rows="3" placeholder="Answers" style="vertical-align:middle;"></textarea>
-        <input type="hidden" name="secret" value="<?= $key; ?>">
+        <input type="hidden" name="secret" value="<?= \gvk\Config::setRandomSecretKey(); ?>">
         <input type="submit" title="Отравить">
-        <div id="error"></div>
+        <div id="success"></div>
     </form>
 </div>
 

@@ -7,7 +7,7 @@ class Config
     const TABLE = 'config';
 
     /**
-     * Get the generated random key.
+     * Set and get a random key.
      *
      * @return string
      */
