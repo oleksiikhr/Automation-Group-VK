@@ -4,6 +4,8 @@ namespace gvk;
 
 class Config
 {
+    use Methods;
+
     const TABLE = 'config';
 
     /**
@@ -13,7 +15,7 @@ class Config
      */
     public static function setRandomSecretKey()
     {
-        $key = bin2hex( openssl_random_pseudo_bytes(15) );
+        $key = self::getRandomString(15);
 
         \QB::table(self::TABLE)->where('name', '=', 'secret_key')->update([
             'value' => $key

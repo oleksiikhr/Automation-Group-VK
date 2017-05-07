@@ -31,8 +31,8 @@ class Polls
         if ($table == self::TABLE_2)
             return self::checkCallbackType2($text);
 
-//        if ($table == self::TABLE_3)
-//            return self::checkCallbackType3($text);
+        if ($table == self::TABLE_3)
+            return self::checkCallbackType3($text);
 
         return false;
     }
@@ -136,6 +136,25 @@ class Polls
     }
 
     /**
+     * Screening type 3.
+     *
+     * @param string $text
+     *
+     * @return array|false
+     */
+    public static function checkCallbackType3($text)
+    {
+        $words = preg_replace('/ +/', ' ', $text);
+        $words = preg_split('/\n/', $words);
+        $words = array_map('trim', $words);
+
+        // Code..
+        return false;
+
+        return $words;
+    }
+
+    /**
      * Get Hashtag for post.
      *
      * @param string $table
@@ -178,9 +197,14 @@ class Polls
         if ( ! empty( \QB::table($table)->select('*')->where('quest', '=', $quest)->first() ) )
             return false;
 
-        // TABLE 3!
+        if ($table == self::TABLE_1 || $table == self::TABLE_2)
+            return \QB::table($table)->insert([
+                'quest'          => $quest,
+                'correct_answer' => $correct_answer,
+                'answers'        => $answers
+            ]);
+
         return \QB::table($table)->insert([
-            'quest'          => $quest,
             'correct_answer' => $correct_answer,
             'answers'        => $answers
         ]);
