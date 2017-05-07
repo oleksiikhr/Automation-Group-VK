@@ -3,6 +3,9 @@
 namespace gvk\vk\parse;
 
 use gvk\Web;
+use gvk\Config;
+use gvk\youtube\Youtube;
+use gvk\vk\methods\Video;
 use gvk\vk\methods\Translate;
 
 class Parse
@@ -65,61 +68,26 @@ class Parse
     }
 
     /**
-     * Update video from YouTube to VK.
+     * Update video from YouTube to DB.
      *
      * @return void
      */
     public static function updateRandomPlaylist()
     {
-//        $this->table = 'videos';
-//
-//        $video = new Video();
-//        $youtube = new Youtube();
-//
-//        $playlist = $video->getUniquePlaylist();
-//        $playlist = $playlist[rand( 0, count($playlist) - 1 )];
-//        $playlist = $playlist->playlist;
-//
-//        $video = $youtube->send('playlistItems', [
-//            'part'       => 'id',
-//            'playlistId' => $playlist,
-//            'maxResults' => 0
-//        ]);
-//
-//        // Если нету в БД этого плейлиста, то создаем новый альбом
-//        $num_album = $this->getData(['playlist' => $playlist])[0];
-//        $num_album = $num_album->album_id;
-//
-//        $count = 50;
-//        $video = ceil($video->pageInfo->totalResults / $count);
-//        $nextPageToken = '';
-//
-//        for ($i = 0; $i < $video; $i++) {
-//            $json = $youtube->send('playlistItems', [
-//                'part'       => 'snippet',
-//                'playlistId' => $playlist,
-//                'maxResults' => $count,
-//                'pageToken'  => $nextPageToken
-//            ]);
-//
-//            foreach ($json->items as $item) {
-//                $title = preg_replace('| +|', ' ', $item->snippet->title);
-//                $videoYoutubeID = preg_replace('| +|', ' ', $item->snippet->resourceId->videoId);
-//
-//                if ( ! empty( $this->getData(['videoYoutubeID' => $videoYoutubeID]) ) ) {
-//                    continue;
-//                }
-//
-//                $this->insert([
-//                    'title' => $title,
-//                    'videoYoutubeID' => $videoYoutubeID,
-//                    'album_id' => $num_album,
-//                    'playlist' => $playlist,
-//                    'is_added' => 0
-//                ]);
-//            }
-//
-//            $nextPageToken = isset($json->nextPageToken) ? $json->nextPageToken : '';
-//        }
+        $playlists = Config::getYoutubePlayList();
+
+        if ( empty($playlists) )
+            return;
+
+        $playlist = $playlists[array_rand($playlists, 1)];
+        $video = Youtube::getPlaylistItems('id', $playlist, 0);
+
+        $num_album = \QB::table(Video::TABLE)->select('album_id')->where('playlist', '=', $playlist)->first();
+        $num_album = $num_album->album_id;
+
+        if ( empty($num_album) )
+            return;
+
+        Video::updatePlaylist($video->pageInfo->totalResults, $playlist, $num_album);
     }
 }

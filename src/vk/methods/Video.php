@@ -26,7 +26,7 @@ class Video
             return false;
 
         $videos = Youtube::getPlaylistItems('id', $arr[0], 0);
-        $numAlbum = \QB::table(self::TABLE)->where('playlist', $arr[0])->first();
+        $numAlbum = \QB::table(self::TABLE)->where('playlist', '=', $arr[0])->first();
 
         if ( empty($numAlbum) && empty($arr[1]) )
             return false;
@@ -38,33 +38,47 @@ class Video
             $numAlbum = $numAlbum->album_id;
         }
 
-        $count = 50;
-        $videos = ceil($videos->pageInfo->totalResults / $count);
+        self::updatePlaylist($videos->pageInfo->totalResults, $arr[0], $numAlbum);
+
+        return true;
+    }
+
+    /**
+     * Get the video from YouTube and add it to the DB.
+     *
+     * @param int    $total
+     * @param string $playlist
+     * @param int    $numAlbum
+     * @param int    $maxResults
+     *
+     * @return void
+     */
+    public static function updatePlaylist($total, $playlist, $numAlbum, $maxResults = 50)
+    {
+        $count = ceil($total / $maxResults);
         $nextPageToken = '';
 
-        for ($i = 0; $i < $videos; $i++) {
-            $json = Youtube::getPlaylistItems('snippet', $arr[0], $count, $nextPageToken);
+        for ($i = 0; $i < $count; $i++) {
+            $json = Youtube::getPlaylistItems('snippet', $playlist, $maxResults, $nextPageToken);
 
             foreach ($json->items as $item) {
                 $title = preg_replace('/ +/', ' ', $item->snippet->title);
                 $videoYoutubeID = preg_replace('/ +/', ' ', $item->snippet->resourceId->videoId);
 
-                if ( ! empty( \QB::table(self::TABLE)->where('videoYoutubeID', '=', $videoYoutubeID)->first() ) )
+                if ( ! empty( \QB::table(self::TABLE)->select('*')->where('videoYoutubeID', '=', $videoYoutubeID)->first() ) )
                     continue;
 
                 \QB::table(self::TABLE)->insert([
                     'title'          => $title,
                     'videoYoutubeID' => $videoYoutubeID,
                     'album_id'       => $numAlbum,
-                    'playlist'       => $arr[0],
+                    'playlist'       => $playlist,
                     'is_added'       => 0
                 ]);
             }
 
             $nextPageToken = isset($json->nextPageToken) ? $json->nextPageToken : '';
         }
-
-        return true;
     }
 
     /**

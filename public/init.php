@@ -59,4 +59,13 @@ QB::query('CREATE TABLE ' . \gvk\vk\methods\Learn::TABLE . '(
     text TEXT
 )');
 
+QB::query('CREATE TABLE ' . \gvk\vk\methods\Video::TABLE . '(
+    id BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    videoYoutubeID VARCHAR(255) UNIQUE,
+    album_id INT(11),
+    playlist VARCHAR(255),
+    is_added BOOLEAN
+)');
+
 unlink(__FILE__);
