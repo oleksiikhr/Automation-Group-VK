@@ -26,8 +26,18 @@ class Learn
         if ( ! empty($photoID) )
             $photoID = 'photo-' . G_ID . '_' . $photoID;
 
-        $message = "&#128221; {$title}\n\n{$text}\n\n#learn@eng_day";
-        return VK::wallPost($message, $photoID, 'POST');
+        $message = "&#128221; {$title}\n\n{$text}\n\n";
+        return VK::wallPost($message . self::getHashtag(), $photoID, 'POST');
+    }
+
+    /**
+     * Get Hashtag for post.
+     *
+     * @return string
+     */
+    public static function getHashtag()
+    {
+        return '#learn@' . G_URL;
     }
 
     /**

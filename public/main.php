@@ -5,7 +5,7 @@ use gvk\vk\methods\Learn;
 use gvk\vk\methods\Polls;
 use gvk\vk\methods\Verbs;
 use gvk\vk\methods\Video;
-use gvk\vk\methods\Photos;
+use gvk\vk\methods\Images;
 use gvk\vk\methods\Translate;
 
 require_once __DIR__ . '/run.php';
@@ -39,7 +39,7 @@ if ( $m == 30 )
         Verbs::createPost(20, 456242834);
 
     elseif ( in_array($h, ['4', '10', '13', '17', '22']) )
-        Photos::createPost();
+        Images::createPost();
 
     elseif ( in_array($h, ['0']) )
         Exam::createPost(456242833);

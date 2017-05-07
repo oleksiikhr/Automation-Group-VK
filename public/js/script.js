@@ -1,20 +1,27 @@
 $(document).ready(function () {
     $("#polls_type1").find("input[type='submit']").on("click", function (e) {
-        var quest = $("#polls_type1").find("input[name='quest']").val();
-        var correct_answer = $("#polls_type1").find("input[name='correct_answer']").val();
-        var answers = $("#polls_type1").find("textarea[name='answers']").val().split("\n");
-        var secret = $("#polls_type1").find("input[name='secret']").val();
+        var id = $("#polls_type1");
+
+        var quest = id.find("input[name='quest']").val();
+        var correct_answer = id.find("input[name='correct_answer']").val();
+        var answers = id.find("textarea[name='answers']").val();
+        var secret = id.find("input[name='secret']").val();
+
+        var text = quest + "\n" + correct_answer + "\n" + answers;
+
+        console.log(text);
 
         $.ajax({
             url: "controllers/polls_type1.php",
             type: "GET",
             data: {
-                'quest': quest,
-                'correct_answer': correct_answer,
-                'answers': answers,
+                'text': text,
                 'secret': secret
             },
             success: function (res) {
+                if (res === "good") {
+                    id.find("#error").append(res);
+                }
                 console.log(res);
             }
         });

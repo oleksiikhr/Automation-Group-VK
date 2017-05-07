@@ -136,22 +136,22 @@ class Polls
     }
 
     /**
-     * Get Hashtags for post Poll.
+     * Get Hashtag for post.
      *
      * @param string $table
      *
      * @return string
      */
-    public static function getHashtags($table)
+    public static function getHashtag($table)
     {
         if ($table == self::TABLE_1)
-            return '#polls@eng_day #polls_type1@eng_day';
+            return '#polls@' . G_URL . ' #polls_type1@' . G_URL;
 
         if ($table == self::TABLE_2)
-            return '#polls@eng_day #polls_type2@eng_day';
+            return '#polls@' . G_URL . ' #polls_type2@' . G_URL;
 
         if ($table == self::TABLE_3)
-            return '#polls@eng_day #polls_type3@eng_day';
+            return '#polls@' . G_URL . ' #polls_type3@' . G_URL;
 
         return '';
     }
@@ -175,7 +175,7 @@ class Polls
         $correct_answer = array_shift($words);
         $answers = base64_encode( serialize($words) );
 
-        if ( ! empty( \QB::table($table)->where('quest', '=', $quest)->first() ) )
+        if ( ! empty( \QB::table($table)->select('*')->where('quest', '=', $quest)->first() ) )
             return false;
 
         // TABLE 3!
@@ -197,7 +197,7 @@ class Polls
     public static function createPost($table, $photo_id = null)
     {
         $data = DB::getRandomData($table);
-        $message = Translate::getRandom() . "\n" . Verbs::getRandom() . "\n" . self::getHashtags($table);
+        $message = Translate::getRandom() . "\n" . Verbs::getRandom() . "\n" . self::getHashtag($table);
 
         $data->answers = unserialize( base64_decode($data->answers) );
         shuffle($data->answers);

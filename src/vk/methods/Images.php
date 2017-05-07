@@ -5,7 +5,7 @@ namespace gvk\vk\methods;
 use gvk\Web;
 use gvk\vk\VK;
 
-class Photos
+class Images
 {
     const F_IMG   = 'img';
     const F_FUNNY = 'funny';
@@ -31,8 +31,18 @@ class Photos
             $photo .= 'photo' . $res->response[0]->owner_id . '_' . $res->response[0]->id . ',';
         }
 
-        $message = Translate::getRandom() . "\n" . Verbs::getRandom();
-        return VK::wallPost($message . "\n#images@eng_day", $photo);
+        $message = Translate::getRandom() . "\n" . Verbs::getRandom() . "\n";
+        return VK::wallPost($message . self::getHashtag(), $photo);
+    }
+
+    /**
+     * Get Hashtag for post.
+     *
+     * @return string
+     */
+    public static function getHashtag()
+    {
+        return '#images@' . G_URL . ' #pictures@' . G_URL;
     }
 
     /**

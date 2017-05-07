@@ -1,8 +1,9 @@
 <?php // Cron each hour.
 
+use gvk\vk\parse\Parse;
+
 require_once __DIR__ . '/run.php';
 
-$parse = new gvk\vk\parse\Parse();
+( new Parse() )->updateTranscription(3);
 
-$parse->updateTranscription(3);
-$parse->updateRandomPlaylist();
+Parse::updateRandomPlaylist();

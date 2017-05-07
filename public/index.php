@@ -1,11 +1,16 @@
-<?php //require_once __DIR__ . '/run.php'; ?>
+<?php
+
+require_once __DIR__ . '/run.php';
+$key = \gvk\Config::setRandomSecretKey();
+
+?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
 
-    <title>English - Добавление данные в БД</title>
+    <title>English - Добавление данных в БД</title>
 
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/script.js"></script>
@@ -13,17 +18,16 @@
 <body>
 
 <div class="section polls_type1">
-    <h2>Опрос ТИП 1</h2>
+    <h2>Poll Type 1</h2>
     <form id="polls_type1">
-        <input type="text" name="quest" placeholder="Вопрос">
-        <input type="text" name="correct_answer" placeholder="Правильный ответ">
-        <textarea name="answers" title="Ответы" rows="3" placeholder="Неправильные ответы" style="vertical-align:middle;"></textarea>
-        <input type="hidden" name="secret" value="fj3243H#F2pf2h3f8p9@F">
+        <input type="text" name="quest" placeholder="Quest">
+        <input type="text" name="correct_answer" placeholder="Correct_answer">
+        <textarea name="answers" title="Ответы" rows="3" placeholder="Answers" style="vertical-align:middle;"></textarea>
+        <input type="hidden" name="secret" value="<?= $key; ?>">
         <input type="submit" title="Отравить">
+        <div id="error"></div>
     </form>
 </div>
-
-<div id="test"></div>
 
 </body>
 </html>

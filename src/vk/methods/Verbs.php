@@ -31,12 +31,20 @@ class Verbs
                 $message .= "\n";
         }
 
-        $message .= "#verbs@eng_day";
-
         if ( ! empty($photoID) )
             $photoID = 'photo-' . G_ID . '_' . $photoID;
 
-        return VK::wallPost($message, $photoID, true);
+        return VK::wallPost($message . self::getHashtag(), $photoID, true);
+    }
+
+    /**
+     * Get Hashtag for post.
+     *
+     * @return string
+     */
+    public static function getHashtag()
+    {
+        return '#verbs@' . G_URL;
     }
 
     /**

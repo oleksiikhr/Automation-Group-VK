@@ -66,7 +66,6 @@ class Parse
 
     /**
      * Update video from YouTube to VK.
-     * !! NEW TABLE -> CONFIG !!
      *
      * @return void
      */

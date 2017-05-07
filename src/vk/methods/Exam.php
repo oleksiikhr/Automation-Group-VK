@@ -9,7 +9,6 @@ class Exam
 {
     const TABLE   = 'exam';
     const SMILE   = '&#128193;'; // *
-    const HASHTAG = '#exam@' . G_URL;
 
     /**
      * Get random data from different tables and create a post.
@@ -34,9 +33,18 @@ class Exam
             . "2. " . Polls::SMILE . " Переведите предложение: {$poll->quest}\n"
             . "3. " . Verbs::SMILE . " Вторая форма глагола: {$verb->first_form}\n"
 //            . "4. " . self::SMILE . " {$exam->question}\n"
-            . "\nОтветов нет. &#128521;\n"
-            . self::HASHTAG;
+            . "\nОтветов нет. &#128521;\n";
 
-        return VK::wallPost($message, $photoID);
+        return VK::wallPost($message . self::getHashtag(), $photoID);
+    }
+
+    /**
+     * Get Hashtag for post.
+     *
+     * @return string
+     */
+    public static function getHashtag()
+    {
+        return '#exam@' . G_URL;
     }
 }

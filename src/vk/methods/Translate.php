@@ -98,12 +98,20 @@ class Translate
                 $message .= "\n";
         }
 
-        $message .= "#words@eng_day";
-
         if ( ! empty($photoID) )
             $photoID = 'photo-' . G_ID . '_' . $photoID;
 
-        return VK::wallPost($message, $photoID);
+        return VK::wallPost($message . self::getHashtag(), $photoID);
+    }
+
+    /**
+     * Get Hashtags for post.
+     *
+     * @return string
+     */
+    public static function getHashtag()
+    {
+        return '#words@' . G_URL;
     }
 
     /**

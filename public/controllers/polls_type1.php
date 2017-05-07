@@ -1,3 +1,7 @@
-<?php if ( empty($_GET['secret']) && $_GET['secret'] !== 'fj3243H#F2pf2h3f8p9@F' ) die('bad');
+<?php use gvk\vk\methods\Polls;
 
-echo 'good';
+require_once __DIR__ . '/../run.php';
+
+$isAdded = \gvk\vk\methods\Polls::addDB($_GET['text'], Polls::TABLE_1);
+
+echo $isAdded ? 'ok' : 'bad';

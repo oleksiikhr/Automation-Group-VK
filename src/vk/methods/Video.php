@@ -150,9 +150,19 @@ class Video
 
         $comment = "&#128193; " . $albums->response->items[0]->title . "\n"
             . "&#10133; " . self::LINK . "?section=album_" . $albums->response->items[0]->id . "\n"
-            . "#videos@eng_day";
+            . self::getHashtag();
 
         return VK::wallPost( $comment, implode( ',', array_reverse($arrVideos) ) );
+    }
+
+    /**
+     * Get Hashtag for post.
+     *
+     * @return string
+     */
+    public static function getHashtag()
+    {
+        return '#videos@' . G_URL;
     }
 
     /**
