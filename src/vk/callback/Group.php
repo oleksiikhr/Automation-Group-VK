@@ -2,9 +2,9 @@
 
 namespace gvk\vk\callback;
 
-use gvk\vk\methods\Video;
-use gvk\vk\VK;
 use gvk\Web;
+use gvk\vk\VK;
+use gvk\vk\methods\Photos;
 
 class Group
 {
@@ -58,13 +58,13 @@ class Group
      */
     public static function setNewPhoto()
     {
-        $uploadURL = Video::getOwnerCoverPhotoUploadServer();
+        $uploadURL = Photos::getOwnerCoverPhotoUploadServer();
 
         $upload = Web::request(
             $uploadURL->response->upload_url, true, 'POST',
             ['photo' => curl_file_create(__DIR__ . '/header/temp.png')]
         );
 
-        return Video::saveOwnerCoverPhoto($upload->hash, $upload->photo);
+        return Photos::saveOwnerCoverPhoto($upload->hash, $upload->photo);
     }
 }

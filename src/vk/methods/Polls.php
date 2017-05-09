@@ -263,4 +263,20 @@ class Polls
             'is_anonymous' => $isAnonymous
         ], T_USR);
     }
+
+    /**
+     * Returns detailed information about the poll by its identifier.
+     *
+     * @param int    $pollID
+     * @param string $token
+     *
+     * @return object
+     */
+    public static function getById($pollID, $token = T_USR)
+    {
+        return VK::send('polls.create', [
+            'owner_id' => '-' . G_ID,
+            'poll_id'  => $pollID
+        ], $token);
+    }
 }

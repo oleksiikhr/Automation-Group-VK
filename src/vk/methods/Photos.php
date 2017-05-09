@@ -5,7 +5,7 @@ namespace gvk\vk\methods;
 use gvk\Web;
 use gvk\vk\VK;
 
-class Images
+class Photos
 {
     const F_IMG   = 'img';
     const F_FUNNY = 'funny';
@@ -96,5 +96,33 @@ class Images
             return self::getImages($folder . '/' . $files[array_rand($files)]);
 
         return [$dir, $files];
+    }
+
+    /**
+     * Gets the address to download the cover of the community.
+     *
+     * @return object
+     */
+    public static function getOwnerCoverPhotoUploadServer()
+    {
+        return VK::send('photos.getOwnerCoverPhotoUploadServer', [
+            'group_id' => G_ID
+        ], T_IMG);
+    }
+
+    /**
+     * Saves the image for the community cover after a successful download.
+     *
+     * @param string $hash
+     * @param string $photo
+     *
+     * @return object
+     */
+    public static function saveOwnerCoverPhoto($hash, $photo)
+    {
+        return VK::send('photos.saveOwnerCoverPhoto', [
+            'hash'   => $hash,
+            'photo'  => $photo
+        ], T_IMG);
     }
 }

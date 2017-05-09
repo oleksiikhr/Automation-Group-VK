@@ -65,7 +65,7 @@ class Video
                 $title = preg_replace('/ +/', ' ', $item->snippet->title);
                 $videoYoutubeID = preg_replace('/ +/', ' ', $item->snippet->resourceId->videoId);
 
-                if ( ! empty( \QB::table(self::TABLE)->select('*')->where('videoYoutubeID', '=', $videoYoutubeID)->first() ) )
+                if ( ! empty( \QB::table(self::TABLE)->where('videoYoutubeID', '=', $videoYoutubeID)->first() ) )
                     continue;
 
                 \QB::table(self::TABLE)->insert([
@@ -228,34 +228,6 @@ class Video
             'group_id' => G_ID,
             'title'    => $title
         ], T_USR);
-    }
-
-    /**
-     * Gets the address to download the cover of the community.
-     *
-     * @return object
-     */
-    public static function getOwnerCoverPhotoUploadServer()
-    {
-        return VK::send('photos.getOwnerCoverPhotoUploadServer', [
-            'group_id' => G_ID
-        ], T_IMG);
-    }
-
-    /**
-     * Saves the image for the community cover after a successful download.
-     *
-     * @param string $hash
-     * @param string $photo
-     *
-     * @return object
-     */
-    public static function saveOwnerCoverPhoto($hash, $photo)
-    {
-        return VK::send('photos.saveOwnerCoverPhoto', [
-            'hash'   => $hash,
-            'photo'  => $photo
-        ], T_IMG);
     }
 
     /**
