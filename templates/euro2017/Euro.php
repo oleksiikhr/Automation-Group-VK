@@ -23,7 +23,7 @@ class Euro
                 ->orderBy('rating', 'DESC')
                 ->get() );
 
-//        self::setNewPhoto();
+        self::setNewPhoto();
     }
 
     public static function parsePoll($round = null)
@@ -33,17 +33,28 @@ class Euro
                 ->where('poll_id', '>', 0)
                 ->where('isFinal', '=', true)
                 ->orderBy('time', 'ASC')
+                ->limit(3)
                 ->get();
         else
             $pollIDs = \QB::table(self::TABLE)
                 ->where('poll_id', '>', 0)
                 ->where('round', '=', $round)
                 ->orderBy('time', 'ASC')
+                ->limit(3)
                 ->get();
 
-        // ! Несколько токенов
-        var_dump($pollIDs);
-//        Polls::getById($pollIDs[0]->poll_id, T_USR);
+        if ( empty($pollIDs) )
+            return;
+
+        $tokens = [T_USR, T_USR2, T_USR3];
+
+        foreach ($pollIDs as $key => $pollID) {
+            $poll = Polls::getById($pollID->poll_id, $tokens[$key]);
+
+            \QB::table(self::TABLE)->where('id', '=', $pollID->id)->update([
+                'rating' => $poll->response->answers[0]->rate
+            ]);
+        }
     }
 
     public static function generateHeaderSemi($data)

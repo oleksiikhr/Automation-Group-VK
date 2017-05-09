@@ -274,7 +274,7 @@ class Polls
      */
     public static function getById($pollID, $token = T_USR)
     {
-        return VK::send('polls.create', [
+        return VK::send('polls.getById', [
             'owner_id' => '-' . G_ID,
             'poll_id'  => $pollID
         ], $token);
