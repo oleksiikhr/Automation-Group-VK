@@ -2,42 +2,49 @@
 
 namespace gvk\vk\methods;
 
+use gvk\DB;
 use gvk\vk\VK;
 
-class Exam extends VK
+class Exam
 {
-    protected $table = null;
+    const TABLE   = 'exam';
+    const SMILE   = '&#128193;'; // *
 
     /**
-     * Create new post exam.
+     * Get random data from different tables and create a post.
      *
-     * @param int $photo_id
+     * @param int $photoID
      *
-     * @return bool
+     * @return object
      */
-    public function createPostExam($photo_id = null)
+    public static function createPost($photoID = null)
     {
-        $this->table = 'polyglot';
-        $data = $this->getRandomSingleData();
-        $attachment = null;
+        if ( ! empty($photoID) )
+            $photoID = 'photo-' . G_ID . '_' . $photoID;
 
-        if ( ! empty($photo_id) ) {
-            $attachment = 'photo-' . GROUP_ID . '_' . $photo_id;
-        }
+        $translate = DB::getRandomData(Translate::TABLE);
+        $poll = DB::getRandomData(Polls::TABLE_1);
+        $verb = DB::getRandomData(Verbs::TABLE);
+//        $exam = DB::getRandomData(self::TABLE);
 
-        $message = 'Тестовая функция! #exam@eng_day' . "\n"
-            . 'Нужно написать ответ на вопрос в комментариях под этой записью.' . "\n\n"
-            . "&#_128293; Переведите: " . $data->quest . "\n\n"
-            . '1. Нужно быть участником группы.' . "\n"
-            . '2. Не блокировать получение сообщений от группы.' . "\n\n"
-            . 'В данный момент имеет разница между didn\'t и did not и других сокращений.';
+        $message = "&#8505; Экспериментальная функция.\n\n"
+            . "Необходимо ответить на вопросы:\n"
+            . "1. " . Translate::SMILE . " Переведите слово: {$translate->word_eng}\n"
+            . "2. " . Polls::SMILE . " Переведите предложение: {$poll->quest}\n"
+            . "3. " . Verbs::SMILE . " Вторая форма глагола: {$verb->first_form}\n"
+//            . "4. " . self::SMILE . " {$exam->question}\n"
+            . "\nОтветов нет. &#128521;\n";
 
-        $newPost = $this->createPost($message,$attachment);
+        return VK::wallPost($message . self::getHashtag(), $photoID);
+    }
 
-        $this->table = 'exam';
-        return $this->insert([
-            'id_post' => $newPost->response->post_id,
-            'id_poll' => $data->id
-        ]);
+    /**
+     * Get Hashtag for post.
+     *
+     * @return string
+     */
+    public static function getHashtag()
+    {
+        return '#exam@' . G_URL;
     }
 }

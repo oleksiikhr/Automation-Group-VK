@@ -8,7 +8,7 @@ Thumbs.db
 /vendor
 
 # pictures.
-/img
+resources/
 
 # passwords.
-/public/config.php
+/configs/defines.php

@@ -2,21 +2,19 @@
 
 namespace gvk;
 
-class Web extends DB
+class Web
 {
-    use Methods;
-
     /**
-     * Send request from website.
+     * Send request to website.
      *
      * @param string $url
-     * @param bool $decode
+     * @param bool   $decode
      * @param string $typeMethod
-     * @param array $fields
+     * @param array  $fields
      *
      * @return object
      */
-    public function request($url, $decode = false, $typeMethod = 'GET', $fields = [])
+    public static function request($url, $decode = false, $typeMethod = 'GET', $fields = [])
     {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -30,8 +28,6 @@ class Web extends DB
         $result = curl_exec($ch);
         curl_close($ch);
 
-        if ($decode) return json_decode($result);
-
-        return $result;
+        return $decode ? json_decode($result) : $result;
     }
 }

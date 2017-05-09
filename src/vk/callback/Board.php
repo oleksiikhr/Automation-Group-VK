@@ -4,121 +4,85 @@ namespace gvk\vk\callback;
 
 use gvk\vk\VK;
 use gvk\vk\methods\Polls;
-use gvk\vk\methods\Videos;
+use gvk\vk\methods\Video;
 use gvk\vk\methods\Translate;
 
-class Board extends VK
+class Board
 {
     /**
      * New comment in the board.
      *
      * @param object $data
      *
-     * @return void
+     * @return bool
      */
-    public function boardPostNew($data)
+    public static function postNew($data)
     {
-        if ($data->from_id != '-' . GROUP_ID) {
-            return; // Если сообщение не от администратора
-        }
+        if ($data->from_id != '-' . G_ID)
+            return false;
 
-        $topic_id = $data->topic_id;
-
-        if ($topic_id != BOARD_ADD_WORD && $topic_id != BOARD_ADD_VIDEO
-            && $topic_id != BOARD_ADD_POOL && $topic_id != BOARD_ADD_CHOOSE) {
-            return; // Если топик не от нужных тем
-        }
+        if ( ! in_array($data->topic_id, [B_WORD, B_VIDEO, B_POLL, B_CHOOSE]) )
+            return false;
 
         $text = trim($data->text);
-        $commentIDMessage = (int)substr( $text, strpos($text, '_') + 1 );
+        $commentID = (int)mb_substr( $text, mb_strpos($text, '_') + 1 );
 
-        // [id207909600:bp-132378855_418|Алексей],
-        if ( ! preg_match('/^\[(id|club)[0-9]+:bp-[0-9]+_[0-9]+\|.+],$/ui', $text) ) {
-            $this->addContent($text, $topic_id, $data->id);
-            return;
+        // [id100000000:bp-100000000_100|Admin], - Example
+        if ( preg_match('/^\[(id|club)[0-9]+:bp-[0-9]+_[0-9]+\|.+],$/ui', $text) ) {
+            self::deleteComment($data->topic_id, $data->id);
+
+            $text = self::getComments($data->topic_id, $commentID);
+            $text = $text->response->items[0]->text;
+            $data->id = $commentID;
         }
-
-        $this->send('board.deleteComment', [
-            'group_id'   => GROUP_ID,
-            'topic_id'   => $topic_id,
-            'comment_id' => $data->id
-        ], TOKEN_USER);
-
-        $comment = $this->send('board.getComments', [
-            'group_id'         => GROUP_ID,
-            'topic_id'         => $topic_id,
-            'start_comment_id' => $commentIDMessage,
-            'count'            => 1
-        ], TOKEN_USER);
 
         $is_add = false;
-        if ($topic_id == BOARD_ADD_VIDEO) {
-            $video = new Videos();
-            $is_add = $video->addBD($comment->response->items[0]->text);
+        switch ($data->topic_id) {
+            case B_VIDEO:   $is_add = Video::addDB($text); break;
+            case B_POLL:    $is_add = Polls::addDB($text, Polls::TABLE_1); break;
+            case B_WORD:    $is_add = Translate::addDB($text); break;
+            case B_CHOOSE:  $is_add = Polls::addDB($text, Polls::TABLE_2); break;
         }
 
-        if ($topic_id == BOARD_ADD_POOL) {
-            $polyglot = new Polls('type1');
-            $is_add = $polyglot->addBD($comment->response->items[0]->text);
-        }
+        if ($is_add)
+            self::deleteComment($data->topic_id, $data->id);
 
-        if ($topic_id == BOARD_ADD_WORD) {
-            $words = new Translate();
-            $is_add = $words->addBD($comment->response->items[0]->text);
-        }
-
-        if ($topic_id == BOARD_ADD_CHOOSE) {
-            $choose = new Polls('type2');
-            $is_add = $choose->addBD($comment->response->items[0]->text);
-        }
-
-        if ($is_add) {
-            $this->send('board.deleteComment', [
-                'group_id'   => GROUP_ID,
-                'topic_id'   => $topic_id,
-                'comment_id' => $commentIDMessage
-            ], TOKEN_USER);
-        }
+        return $is_add;
     }
 
     /**
-     * New comment in the board for admin text.
+     * Returns a list of messages in the specified topic.
      *
-     * @param string $text
-     * @param int $topic_id
-     * @param int $id
+     * @param int $topicID
+     * @param int $startID
+     * @param int $count
      *
-     * @return void
+     * @return object
      */
-    public function addContent($text, $topic_id, $id)
+    public static function getComments($topicID, $startID, $count = 1)
     {
-        $is_add = false;
-        if ($topic_id == BOARD_ADD_VIDEO) {
-            $video = new Videos();
-            $is_add = $video->addBD($text);
-        }
+        return VK::send('board.getComments', [
+            'group_id'         => G_ID,
+            'topic_id'         => $topicID,
+            'start_comment_id' => $startID,
+            'count'            => $count
+        ], T_USR);
+    }
 
-        if ($topic_id == BOARD_ADD_POOL) {
-            $polyglot = new Polls('type1');
-            $is_add = $polyglot->addBD($text);
-        }
-
-        if ($topic_id == BOARD_ADD_WORD) {
-            $words = new Translate();
-            $is_add = $words->addBD($text);
-        }
-
-        if ($topic_id == BOARD_ADD_CHOOSE) {
-            $choose = new Polls('type2');
-            $is_add = $choose->addBD($text);
-        }
-
-        if ($is_add) {
-            $this->send('board.deleteComment', [
-                'group_id' => GROUP_ID,
-                'topic_id' => $topic_id,
-                'comment_id' => $id
-            ], TOKEN_USER);
-        }
+    /**
+     * Deletes a topic message in community discussions.
+     *
+     * @param int $topicID
+     * @param int $commentID
+     *
+     * @return object
+     */
+    public static function deleteComment($topicID, $commentID)
+    {
+        return VK::send('board.deleteComment', [
+            'group_id'   => G_ID,
+            'topic_id'   => $topicID,
+            'comment_id' => $commentID
+        ], T_USR);
     }
 }

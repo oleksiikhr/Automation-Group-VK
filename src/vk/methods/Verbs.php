@@ -2,49 +2,60 @@
 
 namespace gvk\vk\methods;
 
+use gvk\DB;
 use gvk\vk\VK;
 
-class Verbs extends VK
+class Verbs
 {
-    protected $table = 'verbs';
+    const TABLE = 'verbs';
+    const SMILE = '&#128203;';
 
     /**
-     * New post only Verbs.
+     * Get random unique values from the DB and create a new post.
      *
      * @param int $count
      * @param int $photoID
      *
      * @return object
      */
-    public function createPostVerbs($count, $photoID)
+    public static function createPost($count, $photoID = null)
     {
-        $data = $this->getRandomCountData($count);
-        $message = "";
+        $data = DB::getDistinctData(self::TABLE, $count);
+        $message = self::SMILE . " Таблица неправильных глаголов\n\n";
 
         foreach ($data as $key => $item) {
             $i = $key + 1;
-            $message .= $i . ". " . $item->first_form . " - " . $item->second_form . " - " . $item->third_form . "\n";
+            $message .= "$i. {$item->first_form} - {$item->second_form} - {$item->third_form}\n";
 
-            if ($i % 5 == 0) {
+            if ($i % 5 == 0)
                 $message .= "\n";
-            }
         }
 
-        $message .= "#verbs@eng_day";
-        $attachments = 'photo-' . GROUP_ID . '_' . $photoID;
+        if ( ! empty($photoID) )
+            $photoID = 'photo-' . G_ID . '_' . $photoID;
 
-        return $this->createPost($message, $attachments);
+        return VK::wallPost($message . self::getHashtag(), $photoID, true);
     }
 
     /**
-     * Get random verb for new Post.
+     * Get Hashtag for post.
      *
      * @return string
      */
-    public function getRandomVerb()
+    public static function getHashtag()
     {
-        $data = $this->getRandomSingleData();
+        return '#verbs@' . G_URL;
+    }
 
-        return '&#128203; ' . $data->first_form . ' - ' . $data->second_form . ' - ' . $data->third_form;
+    /**
+     * Get a random verb for a new post.
+     *
+     * @return string
+     */
+    public static function getRandom()
+    {
+        $data = DB::getRandomData(self::TABLE);
+
+        return self::SMILE . " {$data->first_form} - {$data->second_form} - {$data->third_form}";
     }
 }

@@ -11,7 +11,7 @@ trait Methods
      *
      * @return string
      */
-    function upperI($str)
+    public static function upI($str)
     {
         $str = preg_replace('/\Ai\s/u', 'I ', $str); // Начало строки + i + пробел
         $str = preg_replace('/\si\z/u', ' I', $str); // Пробел + i + конец строки
@@ -29,8 +29,13 @@ trait Methods
      *
      * @return string
      */
-    function upperFirst($str)
+    public static function upFirst($str)
     {
         return mb_strtoupper( mb_substr($str, 0, 1) ) . mb_substr($str, 1);
+    }
+
+    public static function getRandomString($len)
+    {
+        return bin2hex( openssl_random_pseudo_bytes($len) );
     }
 }

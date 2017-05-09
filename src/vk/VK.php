@@ -4,39 +4,37 @@ namespace gvk\vk;
 
 use gvk\Web;
 
-class VK extends Web
+class VK
 {
+    const VK_API = 'https://api.vk.com/method/';
+    const VK_VER = '5.63';
+
     /**
-     * Send request form vk.
+     * Send request to VK.
      *
      * @param string $method
-     * @param array $params
+     * @param array  $params
      * @param string $token
      * @param string $typeMethod
      *
      * @return object
      */
-    public function send($method, $params, $token, $typeMethod = 'GET')
+    public static function send($method, $params, $token, $typeMethod = 'GET')
     {
-        $params['v'] = VERSION_VK;
+        $params['v'] = self::VK_VER;
         $params['access_token'] = $token;
 
         if ($typeMethod !== 'POST') {
-            $data = $this->request( METHOD_VK . $method . '?' . http_build_query($params), true );
+            $data = Web::request( self::VK_API . $method . '?' . http_build_query($params), true );
         } else {
-            $data = $this->request( METHOD_VK . $method, true, 'POST', http_build_query($params) );
-        }
-
-        if ( ! empty($data->error) && $data->error->error_code == 6 ) {
-            sleep(3);
-            return $this->send($method, $params, $token, $typeMethod);
+            $data = Web::request( self::VK_API . $method, true, 'POST', http_build_query($params) );
         }
 
         return $data;
     }
 
     /**
-     * Create new post.
+     * Create a new post.
      *
      * @param string $message
      * @param string $attachments
@@ -44,66 +42,67 @@ class VK extends Web
      *
      * @return object
      */
-    public function createPost($message, $attachments = null, $typeMethod = 'GET')
+    public static function wallPost($message, $attachments = null, $typeMethod = 'GET')
     {
-        return $this->send('wall.post', [
-            'owner_id'    => '-' . GROUP_ID,
+        return self::send('wall.post', [
+            'owner_id'    => '-' . G_ID,
             'from_group'  => 1,
             'message'     => $message,
             'attachments' => $attachments,
             'guid'        => rand()
-        ], TOKEN_USER, $typeMethod);
+        ], T_USR, $typeMethod);
     }
 
     /**
-     * Send message for User.
+     * Send a message to the user.
      *
      * @param string $message
-     * @param int $user_id
+     * @param int    $user_id
      * @param string $typeMethod
      *
      * @return object
      */
-    public function sendMessage($message, $user_id, $typeMethod = 'GET')
+    public static function messageSend($message, $user_id, $typeMethod = 'GET')
     {
-        return $this->send('messages.send', [
+        return self::send('messages.send', [
             'user_id'   => $user_id,
             'random_id' => rand(),
             'message'   => $message
-        ], TOKEN_GROUP_MSG, $typeMethod);
+        ], T_MSG, $typeMethod);
     }
 
     /**
-     * Delete comment for post.
+     * Delete comment under post.
      *
-     * @param int $comment_id
+     * @param int $commentID
      *
      * @return object
      */
-    public function deleteComment($comment_id)
+    public static function wallDeleteComment($commentID)
     {
-        return $this->send('wall.deleteComment', [
-            'owner_id'   => '-' . GROUP_ID,
-            'comment_id' => $comment_id
-        ], TOKEN_USER);
+        return self::send('wall.deleteComment', [
+            'owner_id'   => '-' . G_ID,
+            'comment_id' => $commentID
+        ], T_USR);
     }
 
     /**
-     * Post comment for post.
+     * Send comment to post.
      *
      * @param string $message
-     * @param int $post_id
+     * @param int    $post_id
+     * @param bool   $fromGroup
      *
      * @return object
      */
-    public function sendComment($message, $post_id)
+    public static function wallCreateComment($message, $post_id, $fromGroup = true)
     {
-        return $this->send('wall.createComment', [
-            'owner_id'   => '-' . GROUP_ID,
+        return self::send('wall.createComment', [
+            'owner_id'   => '-' . G_ID,
             'message'    => $message,
             'post_id'    => $post_id,
             'guid'       => rand(),
-            'from_group' => 1
-        ], TOKEN_USER);
+            'from_group' => $fromGroup
+        ], T_USR);
     }
 }

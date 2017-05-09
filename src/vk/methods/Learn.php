@@ -2,31 +2,42 @@
 
 namespace gvk\vk\methods;
 
+use gvk\DB;
 use gvk\vk\VK;
 
-class Learn extends VK
+class Learn
 {
-    protected $table = 'learn';
+    const TABLE = 'learn';
 
     /**
-     * Create new post learn.
+     * Create a new post learn.
      *
-     * @param int $photo_id
+     * @param int $photoID
      *
      * @return object
      */
-    public function createPostLearn($photo_id)
+    public static function createPost($photoID = null)
     {
-        $data = $this->getRandomSingleData();
+        $data = DB::getRandomData(self::TABLE);
 
         $title = $data->title;
-        $text = $this->formatText($data->text);
+        $text = self::formatText($data->text);
 
-        return $this->createPost(
-            "&#128221; " . $title . "\n\n" . $text . "\n\n#learn@eng_day",
-            'photo-' . GROUP_ID . '_' . $photo_id,
-            'POST'
-        );
+        if ( ! empty($photoID) )
+            $photoID = 'photo-' . G_ID . '_' . $photoID;
+
+        $message = "&#128221; {$title}\n\n{$text}\n\n";
+        return VK::wallPost($message . self::getHashtag(), $photoID, 'POST');
+    }
+
+    /**
+     * Get Hashtag for post.
+     *
+     * @return string
+     */
+    public static function getHashtag()
+    {
+        return '#learn@' . G_URL;
     }
 
     /**
@@ -36,9 +47,9 @@ class Learn extends VK
      *
      * @return string
      */
-    public function formatText($text)
+    public static function formatText($text)
     {
-        $text = str_replace('%subtitle%', '&#9642;&#9642;&#9642;&#9642;&#9642;', $text);
+        $text = str_replace('%subtitle%', '&#128161;', $text);
         $text = str_replace('%li%', '&#128204;', $text);
 
         return $text;
