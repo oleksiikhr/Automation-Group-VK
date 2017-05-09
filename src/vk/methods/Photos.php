@@ -101,12 +101,17 @@ class Photos
     /**
      * Gets the address to download the cover of the community.
      *
+     * @param int $x
+     * @param int $y
+     *
      * @return object
      */
-    public static function getOwnerCoverPhotoUploadServer()
+    public static function getOwnerCoverPhotoUploadServer($x = null, $y = null)
     {
         return VK::send('photos.getOwnerCoverPhotoUploadServer', [
-            'group_id' => G_ID
+            'group_id' => G_ID,
+            'crop_x2'  => $x,
+            'crop_y2'  => $y
         ], T_IMG);
     }
 

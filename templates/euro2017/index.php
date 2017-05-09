@@ -14,8 +14,6 @@ use gvk\vk\methods\Translate;
 $m = date('i');
 $d = date('d');
 
-Euro::parsePoll(1); die;
-
 $round = 0;
 switch ($d) {
     case 9: case 10:  $round = 1; break;
@@ -23,43 +21,39 @@ switch ($d) {
 }
 
 Euro::changeHeader($round);
-//Euro::createPost();
+Euro::parsePoll($round);
 
+// Basic: 25/50
+if ($m % 30 != 0)
+    return;
 
-// Basic: 26/50
-//if ($m % 30 != 0)
-//    return;
-//
-//if ( $m == 30 )
-//{
-//    if     ( in_array($h, ['12']) )
-//        Learn::createPost(456241870);
-//
-//    elseif ( in_array($h, ['8', '20']) )
-//        Video::createPost();
-//
-//    elseif ( in_array($h, ['9', '16', '21']) )
-//        Verbs::createPost(20, 456242834);
-//
-//    elseif ( in_array($h, ['4', '10', '14']) )
-//        Photos::createPost();
-//
-//    elseif ( in_array($h, ['0']) )
-//        Exam::createPost(456242833);
-//
-//    elseif ( in_array($h, ['14']) )
-//        Polls::createPost(Polls::TABLE_3, 0);
-//}
-//else
-//{
-//    if     ( in_array($h, ['0', '3', '6', '9', '12']) )
-//        Polls::createPost(Polls::TABLE_1, 456240697);
-//
-//    elseif ( in_array($h, ['1', '4', '7', '10', '13']) )
-//        Polls::createPost(Polls::TABLE_2, 456240698);
-//
-//    elseif ( in_array($h, ['2', '5', '8', '11', '14']) )
-//        Translate::createPost(20, 456240584);
-//}
-//
-//Video::downloadInVK(5);
+if ( $m == 30 )
+{
+    if     ( in_array($h, ['12']) )
+        Learn::createPost(456241870);
+
+    elseif ( in_array($h, ['6', '15']) )
+        Video::createPost();
+
+    elseif ( in_array($h, ['4', '13', '19']) )
+        Verbs::createPost(20, 456242834);
+
+    elseif ( in_array($h, ['18', '5', '9']) )
+        Photos::createPost();
+
+    elseif ( in_array($h, ['14']) )
+        Exam::createPost(456242833);
+}
+else
+{
+    if     ( in_array($h, ['3', '6', '9', '12', '15']) )
+        Polls::createPost(Polls::TABLE_1, 456240697);
+
+    elseif ( in_array($h, ['4', '7', '10', '13', '16']) )
+        Polls::createPost(Polls::TABLE_2, 456240698);
+
+    elseif ( in_array($h, ['2', '5', '8', '11', '14']) )
+        Translate::createPost(20, 456240584);
+}
+
+Video::downloadInVK(5);

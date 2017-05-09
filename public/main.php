@@ -44,8 +44,8 @@ if ( $m == 30 )
     elseif ( in_array($h, ['0']) )
         Exam::createPost(456242833);
 
-    elseif ( in_array($h, ['14']) )
-        Polls::createPost(Polls::TABLE_3, 0);
+//    elseif ( in_array($h, ['14']) )
+//        Polls::createPost(Polls::TABLE_3, 0);
 }
 else
 {

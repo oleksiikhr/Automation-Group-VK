@@ -2,7 +2,7 @@
 
 use \tmp\euro2017\Euro;
 
-QB::query('CREATE TABLE ' . Euro::TABLE . ' (
+QB::query('CREATE TABLE IF NOT EXISTS ' . Euro::TABLE . ' (
 	id BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
     song VARCHAR(255),
