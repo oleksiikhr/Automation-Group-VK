@@ -21,7 +21,7 @@ class Verbs
     public static function createPost($count, $photoID = null)
     {
         $data = DB::getDistinctData(self::TABLE, $count);
-        $message = self::SMILE . " Таблица неправильных глаголов\n\n";
+        $message = self::SMILE . " Таблица неправильных глаголов.\n\n";
 
         foreach ($data as $key => $item) {
             $i = $key + 1;

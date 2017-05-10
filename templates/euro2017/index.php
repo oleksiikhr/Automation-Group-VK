@@ -13,6 +13,7 @@ use gvk\vk\methods\Translate;
 
 $m = date('i');
 $d = date('d');
+$h = date('G');
 
 $round = 0;
 switch ($d) {
@@ -20,8 +21,8 @@ switch ($d) {
     case 11: case 12: $round = 2; break;
 }
 
-Euro::changeHeader($round);
 Euro::parsePoll($round);
+Euro::changeHeader($round);
 
 // Basic: 25/50
 if ($m % 30 != 0)
@@ -29,16 +30,16 @@ if ($m % 30 != 0)
 
 if ( $m == 30 )
 {
-    if     ( in_array($h, ['12']) )
-        Learn::createPost(456241870);
-
-    elseif ( in_array($h, ['6', '15']) )
+    if     ( in_array($h, ['6', '15']) )
         Video::createPost();
+
+//    elseif ( in_array($h, ['12']) )
+//        Learn::createPost(456241870);
 
     elseif ( in_array($h, ['4', '13', '19']) )
         Verbs::createPost(20, 456242834);
 
-    elseif ( in_array($h, ['18', '5', '9']) )
+    elseif ( in_array($h, ['5', '9', '18']) )
         Photos::createPost();
 
     elseif ( in_array($h, ['14']) )
@@ -46,13 +47,13 @@ if ( $m == 30 )
 }
 else
 {
-    if     ( in_array($h, ['3', '6', '9', '12', '15']) )
+    if     ( in_array($h, ['3', '6', '9', '12', '15', '18']) )
         Polls::createPost(Polls::TABLE_1, 456240697);
 
-    elseif ( in_array($h, ['4', '7', '10', '13', '16']) )
+    elseif ( in_array($h, ['4', '7', '10', '13', '16', '19']) )
         Polls::createPost(Polls::TABLE_2, 456240698);
 
-    elseif ( in_array($h, ['2', '5', '8', '11', '14']) )
+    elseif ( in_array($h, ['2', '5', '8', '11', '14', '17']) )
         Translate::createPost(20, 456240584);
 }
 

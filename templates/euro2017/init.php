@@ -9,7 +9,7 @@ QB::query('CREATE TABLE IF NOT EXISTS ' . Euro::TABLE . ' (
     country VARCHAR(255),
     round INT,
     isFinal BOOLEAN,
-    poll_id INT,
+    poll_id INT DEFAULT 0,
     rating INT DEFAULT 0,
     time TIMESTAMP on update CURRENT_TIMESTAMP() NOT NULL DEFAULT CURRENT_TIMESTAMP()
 )');
@@ -22,6 +22,12 @@ QB::table(Euro::TABLE)->insert([
         'round'   => '1'
     ],
     [
+        'name'    => 'Tamara Gachechiladze',
+        'song'    => 'Keep the Faith',
+        'country' => 'Georgia',
+        'round'   => '1'
+    ],
+    [
         'name'    => 'Isaiah',
         'song'    => 'Don\'t Come Easy',
         'country' => 'Australia',
@@ -31,12 +37,6 @@ QB::table(Euro::TABLE)->insert([
         'name'    => 'Lindita',
         'song'    => 'World',
         'country' => 'Albania',
-        'round'   => '1'
-    ],
-    [
-        'name'    => 'Tamara Gachechiladze',
-        'song'    => 'Keep the Faith',
-        'country' => 'Georgia',
         'round'   => '1'
     ],
     [

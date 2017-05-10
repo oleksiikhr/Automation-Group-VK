@@ -88,7 +88,7 @@ class Translate
     public static function createPost($count, $photoID = null)
     {
         $data = DB::getDistinctData(self::TABLE, $count);
-        $message = self::SMILE . " Перевод английских слов.";
+        $message = self::SMILE . " Перевод английских слов.\n\n";
         $i = 1;
 
         foreach ($data as $item) {
