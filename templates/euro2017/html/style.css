@@ -22,13 +22,22 @@ html, body, .fon {
     padding-top: 30px;
     padding-bottom: 20px;
     width: 230px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .a2 {
     font-size: 40px;
 }
 
+.a3 {
+    font-size: 18px;
+}
+
 .a4 {
-    margin-top: 55px;
+    margin-top: 50px;
+}
+
+.a5 {
+    font-size: 30px;
+    padding: 5px 0;
 }

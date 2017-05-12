@@ -5,12 +5,15 @@ use \tmp\euro2017\Euro;
 QB::query('CREATE TABLE IF NOT EXISTS ' . Euro::TABLE . ' (
 	id BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
-    song VARCHAR(255),
-    country VARCHAR(255),
-    round INT,
-    isFinal BOOLEAN,
-    poll_id INT DEFAULT 0,
-    rating INT DEFAULT 0,
+    song VARCHAR(255) NOT NULL,
+    country VARCHAR(255) NOT NULL,
+    round INT NOT NULL,
+    poll_id INT DEFAULT 0 NOT NULL,
+    rating INT DEFAULT 0 NOT NULL,
+    isFinal BOOLEAN NOT NULL,
+    final_pos TINYINT NOT NULL,
+    final_poll INT NOT NULL,
+    music_id INT NOT NULL
     time TIMESTAMP on update CURRENT_TIMESTAMP() NOT NULL DEFAULT CURRENT_TIMESTAMP()
 )');
 

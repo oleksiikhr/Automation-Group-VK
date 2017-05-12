@@ -22,17 +22,13 @@ class Photos
         if ( ! $images )
             return false;
 
-        $photo = '';
+        $attachments = '';
         foreach ($images[1] as $image) {
-            $upload = Web::request(self::getWallUploadServer()->response->upload_url, true, 'POST',
-                ['photo' => curl_file_create($images[0] . '/' . $image)]);
-
-            $res = self::saveWallPhoto($upload->server, $upload->photo, $upload->hash);
-            $photo .= 'photo' . $res->response[0]->owner_id . '_' . $res->response[0]->id . ',';
+            $attachments .= self::getUploadWallImageComplex($images[0] . '/' . $image) . ',';
         }
 
         $message = Translate::getRandom() . "\n" . Verbs::getRandom() . "\n";
-        return VK::wallPost($message . self::getHashtag(), $photo);
+        return VK::wallPost($message . self::getHashtag(), $attachments);
     }
 
     /**
@@ -43,6 +39,22 @@ class Photos
     public static function getHashtag()
     {
         return '#images@' . G_URL . ' #pictures@' . G_URL;
+    }
+
+    /**
+     * All in one method.
+     *
+     * @param string $uri - URL Image
+     *
+     * @return string
+     */
+    public static function getUploadWallImageComplex($uri)
+    {
+        $upload = Web::request(self::getWallUploadServer()->response->upload_url, true, 'POST',
+            ['photo' => curl_file_create($uri)]);
+
+        $res = self::saveWallPhoto($upload->server, $upload->photo, $upload->hash);
+        return 'photo' . $res->response[0]->owner_id . '_' . $res->response[0]->id . ',';
     }
 
     /**
