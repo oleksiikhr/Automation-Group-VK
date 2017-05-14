@@ -29,8 +29,11 @@ $m = date('i');
 
 if ( $m == 30 )
 {
-    if     ( in_array($h, ['12']) )
-        Learn::createPost(456241870);
+    if     ( in_array($h, ['0']) )
+        Exam::createPost(456242833);
+
+//    elseif ( in_array($h, ['12']) )
+//        Learn::createPost(456241870);
 
     elseif ( in_array($h, ['8', '20']) )
         Video::createPost();
@@ -40,9 +43,6 @@ if ( $m == 30 )
 
     elseif ( in_array($h, ['4', '10', '13', '17', '22']) )
         Photos::createPost();
-
-    elseif ( in_array($h, ['0']) )
-        Exam::createPost(456242833);
 
 //    elseif ( in_array($h, ['14']) )
 //        Polls::createPost(Polls::TABLE_3, 0);

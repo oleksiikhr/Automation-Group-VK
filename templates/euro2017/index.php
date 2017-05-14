@@ -21,6 +21,9 @@ switch ($d) {
     case 11: case 12: $round = 2; break;
 }
 
+if ($d > 14)
+	return;
+
 Euro::parsePoll($round);
 Euro::changeHeader($round);
 
@@ -30,30 +33,30 @@ if ($m % 30 != 0)
 
 if ( $m == 30 )
 {
-    if     ( in_array($h, ['6', '15']) )
+    if     ( in_array($h, ['11']) )
         Video::createPost();
 
-//    elseif ( in_array($h, ['12']) )
-//        Learn::createPost(456241870);
+    // elseif ( in_array($h, ['12']) )
+    //     Learn::createPost(456241870);
 
-    elseif ( in_array($h, ['4', '13', '19']) )
-        Verbs::createPost(20, 456242834);
+    // elseif ( in_array($h, ['4', '13', '19']) )
+    //     Verbs::createPost(20, 456242834);
 
-    elseif ( in_array($h, ['5', '9', '18']) )
+    elseif ( in_array($h, ['5', '14']) )
         Photos::createPost();
 
-    elseif ( in_array($h, ['14']) )
-        Exam::createPost(456242833);
+    // elseif ( in_array($h, ['14']) )
+    //     Exam::createPost(456242833);
 }
 else
 {
-    if     ( in_array($h, ['3', '6', '9', '12', '15', '18']) )
+    if     ( in_array($h, ['4', '13']) )
         Polls::createPost(Polls::TABLE_1, 456240697);
 
-    elseif ( in_array($h, ['4', '7', '10', '13', '16', '19']) )
+    elseif ( in_array($h, ['8', '19']) )
         Polls::createPost(Polls::TABLE_2, 456240698);
 
-    elseif ( in_array($h, ['2', '5', '8', '11', '14', '17']) )
+    elseif ( in_array($h, ['2', '9', '16']) )
         Translate::createPost(20, 456240584);
 }
 

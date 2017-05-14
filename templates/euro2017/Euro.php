@@ -89,23 +89,26 @@ class Euro
                 ->where('final_poll', '>', 0)
                 ->where('isFinal', '=', true)
                 ->orderBy('time', 'ASC')
-                ->limit(4)
+                ->limit(3)
                 ->get();
         else
             $pollIDs = \QB::table(self::TABLE)
                 ->where('poll_id', '>', 0)
                 ->where('round', '=', $round)
                 ->orderBy('time', 'ASC')
-                ->limit(4)
+                ->limit(3)
                 ->get();
 
         if ( empty($pollIDs) )
             return;
 
-        $tokens = [T_USR, T_USR2, T_USR3, T_USR4];
+        $tokens = [T_USR, T_USR2, T_USR3];
 
         foreach ($pollIDs as $key => $pollID) {
-            $poll = Polls::getById($pollID->poll_id, $tokens[$key % count($tokens)]);
+            if ( empty($round) )
+                $poll = Polls::getById($pollID->final_poll, $tokens[$key % count($tokens)]);
+            else
+                $poll = Polls::getById($pollID->poll_id, $tokens[$key % count($tokens)]);
 
             if ( ! empty($poll->error) )
                 continue;
@@ -162,13 +165,13 @@ class Euro
             self::addText($fon, $offset, 32 + $li, $num, false, 12);
             self::addText($fon, 60 + $offset, 19 + $li, $data[$i]->name, false, 10);
             self::addText($fon, 60 + $offset, 38 + $li, '"' . $data[$i]->song . '"', false, 10);
-            self::addText($fon, 30 + $offset, 45 + $li, $data[$i]->rating, false, 12);
+            self::addText($fon, 30 + $offset, 45 + $li, $data[$i]->final_rating, false, 12);
 
             self::addFlag($fon, $data[$i + $count]->country, 1225 - $offset, 10 + $li);
             self::addText($fon, $offset, 32 + $li, $i + $count + 1, true, 12);
             self::addText($fon, 60 + $offset, 19 + $li, $data[$i + $count]->name, true, 10);
             self::addText($fon, 60 + $offset, 38 + $li, '"' . $data[$i + $count]->song . '"', true, 10);
-            self::addText($fon, 30 + $offset, 45 + $li, $data[$i + $count]->rating, true, 12);
+            self::addText($fon, 30 + $offset, 45 + $li, $data[$i + $count]->final_rating, true, 12);
         }
 
         imagepng($fon, __DIR__ . '/header/temp' . $round . '.png');
