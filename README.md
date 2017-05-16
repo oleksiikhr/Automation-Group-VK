@@ -1,4 +1,10 @@
 # Automatic group work in VK.
 
-To-do list:
-- Одно видео - несколько видеоальбомов
+See: https://vk.com/eng_day
+
+Issues: https://vk.com/alexeykhr
+
+<b>To-do list:</b>
+- One video - several albums
+
+..
