@@ -118,7 +118,6 @@ class Video
             return;
 
         foreach ($videos as $video) {
-            $video->album_id = 1;
             $savedVideo = self::save($video->title, $video->videoYoutubeID, $video->album_id);
 
             if ( ! empty($savedVideo->error) )
