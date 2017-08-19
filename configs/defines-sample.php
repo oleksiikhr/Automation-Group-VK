@@ -1,5 +1,8 @@
 <?php
 
+// DEBUG
+define('DEBUG', false);
+
 // DIR
 define('D_ROOT', __DIR__ . '/..');
 define('D_IMG',  D_ROOT . '/resources');
@@ -17,6 +20,10 @@ define('T_USR',    '');
 define('T_MSG',    '');
 define('T_IMG',    '');
 define('T_GOOGLE', '');
+
+// Additional accounts
+define('T_USR2', '');
+define('T_USR3', '');
 
 // Board
 define('B_POLL',   '');

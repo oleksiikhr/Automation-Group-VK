@@ -5,40 +5,61 @@ namespace gvk\vk\methods;
 use gvk\Web;
 use gvk\vk\VK;
 
-class Photos
+class Images
 {
     const F_IMG   = 'img';
-    const F_FUNNY = 'funny';
+    const F_CARD  = 'card';
+    const F_FUNNY = 'fun';
 
     /**
      * Get images from the folder and create a new post.
      *
-     * @return object|false
+     * @param string $type
+     *
+     * @return false|object
      */
-    public static function createPost()
+    public static function createPost($type)
     {
-        $images = self::getImages(self::F_IMG);
+        $images = self::getImages($type == self::F_IMG ? self::F_IMG : $type);
 
-        if ( ! $images )
+        if (! $images) {
             return false;
+        }
 
-        $attachments = '';
-        foreach ($images[1] as $image) {
-            $attachments .= self::getUploadWallImageComplex($images[0] . '/' . $image) . ',';
+        if ($type == self::F_IMG) {
+            $attachments = '';
+
+            foreach ($images[1] as $image) {
+                $attachments .= self::getUploadWallImageComplex($images[0] . '/' . $image) . ',';
+            }
+        } else {
+            $attachments = self::getUploadWallImageComplex($images[0] . '/' . $images[1][mt_rand(0, count($images[1]))]);
         }
 
         $message = Translate::getRandom() . "\n" . Verbs::getRandom() . "\n";
-        return VK::wallPost($message . self::getHashtag(), $attachments);
+
+        return VK::wallPost($message . self::getHashtag($type), $attachments);
     }
 
     /**
      * Get Hashtag for post.
      *
+     * @param string $type
+     *
      * @return string
      */
-    public static function getHashtag()
+    public static function getHashtag($type)
     {
-        return '#images@' . G_URL . ' #pictures@' . G_URL;
+        if ($type == self::F_IMG)
+            return '#images@' . G_URL . ' #img@' . G_URL;
+
+        if ($type == self::F_FUNNY)
+            return '#images@' . G_URL . ' #fun@' . G_URL;
+
+        if ($type == self::F_CARD)
+            return '#images@' . G_URL . ' #card@' . G_URL;
+
+        return '';
     }
 
     /**
@@ -99,12 +120,13 @@ class Photos
     {
         $dir = D_IMG . '/' . $folder;
 
-        if ( ! file_exists($dir) )
+        if (! file_exists($dir)) {
             return false;
+        }
 
-        $files = array_slice( scandir($dir), 2 );
+        $files = array_slice(scandir($dir), 2);
 
-        if ( is_dir($dir . '/' . $files[0]) )
+        if (is_dir($dir . '/' . $files[0]))
             return self::getImages($folder . '/' . $files[array_rand($files)]);
 
         return [$dir, $files];

@@ -12,3 +12,6 @@ resources/
 
 # passwords.
 /configs/defines.php
+
+# htaccess
+.htaccess

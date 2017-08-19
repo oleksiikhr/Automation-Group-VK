@@ -1,5 +1,11 @@
 <?php // Cron every 5 minutes.
 
+/*
+ * NOTE:
+ *
+ * Do not use this file!
+ */
+
 require_once __DIR__ . '/../../public/run.php';
 
 use tmp\euro2017\Euro;
@@ -8,7 +14,7 @@ use gvk\vk\methods\Learn;
 use gvk\vk\methods\Polls;
 use gvk\vk\methods\Verbs;
 use gvk\vk\methods\Video;
-use gvk\vk\methods\Photos;
+use gvk\vk\methods\Images;
 use gvk\vk\methods\Translate;
 
 $m = date('i');
@@ -43,7 +49,7 @@ if ( $m == 30 )
     //     Verbs::createPost(20, 456242834);
 
     elseif ( in_array($h, ['5', '14']) )
-        Photos::createPost();
+        Images::createPost();
 
     // elseif ( in_array($h, ['14']) )
     //     Exam::createPost(456242833);

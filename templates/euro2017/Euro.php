@@ -5,7 +5,7 @@ namespace tmp\euro2017;
 use gvk\Web;
 use gvk\vk\VK;
 use gvk\vk\methods\Polls;
-use gvk\vk\methods\Photos;
+use gvk\vk\methods\Images;
 
 class Euro
 {
@@ -13,44 +13,50 @@ class Euro
 
     public static function createPost($round = 0)
     {
-        if ( empty($round) )
+        if (empty($round)) {
             $data = \QB::table(self::TABLE)
                 ->where('isFinal', '=', '1')
                 ->where('final_poll', '=', '0')
                 ->orderBy('final_pos', 'ASC')
                 ->first();
-        else
+        } else {
             $data = \QB::table(self::TABLE)
                 ->where('poll_id', '=', '0')
                 ->where('round', '=', $round)
                 ->first();
+        }
 
         $poll = self::createPoll();
         $attachments = null;
 
-        if ( ! empty($data->music_id) )
+        if (! empty($data->music_id)) {
             $attachments .= 'audio' . $data->music_id . ',';
+        }
 
-        if ( ! empty($poll->response) )
+        if (! empty($poll->response)) {
             $attachments .= 'poll-' . G_ID . '_' . $poll->response->id . ',';
+        }
 
-        if ( file_exists(__DIR__ . '/members/artists/' . $data->id . '.jpg') )
-            $attachments .= Photos::getUploadWallImageComplex(__DIR__ . '/members/artists/' . $data->id . '.jpg') . ',';
+        if (file_exists(__DIR__ . '/members/artists/' . $data->id . '.jpg')) {
+            $attachments .= Images::getUploadWallImageComplex(__DIR__ . '/members/artists/' . $data->id . '.jpg') . ',';
+        }
 
-        if ( file_exists(__DIR__ . '/members/translate/' . $data->id . '.png') )
-            $attachments .= Photos::getUploadWallImageComplex(__DIR__ . '/members/translate/' . $data->id . '.png') . ',';
+        if (file_exists(__DIR__ . '/members/translate/' . $data->id . '.png')) {
+            $attachments .= Images::getUploadWallImageComplex(__DIR__ . '/members/translate/' . $data->id . '.png') . ',';
+        }
 
         $message = "&#128204; Country: {$data->country}\n&#10004; Artist: {$data->name}\n&#127925; Song: {$data->song}";
         VK::wallPost($message . "\n\n" . self::getHashtag($round), $attachments);
 
-        if ( empty($round) )
+        if (empty($round)) {
             \QB::table(self::TABLE)->where('id', '=', $data->id)->update([
                 'final_poll' => $poll->response->id
             ]);
-        else
+        } else {
             \QB::table(self::TABLE)->where('id', '=', $data->id)->update([
                 'poll_id' => $poll->response->id
             ]);
+        }
     }
 
     public static function createPoll()
@@ -60,69 +66,76 @@ class Euro
 
     public static function getHashtag($round = 0)
     {
-        if ( empty($round) )
+        if (empty($round)) {
             return '#eurovision2017@' . G_URL . ' #eurovision2017_final@' . G_URL;
+        }
 
         return '#eurovision2017@' . G_URL . ' #eurovision2017_semi' . $round . '@' . G_URL;
     }
 
     public static function changeHeader($round = 0)
     {
-        if ( empty($round) )
-            self::generateHeaderFinal( \QB::table(self::TABLE)
+        if (empty($round)) {
+            self::generateHeaderFinal(\QB::table(self::TABLE)
                 ->where('isFinal', '=', true)
                 ->orderBy('final_rating', 'DESC')
-                ->get(), $round );
-        else
-            self::generateHeaderSemi( \QB::table(self::TABLE)
+                ->get(), $round);
+        } else {
+            self::generateHeaderSemi(\QB::table(self::TABLE)
                 ->where('round', '=', $round)
                 ->orderBy('rating', 'DESC')
-                ->get(), $round );
+                ->get(), $round);
+        }
 
         self::setNewCoverPhoto($round);
     }
 
     public static function parsePoll($round = null)
     {
-        if ( empty($round) )
+        if (empty($round)) {
             $pollIDs = \QB::table(self::TABLE)
                 ->where('final_poll', '>', 0)
                 ->where('isFinal', '=', true)
                 ->orderBy('time', 'ASC')
                 ->limit(3)
                 ->get();
-        else
+        } else {
             $pollIDs = \QB::table(self::TABLE)
                 ->where('poll_id', '>', 0)
                 ->where('round', '=', $round)
                 ->orderBy('time', 'ASC')
                 ->limit(3)
                 ->get();
+        }
 
-        if ( empty($pollIDs) )
+        if (empty($pollIDs)) {
             return;
+        }
 
         $tokens = [T_USR, T_USR2, T_USR3];
 
         foreach ($pollIDs as $key => $pollID) {
-            if ( empty($round) )
+            if (empty($round)) {
                 $poll = Polls::getById($pollID->final_poll, $tokens[$key % count($tokens)]);
-            else
+            } else {
                 $poll = Polls::getById($pollID->poll_id, $tokens[$key % count($tokens)]);
+            }
 
-            if ( ! empty($poll->error) )
+            if (! empty($poll->error)) {
                 continue;
+            }
 
-            if ( empty($round) )
+            if (empty($round)) {
                 \QB::table(self::TABLE)->where('id', '=', $pollID->id)->update([
                     'final_rating' => empty($poll->response->answers[0]->rate) ? 0 : $poll->response->answers[0]->rate,
                     'time'   => date( 'Y-m-d H:i:s', time() )
                 ]);
-            else
+            } else {
                 \QB::table(self::TABLE)->where('id', '=', $pollID->id)->update([
                     'rating' => empty($poll->response->answers[0]->rate) ? 0 : $poll->response->answers[0]->rate,
                     'time'   => date( 'Y-m-d H:i:s', time() )
                 ]);
+            }
         }
     }
 
@@ -199,13 +212,13 @@ class Euro
 
     public static function setNewCoverPhoto($round)
     {
-        $uploadURL = Photos::getOwnerCoverPhotoUploadServer(1279, 322);
+        $uploadURL = Images::getOwnerCoverPhotoUploadServer(1279, 322);
 
         $upload = Web::request(
             $uploadURL->response->upload_url, true, 'POST',
             ['photo' => curl_file_create(__DIR__ . '/header/temp' . $round . '.png')]
         );
 
-        return Photos::saveOwnerCoverPhoto($upload->hash, $upload->photo);
+        return Images::saveOwnerCoverPhoto($upload->hash, $upload->photo);
     }
 }

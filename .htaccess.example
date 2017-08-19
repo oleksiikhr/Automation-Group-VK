@@ -1,7 +1,6 @@
 Order Deny,Allow
 Deny from all
-Allow from 192.168.45.1
-Allow from 192.168.45.50
+Allow from [IP]
 
 <Files callback.php>
     Allow from all

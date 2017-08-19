@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Connect to BD.
+ * Connect to DB.
  *
  * @see https://github.com/usmanhalalit/pixie docs
  */

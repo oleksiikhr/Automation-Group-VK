@@ -22,22 +22,24 @@ class Video
     {
         $arr = self::checkCallback($text);
 
-        if ( empty($arr) )
+        if (empty($arr)) {
             return false;
+        }
 
-        $videos = Youtube::getPlaylistItems('id', $arr[0], 0);
         $numAlbum = \QB::table(self::TABLE)->where('playlist', '=', $arr[0])->first();
 
-        if ( empty($numAlbum) && empty($arr[1]) )
+        if (empty($numAlbum) && empty($arr[1])) {
             return false;
+        }
 
-        if ( empty($numAlbum->album_id) ) {
+        if (empty($numAlbum->album_id)) {
             $addedAlbum = self::addAlbum($arr[1]);
             $numAlbum = $addedAlbum->response->album_id;
         } else {
             $numAlbum = $numAlbum->album_id;
         }
 
+        $videos = Youtube::getPlaylistItems('id', $arr[0], 0);
         self::updatePlaylist($videos->pageInfo->totalResults, $arr[0], $numAlbum);
 
         return true;
@@ -65,8 +67,9 @@ class Video
                 $title = preg_replace('/ +/', ' ', $item->snippet->title);
                 $videoYoutubeID = preg_replace('/ +/', ' ', $item->snippet->resourceId->videoId);
 
-                if ( ! empty( \QB::table(self::TABLE)->where('videoYoutubeID', '=', $videoYoutubeID)->first() ) )
+                if (! empty(\QB::table(self::TABLE)->where('videoYoutubeID', '=', $videoYoutubeID)->first())) {
                     continue;
+                }
 
                 \QB::table(self::TABLE)->insert([
                     'title'          => $title,
@@ -94,11 +97,13 @@ class Video
         $text = preg_split('/\n/', $text);
         $text = array_map('trim', $text);
 
-        if ( count($text) != 2 && count($text) != 1 )
+        if (count($text) != 2 && count($text) != 1) {
             return false;
+        }
 
-        if ( ! preg_match('/^[a-z0-9_-]+$/ui', $text[0]) )
+        if (! preg_match('/^[a-z0-9_-]+$/ui', $text[0])) {
             return false;
+        }
 
         return $text;
     }
@@ -114,21 +119,24 @@ class Video
     {
         $videos = \QB::table(self::TABLE)->where('is_added', '=', 0)->limit($count)->get();
 
-        if ( empty($videos) )
+        if (empty($videos)) {
             return;
+        }
 
         foreach ($videos as $video) {
             $savedVideo = self::save($video->title, $video->videoYoutubeID, $video->album_id);
 
-            if ( ! empty($savedVideo->error) )
+            if (! empty($savedVideo->error)) {
                 return;
+            }
 
             $send = Web::request($savedVideo->response->upload_url, true);
             $is_added = 1;
 
-            if ( ! empty($send->error_code) ) {
-                if ($send->error_code != 7)
+            if (! empty($send->error_code)) {
+                if ($send->error_code != 7) {
                     continue;
+                }
 
                 $is_added = 2;
             }
@@ -150,10 +158,10 @@ class Video
     public static function createPost()
     {
         $albums = self::getAlbums(0);
-        $albums = self::getAlbums( 1, rand(0, $albums->response->count - 1) );
+        $albums = self::getAlbums(1, rand(0, $albums->response->count - 1));
 
         $albumsCount = self::get($albums->response->items[0]->id, 0);
-        $offset = ($albumsCount->response->count > 10) ? $albumsCount->response->count - 10 : 0;
+        $offset = $albumsCount->response->count > 10 ? $albumsCount->response->count - 10 : 0;
         $album = self::get($albums->response->items[0]->id, 10, $offset);
 
         $arrVideos = [];
@@ -165,7 +173,7 @@ class Video
             . "&#10133; " . self::LINK . "?section=album_" . $albums->response->items[0]->id . "\n"
             . self::getHashtag();
 
-        return VK::wallPost( $comment, implode( ',', array_reverse($arrVideos) ) );
+        return VK::wallPost($comment, implode(',', array_reverse($arrVideos)));
     }
 
     /**

@@ -7,7 +7,7 @@ use gvk\Web;
 class VK
 {
     const VK_API = 'https://api.vk.com/method/';
-    const VK_VER = '5.63';
+    const VK_VER = '5.68';
 
     /**
      * Send request to VK.
@@ -25,9 +25,9 @@ class VK
         $params['access_token'] = $token;
 
         if ($typeMethod !== 'POST') {
-            $data = Web::request( self::VK_API . $method . '?' . http_build_query($params), true );
+            $data = Web::request(self::VK_API . $method . '?' . http_build_query($params), true);
         } else {
-            $data = Web::request( self::VK_API . $method, true, 'POST', http_build_query($params) );
+            $data = Web::request(self::VK_API . $method, true, 'POST', http_build_query($params));
         }
 
         return $data;

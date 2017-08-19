@@ -27,12 +27,14 @@ class Verbs
             $i = $key + 1;
             $message .= "$i. {$item->first_form} - {$item->second_form} - {$item->third_form}\n";
 
-            if ($i % 5 == 0)
+            if ($i % 5 == 0) {
                 $message .= "\n";
+            }
         }
 
-        if ( ! empty($photoID) )
+        if (! empty($photoID)) {
             $photoID = 'photo-' . G_ID . '_' . $photoID;
+        }
 
         return VK::wallPost($message . self::getHashtag(), $photoID, true);
     }

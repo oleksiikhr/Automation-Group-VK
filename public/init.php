@@ -25,18 +25,21 @@ QB::query('CREATE TABLE IF NOT EXISTS ' . \gvk\vk\methods\Polls::TABLE_1 . ' (
     id BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     quest VARCHAR(255) NOT NULL UNIQUE,
     answers TEXT NOT NULL,
-    correct_answer VARCHAR(255) NOT NULL
+    correct_answer VARCHAR(255) NOT NULL,
+    explanation VARCHAR(255)
 )');
 QB::query('CREATE TABLE IF NOT EXISTS ' . \gvk\vk\methods\Polls::TABLE_2 . '(
     id BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     quest VARCHAR(255) NOT NULL UNIQUE,
     answers TEXT NOT NULL,
-    correct_answer VARCHAR(255) NOT NULL
+    correct_answer VARCHAR(255) NOT NULL,
+    explanation VARCHAR(255)
 )');
 QB::query('CREATE TABLE IF NOT EXISTS ' . \gvk\vk\methods\Polls::TABLE_3 . '(
     id BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     answers TEXT NOT NULL,
-    correct_answer VARCHAR(255) NOT NULL
+    correct_answer VARCHAR(255) NOT NULL,
+    explanation VARCHAR(255)
 )');
 
 QB::query('CREATE TABLE IF NOT EXISTS ' . \gvk\vk\methods\Verbs::TABLE . '(
