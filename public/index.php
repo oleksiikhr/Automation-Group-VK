@@ -1,4 +1,8 @@
-<?php require_once __DIR__ . '/run.php'; ?>
+<?php
+require_once __DIR__ . '/run.php';
+
+$key = \gvk\Config::setRandomSecretKey();
+?>
 
 <!DOCTYPE html>
 <html>
@@ -24,7 +28,7 @@
         <input type="text" name="quest" placeholder="Вопрос" onblur="findPoll('poll_type1');" required>
         <input type="text" name="correct_answer" placeholder="Правильный ответ" required>
         <textarea name="answers" title="Ответы" rows="4" placeholder="Ответы" required></textarea>
-        <input type="hidden" name="secret" value="<?= \gvk\Config::setRandomSecretKey(); ?>">
+        <input type="hidden" name="secret" value="<?= $key; ?>">
         <input type="hidden" name="action" value="add">
         <input type="submit" value="Добавить" onclick="sendPoll('poll_type1'); return false;">
     </form>
@@ -37,7 +41,7 @@
         <input type="text" name="quest" placeholder="Вопрос" onblur="findPoll('poll_type2');" required>
         <input type="text" name="correct_answer" placeholder="Правильный ответ" required>
         <textarea name="answers" title="Ответы" rows="4" placeholder="Ответы" required></textarea>
-        <input type="hidden" name="secret" value="<?= \gvk\Config::setRandomSecretKey(); ?>">
+        <input type="hidden" name="secret" value="<?= $key; ?>">
         <input type="hidden" name="action" value="add">
         <input type="submit" value="Добавить" onclick="sendPoll('poll_type2'); return false;">
     </form>
@@ -49,7 +53,7 @@
     <form id="poll_type3">
         <input type="text" name="correct_answer" placeholder="Правильный ответ" onblur="findPoll('poll_type3');" required>
         <textarea name="answers" title="Ответы" rows="4" placeholder="Ответы" required></textarea>
-        <input type="hidden" name="secret" value="<?= \gvk\Config::setRandomSecretKey(); ?>">
+        <input type="hidden" name="secret" value="<?= $key; ?>">
         <input type="hidden" name="action" value="add">
         <input type="submit" value="Добавить" onclick="sendPoll('poll_type3'); return false;">
     </form>
@@ -61,7 +65,7 @@
     <form id="youtube">
         <input type="text" name="title" placeholder="Название" required>
         <input type="text" name="playlist" placeholder="Плейлист" required>
-        <input type="hidden" name="secret" value="<?= \gvk\Config::setRandomSecretKey(); ?>">
+        <input type="hidden" name="secret" value="<?= $key; ?>">
         <input type="submit" value="Добавить" onclick="sendYoutube(); return false;">
     </form>
 
