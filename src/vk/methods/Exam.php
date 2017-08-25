@@ -8,7 +8,7 @@ use gvk\vk\VK;
 class Exam
 {
     const TABLE = 'exam';
-    const SMILE = '&#128193;';
+    const SMILE = '&#9999;';
 
     /**
      * Get random data from different tables and create a post.
@@ -23,19 +23,34 @@ class Exam
             $photoID = 'photo-' . G_ID . '_' . $photoID;
         }
 
-        $translate = DB::getRandomData(Translate::TABLE);
-        $poll = DB::getRandomData(Polls::TABLE_1);
-        $verb = DB::getRandomData(Verbs::TABLE);
-//        $exam = DB::getRandomData(self::TABLE);
+        $translate = DB::getDistinctData(Translate::TABLE, 3);
+        $verbs = DB::getDistinctData(Verbs::TABLE, 3);
+        $polls = DB::getDistinctData(Polls::TABLE_1, 3);
 
-        $message = "&#8505; Нужно ответить на вопросы.\n\n"
-            . "1. " . Translate::SMILE . " Переведите слово: {$translate->word_eng}\n"
-            . "2. " . Polls::SMILE . " Переведите предложение: {$poll->quest}\n"
-            . "3. " . Verbs::SMILE . " Вторая форма глагола: {$verb->first_form}\n"
-//            . "4. " . self::SMILE . " {$exam->question}\n"
-            . "\nОтветов нет. &#128521;\n";
+        $message = "&#8505; Для лучшего запоминания/закрепления знаний, ответьте на вопросы ниже.\n\n"
 
-        return VK::wallPost($message . self::getHashtag(), $photoID);
+            . "1. " . Translate::SMILE . " Слова:\n"
+            . "- " . $translate[0]->word_eng . " [рус., транскрипция]\n"
+            . "- " . $translate[1]->word_eng . " [рус., транскрипция]\n"
+            . "- " . $translate[2]->word_eng . " [рус., транскрипция]\n\n"
+
+            . "2. " . Verbs::SMILE . " Неправильные глаголы:\n"
+            . "- " . $verbs[0]->second_form . " [1-я форма]\n"
+            . "- " . $verbs[1]->first_form . " [2-я форма]\n"
+            . "- " . $verbs[2]->first_form . " [3-я форма]\n\n"
+
+            . "3. " . Polls::SMILE . " Предложения:\n"
+            . "- " . $polls[0]->quest . " [англ.]\n"
+            . "- " . $polls[1]->quest . " [англ.]\n"
+            . "- " . $polls[2]->correct_answer . " [рус.]\n\n"
+
+            . "4. " . self::SMILE . " Вопросы:\n"
+            . "- " . "Пусто.\n"
+            . "Пишите в комментариях вопросы, которые вы бы хотели видеть тут.\n\n"
+
+            . "Ответов нет. &#128521;\n";
+
+        return VK::wallPost($message . self::getHashtag(), $photoID, 'POST');
     }
 
     /**
