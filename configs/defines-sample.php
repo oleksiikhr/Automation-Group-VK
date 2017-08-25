@@ -11,6 +11,12 @@ define('D_IMG',  D_ROOT . '/resources');
 define('CONFIRMATION', '');
 define('SECRET_KEY',   '');
 
+// Database
+define('DB_HOST',  'localhost');
+define('DB_TABLE', '');
+define('DB_USER',  '');
+define('DB_PASS',  '');
+
 // Group
 define('G_ID',  '');
 define('G_URL', '');
@@ -21,12 +27,12 @@ define('T_MSG',    '');
 define('T_IMG',    '');
 define('T_GOOGLE', '');
 
-// Additional accounts
-define('T_USR2', '');
-define('T_USR3', '');
-
 // Board
 define('B_POLL',   '');
 define('B_WORD',   '');
 define('B_VIDEO',  '');
 define('B_CHOOSE', '');
+
+// Additional accounts
+define('T_USR2', '');
+define('T_USR3', '');

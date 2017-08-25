@@ -22,7 +22,7 @@ $key = \gvk\Config::setRandomSecretKey();
 <body>
 
 <div class="section poll_type1">
-    <span>Вопрос 1</span>
+    <span>Опрос 1</span>
 
     <form id="poll_type1">
         <input type="text" name="quest" placeholder="Вопрос" onblur="findPoll('poll_type1');" required>
@@ -35,7 +35,7 @@ $key = \gvk\Config::setRandomSecretKey();
 </div>
 
 <div class="section poll_type2">
-    <span>Вопрос 2</span>
+    <span>Опрос 2</span>
 
     <form id="poll_type2">
         <input type="text" name="quest" placeholder="Вопрос" onblur="findPoll('poll_type2');" required>
@@ -48,7 +48,7 @@ $key = \gvk\Config::setRandomSecretKey();
 </div>
 
 <div class="section poll_type3">
-    <span>Вопрос 3</span>
+    <span>Опрос 3</span>
 
     <form id="poll_type3">
         <input type="text" name="correct_answer" placeholder="Правильный ответ" onblur="findPoll('poll_type3');" required>
