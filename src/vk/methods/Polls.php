@@ -137,7 +137,7 @@ class Polls
                     continue;
                 }
 
-                if (! preg_match('/^[a-z\s]+' . str_repeat('\s\/\s[a-z\s]+', $count - 1) . '$/ui', $word)) {
+                if (! preg_match('/^[a-z\s]+' . str_repeat('\s\/\s[a-z\'\s]+', $count - 1) . '$/ui', $word)) {
                     return false;
                 }
             }
