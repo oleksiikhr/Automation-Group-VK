@@ -25,26 +25,39 @@ class Exam
 
         $translate = DB::getDistinctData(Translate::TABLE, 3);
         $verbs = DB::getDistinctData(Verbs::TABLE, 3);
-        $polls = DB::getDistinctData(Polls::TABLE_1, 3);
+        $polls1 = DB::getDistinctData(Polls::TABLE_1, 3);
+        $polls2 = DB::getDistinctData(Polls::TABLE_2, 3);
+
+        $arrPolls2 = [];
+        foreach ($polls2 as $poll) {
+            $pattern = array_fill(0, substr_count($poll->quest, '___'), '/___/ui');
+            $replacement = explode(' / ', $poll->correct_answer);
+            $arrPolls2[] = preg_replace($pattern, $replacement, $poll->quest, 1);
+        }
 
         $message = "&#8505; Для лучшего запоминания/закрепления знаний, ответьте на вопросы ниже.\n\n"
 
-            . "1. " . Translate::SMILE . " Слова:\n"
-            . "- " . $translate[0]->word_eng . " [рус., транскрипция]\n"
-            . "- " . $translate[1]->word_eng . " [рус., транскрипция]\n"
-            . "- " . $translate[2]->word_eng . " [рус., транскрипция]\n\n"
+            . "1. " . Translate::SMILE . "Перевод слов [рус, транскрипция]:\n"
+            . "- " . $translate[0]->word_eng . "\n"
+            . "- " . $translate[1]->word_eng . "\n"
+            . "- " . $translate[2]->word_eng . "\n\n"
 
             . "2. " . Verbs::SMILE . " Неправильные глаголы:\n"
-            . "- " . $verbs[0]->second_form . " [1-я форма]\n"
+            . "- " . $verbs[0]->third_form . " [1-я форма]\n"
             . "- " . $verbs[1]->first_form . " [2-я форма]\n"
-            . "- " . $verbs[2]->first_form . " [3-я форма]\n\n"
+            . "- " . $verbs[2]->second_form . " [3-я форма]\n\n"
 
-            . "3. " . Polls::SMILE . " Предложения:\n"
-            . "- " . $polls[0]->quest . " [англ.]\n"
-            . "- " . $polls[1]->quest . " [англ.]\n"
-            . "- " . $polls[2]->correct_answer . " [рус.]\n\n"
+            . "3. " . Polls::SMILE . " Перевод предложений [англ.]:\n"
+            . "- " . $polls1[0]->quest . "\n"
+            . "- " . $polls1[1]->quest . "\n"
+            . "- " . $polls1[2]->quest . "\n\n"
 
-            . "4. " . self::SMILE . " Вопросы:\n"
+            . "4. " . Polls::SMILE . " Перевод предложений [рус.]:\n"
+            . "- " . $arrPolls2[0] . "\n"
+            . "- " . $arrPolls2[1] . "\n"
+            . "- " . $arrPolls2[2] . "\n\n"
+
+            . "5. " . self::SMILE . " Вопросы:\n"
             . "- " . "Пусто.\n"
             . "Пишите в комментариях вопросы, которые вы бы хотели видеть тут.\n\n"
 
