@@ -37,15 +37,15 @@ class Exam
 
         $message = "&#8505; Для лучшего запоминания/закрепления знаний, ответьте на вопросы ниже.\n\n"
 
-            . "1. " . Translate::SMILE . "Перевод слов [рус, транскрипция]:\n"
-            . "- " . $translate[0]->word_eng . "\n"
-            . "- " . $translate[1]->word_eng . "\n"
-            . "- " . $translate[2]->word_eng . "\n\n"
+            . "1. " . Translate::SMILE . " Перевод слов [рус, транскрипция]:\n"
+            . "- " . $translate[0]->word_eng . ".\n"
+            . "- " . $translate[1]->word_eng . ".\n"
+            . "- " . $translate[2]->word_eng . ".\n\n"
 
-            . "2. " . Verbs::SMILE . " Неправильные глаголы:\n"
-            . "- " . $verbs[0]->third_form . " [1-я форма]\n"
-            . "- " . $verbs[1]->first_form . " [2-я форма]\n"
-            . "- " . $verbs[2]->second_form . " [3-я форма]\n\n"
+            . "2. " . Verbs::SMILE . " Неправильные глаголы [3 формы]:\n"
+            . "- " . $verbs[0]->first_form . ".\n"
+            . "- " . $verbs[1]->second_form . ".\n"
+            . "- " . $verbs[2]->third_form . ".\n\n"
 
             . "3. " . Polls::SMILE . " Перевод предложений [англ.]:\n"
             . "- " . $polls1[0]->quest . "\n"

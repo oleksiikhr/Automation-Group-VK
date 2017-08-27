@@ -91,18 +91,17 @@ class VK
      *
      * @param string $message
      * @param int    $post_id
-     * @param bool   $fromGroup
      *
      * @return object
      */
-    public static function wallCreateComment($message, $post_id, $fromGroup = true)
+    public static function wallCreateComment($message, $post_id)
     {
         return self::send('wall.createComment', [
             'owner_id'   => '-' . G_ID,
             'message'    => $message,
             'post_id'    => $post_id,
             'guid'       => rand(),
-            'from_group' => $fromGroup
+            'from_group' => G_ID
         ], T_USR);
     }
 }
