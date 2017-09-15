@@ -19,15 +19,26 @@ class Game
      */
     public static function getBestUsers($data)
     {
-        $user = VK::send('users.get', [
-            'user_ids' => $data->user_id,
-            'fields'   => 'photo_100'
-        ], T_USR);
 
-        self::generateLogo($user->response[0]->first_name, $user->response[0]->photo_100);
-        $photo = self::setNewPhoto();
+    }
 
-        return empty($photo->error);
+    public static function checkingGame()
+    {
+//        $q = \DB::table(Game::TABLE)->where('is_finished', '=', 0)->first();
+//
+//        if ($q && strtotime($q->time) > time() + 1080) {
+//
+//        } else {
+//            $q = \DB::table(Game::TABLE)->where('is_finished', '=', 1)->first();
+//            if ($q && strtotime($q->time) > time() + 360) {
+//                $word = DB::getRandomData(Translate::TABLE);
+//                \DB::talbe(Game::TABLE)->insert([
+//                    'word' => $word->word_eng,
+//                    'answer' => str_repeat('*', strlen($word->word_eng)),
+//                ]);
+//                // Generate Templates 1
+//            }
+//        }
     }
 
     /**
