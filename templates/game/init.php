@@ -3,9 +3,8 @@
 require_once __DIR__ . '/../../public/run.php';
 
 use \tmp\game\Game;
-use \tmp\game\User;
 
-QB::query('CREATE TABLE IF NOT EXISTS ' . Game::TABLE . ' (
+QB::query('CREATE TABLE IF NOT EXISTS ' . Game::TABLE_GAME . ' (
     word VARCHAR(60) NOT NULL,
     ans VARCHAR(60) NOT NULL,
     tip VARCHAR(60),
@@ -14,7 +13,7 @@ QB::query('CREATE TABLE IF NOT EXISTS ' . Game::TABLE . ' (
     time TIMESTAMP on update CURRENT_TIMESTAMP() NOT NULL DEFAULT CURRENT_TIMESTAMP()
 )');
 
-QB::query('CREATE TABLE IF NOT EXISTS ' . User::TABLE . ' (
+QB::query('CREATE TABLE IF NOT EXISTS ' . Game::TABLE_USER . ' (
 	id BIGINT(20) NOT NULL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
