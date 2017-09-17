@@ -1,13 +1,23 @@
 <?php
 
+use tmp\game\Game;
 use gvk\vk\callback\Board;
 use gvk\vk\callback\Group;
-use gvk\vk\callback\Message;
 
-require_once __DIR__ . '/run.php';
+require_once __DIR__ . '/../configs/defines.php';
 
 $data = json_decode( file_get_contents('php://input') );
-$res = false;
+
+if ($data->secret !== SECRET_KEY) {
+    die;
+}
+
+date_default_timezone_set('Europe/London');
+
+require_once D_ROOT . '/vendor/autoload.php';
+
+$db = require D_ROOT . '/configs/db.php';
+new Pixie\Connection($db['driver'], $db, 'QB');
 
 switch ($data->type) {
     case 'confirmation':
@@ -18,7 +28,7 @@ switch ($data->type) {
 //        break;
 
     case 'message_new':
-        $res = Message::messageNew($data->object);
+        Game::parseInputData($data->object);
         break;
 
 //    case 'group_join':
@@ -26,6 +36,4 @@ switch ($data->type) {
 //        break;
 }
 
-if ($res) {
-    echo 'ok';
-}
+echo 'ok';

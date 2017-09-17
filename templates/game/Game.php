@@ -2,6 +2,7 @@
 
 namespace tmp\game;
 
+use gvk\DB;
 use gvk\Web;
 use gvk\vk\VK;
 use gvk\vk\methods\Images;
@@ -17,7 +18,7 @@ class Game
      *
      * @param object $data
      *
-     * @return void
+     * @return boolean
      */
     public static function parseInputData($data)
     {
@@ -27,12 +28,17 @@ class Game
             ->first();
 
         if ($q) {
-            if (trim($data->body) == $q->word) {
+            if (mb_strtolower(trim($data->body)) == mb_strtolower($q->ans)) {
                 $u = \QB::table(self::TABLE_USER)->where('id', '=', $data->user_id)->first();
                 $vkUser = VK::send('users.get', [
                     'user_ids' => $data->user_id,
                     'fields' => 'photo_50',
                 ], T_USR);
+
+                \QB::table(self::TABLE_GAME)->where('id', '=', $q->id)->update([
+                    'word' => $q->ans,
+                    'is_finished' => 1,
+                ]);
 
                 if ($u) {
                     \QB::table(self::TABLE_USER)->where('id', '=', $data->user_id)
@@ -48,66 +54,67 @@ class Game
                         'first_name' => $vkUser->response[0]->first_name,
                         'last_name' => $vkUser->response[0]->last_name,
                         'image' => $vkUser->response[0]->photo_50,
-                        'rating' => $u->rating + 1,
+                        'rating' => 1,
                     ]);
                 }
 
-                VK::messageSend('+ ' . ($u->rating + 1), $data->user_id);
-                self::generateTemplate2();
+                VK::messageSend('+ R:' . ($u->rating + 1), $data->user_id);
+                self::generateTemplate(2);
             }
-            VK::messageSend('-', $data->user_id);
+            else {
+                VK::messageSend('-', $data->user_id);
+            }
+        } else {
+            VK::messageSend('..', $data->user_id);
         }
-        VK::messageSend('..', $data->user_id);
+
+        return true;
     }
 
     public static function checkingGame()
     {
         $q = \QB::table(self::TABLE_GAME)
-            ->where('is_finished', '=', 0)
             ->where('game_type', '=', 0)
             ->first();
 
-        // TODO: check time at home
-
         if ($q) {
-            if (strtotime($q->time) > time() - 1080) {
-                $ans = self::getNextRndLetter($q->ans, $q->word);
+            if ($q->is_finished == 0 && strtotime($q->time) < time() - 1200) {
+                $word = self::getNextRndLetter($q->word, $q->ans);
 
                 \QB::table(self::TABLE_GAME)
                     ->where('id', '=', $q->id)
                     ->update([
-                        'ans' => $ans,
-                        'is_finished' => $q->ans == $q->word,
+                        'word' => $word,
+                        'is_finished' => $word == $q->ans,
                     ]);
 
-                if ($q->ans == $q->word) {
-                    self::generateTemplate2();
+                if ($word == $q->ans) {
+                    self::generateTemplate(2);
                 } else {
-                    self::generateTemplate1();
+                    self::generateTemplate(1);
                 }
             }
-            elseif (strtotime($q->time) > time() - 360) {
-                $w = \QB::getRandomData(Translate::TABLE);
+            elseif ($q->is_finished == 1 && strtotime($q->time) < time() - 600) {
+                $w = DB::getRandomData(Translate::TABLE);
 
                 \QB::table(self::TABLE_GAME)->insert([
-                    'word' => $w->word_eng,
-                    'ans' => self::getNextRndLetter(str_repeat('_', strlen($w->word_eng)), $w->word_eng),
+                    'word' => self::getNextRndLetter(str_repeat('_', strlen($w->word_eng)), $w->word_eng),
+                    'ans' => $w->word_eng,
                     'game_type' => 0,
                 ]);
 
                 \QB::table(self::TABLE_GAME)
-                    ->where('is_finished', '=', 1)
-                    ->where('game_type', '=', 0)
+                    ->where('id', '=', $q->id)
                     ->delete();
 
-                self::generateTemplate1();
+                self::generateTemplate(1);
             }
         }
     }
 
     public static function updateBestUsers()
     {
-        $users = \QB::table(self::TABLE_USER)->orderBy('rating', 'DESC')->limit(3)->get();
+        $users = self::getBestUsers();
 
         $ids = implode(',', array_map(function ($user) {
             return $user->rating;
@@ -127,14 +134,51 @@ class Game
         }
     }
 
-    public static function generateTemplate1()
+    public static function generateTemplate($template)
     {
+        $game = \QB::table(self::TABLE_GAME)
+            ->where('is_finished', '=', $template == 1 ? 0 : 1)
+            ->where('game_type', '=', 0)
+            ->first();
 
+        $users = self::getBestUsers();
+
+        $fon  = imagecreatefrompng(__DIR__ . '/header/fon.png');
+
+        for ($i = 0; $i < count($users); $i++) {
+            self::addImg($users[$i]->image, $fon, 599, 33 + ($i * 57));
+            self::addText($fon, 655, 50 + ($i * 57), $users[$i]->last_name . ' ' . $users[$i]->first_name, 10);
+            self::addText($fon, 655, 70 + ($i * 57), $users[$i]->rating);
+        }
+
+        self::addText($fon, 100, 105, join(' ', str_split($game->word)), 27, 0, 0, 0);
+        self::addText($fon, 543, 188, date('H:i'), 10);
+
+        if ($template == 1) {
+            self::addText($fon, 457, 188, date('H:i', strtotime($game->time) + 1200), 10);
+        }
+
+        imagepng($fon, __DIR__ . '/header/temp0.png');
+        self::setNewPhoto(__DIR__ . '/header/temp0.png');
     }
 
-    public static function generateTemplate2()
+    public static function addText($fon, $x, $y, $text, $size = 11, $r = 255, $g = 255, $b = 255)
     {
+        imagettftext(
+            $fon, $size, 0, $x, $y, imagecolorallocate($fon, $r, $g, $b),
+            __DIR__ . '/fonts/Roboto.ttf', $text
+        );
+    }
 
+    public static function addImg($img, $fon, $x, $y)
+    {
+        $photo = imagecreatefrompng($img);
+        imagecopymerge($fon, $photo, $x, $y, 0, 0, 50, 50, 100);
+    }
+
+    public static function getBestUsers()
+    {
+        return \QB::table(self::TABLE_USER)->orderBy('rating', 'DESC')->limit(3)->get();
     }
 
     public static function getNextRndLetter($text, $ans)
@@ -148,40 +192,19 @@ class Game
     }
 
     /**
-     * Generate a logo for the group.
-     *
-     * @param string $text
-     * @param string $img
-     *
-     * @return void
-     */
-    public static function generateLogo($text, $img)
-    {
-//        $fon  = imagecreatefrompng(__DIR__ . '/header/fon.png');
-//        $photo = imagecreatefromjpeg($img);
-//
-//        imagecopymerge($fon, $photo, 638, 49, 0, 0, 100, 100, 100);
-//
-//        imagettftext(
-//            $fon, 11, 0, 657, 164, 0,
-//            __DIR__ . '/fonts/ConcertOne-Regular.ttf', $text
-//        );
-//
-//        imagepng($fon, __DIR__ . '/header/temp.png');
-    }
-
-    /**
      * Pour the generated photo into the group.
+     *
+     * @param string $img
      *
      * @return object
      */
-    public static function setNewPhoto()
+    public static function setNewPhoto($img)
     {
         $uploadURL = Images::getOwnerCoverPhotoUploadServer();
 
         $upload = Web::request(
             $uploadURL->response->upload_url, true, 'POST',
-            ['photo' => curl_file_create(__DIR__ . '/header/temp.png')]
+            ['photo' => curl_file_create($img)]
         );
 
         return Images::saveOwnerCoverPhoto($upload->hash, $upload->photo);
