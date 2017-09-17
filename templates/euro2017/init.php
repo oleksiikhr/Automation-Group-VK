@@ -13,7 +13,7 @@ QB::query('CREATE TABLE IF NOT EXISTS ' . Euro::TABLE . ' (
     isFinal BOOLEAN NOT NULL,
     final_pos TINYINT NOT NULL,
     final_poll INT NOT NULL,
-    music_id INT NOT NULL
+    music_id INT NOT NULL,
     time TIMESTAMP on update CURRENT_TIMESTAMP() NOT NULL DEFAULT CURRENT_TIMESTAMP()
 )');
 

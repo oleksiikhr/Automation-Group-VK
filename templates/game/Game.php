@@ -2,7 +2,6 @@
 
 namespace tmp\game;
 
-use gvk\DB;
 use gvk\Web;
 use gvk\vk\VK;
 use gvk\vk\methods\Images;
@@ -10,50 +9,50 @@ use gvk\vk\methods\Translate;
 
 class Game
 {
-    const TABLE_GAME = 'game';
-    const TABLE_USER = 'user';
+    const TABLE_GAME = 'games';
+    const TABLE_USER = 'users';
 
     /**
      * New member in the group.
      *
      * @param object $data
      *
-     * @return bool
+     * @return void
      */
     public static function parseInputData($data)
     {
-        $q = DB::table(self::TABLE_GAME)
+        $q = \QB::table(self::TABLE_GAME)
             ->where('is_finished', '=', 0)
             ->where('game_type', '=', 0)
             ->first();
 
         if ($q) {
             if (trim($data->body) == $q->word) {
-                $u = DB::table(self::TABLE_USER)->where('id', '=', $data->user_id)->first();
+                $u = \QB::table(self::TABLE_USER)->where('id', '=', $data->user_id)->first();
                 $vkUser = VK::send('users.get', [
                     'user_ids' => $data->user_id,
                     'fields' => 'photo_50',
                 ], T_USR);
 
                 if ($u) {
-                    DB::table(self::TABLE_USER)->where('id', '=', $data->user_id)
+                    \QB::table(self::TABLE_USER)->where('id', '=', $data->user_id)
                         ->update([
-                            'first_name' => $vkUser->first_name,
-                            'last_name' => $vkUser->last_name,
-                            'image' => $vkUser->photo_50,
+                            'first_name' => $vkUser->response[0]->first_name,
+                            'last_name' => $vkUser->response[0]->last_name,
+                            'image' => $vkUser->response[0]->photo_50,
                             'rating' => $u->rating + 1,
                         ]);
                 } else {
-                    DB::table(self::TABLE_USER)->insert([
+                    \QB::table(self::TABLE_USER)->insert([
                         'id' => $data->user_id,
-                        'first_name' => $vkUser->first_name,
-                        'last_name' => $vkUser->last_name,
-                        'image' => $vkUser->photo_50,
+                        'first_name' => $vkUser->response[0]->first_name,
+                        'last_name' => $vkUser->response[0]->last_name,
+                        'image' => $vkUser->response[0]->photo_50,
                         'rating' => $u->rating + 1,
                     ]);
                 }
 
-                VK::messageSend('R: ' . ($u->rating + 1), $data->user_id);
+                VK::messageSend('+ ' . ($u->rating + 1), $data->user_id);
                 self::generateTemplate2();
             }
             VK::messageSend('-', $data->user_id);
@@ -63,27 +62,40 @@ class Game
 
     public static function checkingGame()
     {
-        $q = DB::table(self::TABLE_GAME)
+        $q = \QB::table(self::TABLE_GAME)
             ->where('is_finished', '=', 0)
             ->where('game_type', '=', 0)
             ->first();
 
+        // TODO: check time at home
+
         if ($q) {
             if (strtotime($q->time) > time() - 1080) {
+                $ans = self::getNextRndLetter($q->ans, $q->word);
 
-                // TODO: Show next rnd letter, upd time
-                self::generateTemplate1();
+                \QB::table(self::TABLE_GAME)
+                    ->where('id', '=', $q->id)
+                    ->update([
+                        'ans' => $ans,
+                        'is_finished' => $q->ans == $q->word,
+                    ]);
 
-            } elseif (strtotime($q->time) > time() - 360) {
-                $w = DB::getRandomData(Translate::TABLE);
+                if ($q->ans == $q->word) {
+                    self::generateTemplate2();
+                } else {
+                    self::generateTemplate1();
+                }
+            }
+            elseif (strtotime($q->time) > time() - 360) {
+                $w = \QB::getRandomData(Translate::TABLE);
 
-                DB::table(self::TABLE_GAME)->insert([
+                \QB::table(self::TABLE_GAME)->insert([
                     'word' => $w->word_eng,
-                    'ans' => str_repeat('_', strlen($w->word_eng)),
+                    'ans' => self::getNextRndLetter(str_repeat('_', strlen($w->word_eng)), $w->word_eng),
                     'game_type' => 0,
                 ]);
 
-                DB::table(self::TABLE_GAME)
+                \QB::table(self::TABLE_GAME)
                     ->where('is_finished', '=', 1)
                     ->where('game_type', '=', 0)
                     ->delete();
@@ -95,9 +107,24 @@ class Game
 
     public static function updateBestUsers()
     {
-        $users = DB::table(self::TABLE_USER)->orderBy('rating', 'ASC')->limit(3)->get();
+        $users = \QB::table(self::TABLE_USER)->orderBy('rating', 'DESC')->limit(3)->get();
 
-        // TODO: ..
+        $ids = implode(',', array_map(function ($user) {
+            return $user->rating;
+        }, $users));
+
+        $usersVK = VK::send('users.get', [
+            'user_ids' => $ids,
+            'fields' => 'photo_50',
+        ], T_USR);
+
+        for ($i = 0; $i < count($users); $i++) {
+            \QB::table(self::TABLE_USER)->where('user_id', '=', $users[$i]->user_id)->update([
+                'first_name' => $usersVK->response[$i]->first_name,
+                'last_name' => $usersVK->response[$i]->last_name,
+                'image' => $usersVK->response[$i]->photo_50,
+            ]);
+        }
     }
 
     public static function generateTemplate1()
@@ -130,17 +157,17 @@ class Game
      */
     public static function generateLogo($text, $img)
     {
-        $fon  = imagecreatefrompng(__DIR__ . '/header/fon.png');
-        $photo = imagecreatefromjpeg($img);
-
-        imagecopymerge($fon, $photo, 638, 49, 0, 0, 100, 100, 100);
-
-        imagettftext(
-            $fon, 11, 0, 657, 164, 0,
-            __DIR__ . '/fonts/ConcertOne-Regular.ttf', $text
-        );
-
-        imagepng($fon, __DIR__ . '/header/temp.png');
+//        $fon  = imagecreatefrompng(__DIR__ . '/header/fon.png');
+//        $photo = imagecreatefromjpeg($img);
+//
+//        imagecopymerge($fon, $photo, 638, 49, 0, 0, 100, 100, 100);
+//
+//        imagettftext(
+//            $fon, 11, 0, 657, 164, 0,
+//            __DIR__ . '/fonts/ConcertOne-Regular.ttf', $text
+//        );
+//
+//        imagepng($fon, __DIR__ . '/header/temp.png');
     }
 
     /**

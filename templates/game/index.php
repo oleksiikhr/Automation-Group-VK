@@ -2,4 +2,6 @@
 
 require_once __DIR__ . '/../../public/run.php';
 
-\tmp\game\Game::getNextRndLetter('_le__y', 'Alexey');
+\tmp\game\Game::updateBestUsers();
+
+// TODO: night -> updateBestUsers
