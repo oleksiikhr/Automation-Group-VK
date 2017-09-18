@@ -45,7 +45,6 @@ class Game
                         ->update([
                             'first_name' => $vkUser->response[0]->first_name,
                             'last_name' => $vkUser->response[0]->last_name,
-                            'image' => $vkUser->response[0]->photo_50,
                             'rating' => $u->rating + 1,
                         ]);
                 } else {
@@ -53,19 +52,25 @@ class Game
                         'id' => $data->user_id,
                         'first_name' => $vkUser->response[0]->first_name,
                         'last_name' => $vkUser->response[0]->last_name,
-                        'image' => $vkUser->response[0]->photo_50,
                         'rating' => 1,
                     ]);
                 }
 
-                VK::messageSend('+ R:' . ($u->rating + 1), $data->user_id);
+                file_put_contents(__DIR__ . '/avatars/' . $data->user_id . '.jpg',
+                    file_get_contents($vkUser->response[0]->photo_50)
+                );
+
+                VK::messageSend('Correctly! Rating:' . ($u->rating + 1), $data->user_id);
                 self::generateTemplate(2);
             }
+            elseif (strlen(trim($data->body)) != strlen($q->ans)) {
+                VK::messageSend('Wrong, ' . strlen($q->ans) . ' characters', $data->user_id);
+            }
             else {
-                VK::messageSend('-', $data->user_id);
+                VK::messageSend('Wrong', $data->user_id);
             }
         } else {
-            VK::messageSend('..', $data->user_id);
+            VK::messageSend('Wait for the next word', $data->user_id);
         }
 
         return true;
@@ -78,7 +83,7 @@ class Game
             ->first();
 
         if ($q) {
-            if ($q->is_finished == 0 && strtotime($q->time) < time() - 1200) {
+            if ($q->is_finished == 0 && strtotime($q->time) + 3600 < time() - 1200) {
                 $word = self::getNextRndLetter($q->word, $q->ans);
 
                 \QB::table(self::TABLE_GAME)
@@ -94,7 +99,7 @@ class Game
                     self::generateTemplate(1);
                 }
             }
-            elseif ($q->is_finished == 1 && strtotime($q->time) < time() - 600) {
+            elseif ($q->is_finished == 1 && strtotime($q->time) + 3600 < time() - 600) {
                 $w = DB::getRandomData(Translate::TABLE);
 
                 \QB::table(self::TABLE_GAME)->insert([
@@ -114,10 +119,12 @@ class Game
 
     public static function updateBestUsers()
     {
+        self::deleteAllAvatars();
+
         $users = self::getBestUsers();
 
         $ids = implode(',', array_map(function ($user) {
-            return $user->rating;
+            return $user->id;
         }, $users));
 
         $usersVK = VK::send('users.get', [
@@ -126,11 +133,24 @@ class Game
         ], T_USR);
 
         for ($i = 0; $i < count($users); $i++) {
-            \QB::table(self::TABLE_USER)->where('user_id', '=', $users[$i]->user_id)->update([
+            \QB::table(self::TABLE_USER)->where('id', '=', $usersVK->response[$i]->id)->update([
                 'first_name' => $usersVK->response[$i]->first_name,
                 'last_name' => $usersVK->response[$i]->last_name,
-                'image' => $usersVK->response[$i]->photo_50,
             ]);
+
+            file_put_contents(__DIR__ . '/avatars/' . $usersVK->response[$i]->id . '.jpg',
+                file_get_contents($usersVK->response[$i]->photo_50)
+            );
+        }
+    }
+
+    public static function deleteAllAvatars()
+    {
+        $directory = __DIR__ . '/avatars';
+        $files = array_diff(scandir($directory), ['..', '.']);
+
+        foreach ($files as $file) {
+            unlink(__DIR__ . '/avatars/' . $file);
         }
     }
 
@@ -142,11 +162,10 @@ class Game
             ->first();
 
         $users = self::getBestUsers();
-
         $fon  = imagecreatefrompng(__DIR__ . '/header/fon.png');
 
         for ($i = 0; $i < count($users); $i++) {
-            self::addImg($users[$i]->image, $fon, 599, 33 + ($i * 57));
+            self::addAvatar($users[$i]->id, $fon, 599, 33 + ($i * 57));
             self::addText($fon, 655, 50 + ($i * 57), $users[$i]->last_name . ' ' . $users[$i]->first_name, 10);
             self::addText($fon, 655, 70 + ($i * 57), $users[$i]->rating);
         }
@@ -155,7 +174,7 @@ class Game
         self::addText($fon, 543, 188, date('H:i'), 10);
 
         if ($template == 1) {
-            self::addText($fon, 457, 188, date('H:i', strtotime($game->time) + 1200), 10);
+            self::addText($fon, 457, 188, date('H:i', strtotime($game->time) + 3600 + 1200), 10);
         }
 
         imagepng($fon, __DIR__ . '/header/temp0.png');
@@ -170,9 +189,23 @@ class Game
         );
     }
 
-    public static function addImg($img, $fon, $x, $y)
+    public static function addAvatar($img, $fon, $x, $y)
     {
-        $photo = imagecreatefrompng($img);
+        $dir = __DIR__ . '/avatars/' . $img . '.jpg';
+
+        switch (mime_content_type($dir)) {
+            case 'image/jpeg':
+                $photo = imagecreatefromjpeg($dir);
+                break;
+
+            case 'image/png':
+                $photo = imagecreatefrompng($dir);
+                break;
+
+            default:
+                return;
+        }
+
         imagecopymerge($fon, $photo, $x, $y, 0, 0, 50, 50, 100);
     }
 
