@@ -40,27 +40,32 @@ class Game
                     'is_finished' => 1,
                 ]);
 
+                $rating = substr_count($q->word, '_');
+
                 if ($u) {
                     \QB::table(self::TABLE_USER)->where('id', '=', $data->user_id)
                         ->update([
                             'first_name' => $vkUser->response[0]->first_name,
                             'last_name' => $vkUser->response[0]->last_name,
-                            'rating' => $u->rating + 1,
+                            'rating' => $u->rating + $rating,
                         ]);
+
+                    VK::messageSend('Correctly! Rating:' . ($u->rating + $rating) . ' (+' . $rating . ')', $data->user_id);
                 } else {
                     \QB::table(self::TABLE_USER)->insert([
                         'id' => $data->user_id,
                         'first_name' => $vkUser->response[0]->first_name,
                         'last_name' => $vkUser->response[0]->last_name,
-                        'rating' => 1,
+                        'rating' => $rating,
                     ]);
+
+                    VK::messageSend('Correctly! Rating:' . $rating, $data->user_id);
                 }
 
                 file_put_contents(__DIR__ . '/avatars/' . $data->user_id . '.jpg',
                     file_get_contents($vkUser->response[0]->photo_50)
                 );
 
-                VK::messageSend('Correctly! Rating:' . ($u->rating + 1), $data->user_id);
                 self::generateTemplate(2);
             }
             elseif (strlen(trim($data->body)) != strlen($q->ans)) {
