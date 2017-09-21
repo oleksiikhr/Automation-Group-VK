@@ -62,11 +62,10 @@ class Game
                     VK::messageSend('Correctly! Rating:' . $rating, $data->user_id);
                 }
 
-                file_put_contents(__DIR__ . '/avatars/' . $data->user_id . '.jpg',
-                    file_get_contents($vkUser->response[0]->photo_50)
-                );
+                self::uploadImage(__DIR__ . '/avatars/' . $data->user_id . '.jpg',
+                    $vkUser->response[0]->photo_50, 35, 35, 100);
 
-                self::generateTemplate(2);
+                self::generateTemplate2();
             }
             elseif (strlen(trim($data->body)) != strlen($q->ans)) {
                 VK::messageSend('Wrong, ' . strlen($q->ans) . ' characters', $data->user_id);
@@ -99,9 +98,9 @@ class Game
                     ]);
 
                 if ($word == $q->ans) {
-                    self::generateTemplate(2);
+                    self::generateTemplate2();
                 } else {
-                    self::generateTemplate(1);
+                    self::generateTemplate1();
                 }
             }
             elseif ($q->is_finished == 1 && strtotime($q->time) + 3600 < time() - 600) {
@@ -117,7 +116,7 @@ class Game
                     ->where('id', '=', $q->id)
                     ->delete();
 
-                self::generateTemplate(1);
+                self::generateTemplate1();
             }
         }
     }
@@ -143,9 +142,8 @@ class Game
                 'last_name' => $usersVK->response[$i]->last_name,
             ]);
 
-            file_put_contents(__DIR__ . '/avatars/' . $usersVK->response[$i]->id . '.jpg',
-                file_get_contents($usersVK->response[$i]->photo_50)
-            );
+            self::uploadImage(__DIR__ . '/avatars/' . $usersVK->response[$i]->id . '.jpg',
+                $usersVK->response[$i]->photo_50, 35, 35, 100);
         }
     }
 
@@ -159,59 +157,92 @@ class Game
         }
     }
 
-    public static function generateTemplate($template)
+    public static function generateTemplate1()
     {
         $game = \QB::table(self::TABLE_GAME)
-            ->where('is_finished', '=', $template == 1 ? 0 : 1)
+            ->where('is_finished', '=', 0)
             ->where('game_type', '=', 0)
             ->first();
 
         $users = self::getBestUsers();
-        $fon  = imagecreatefrompng(__DIR__ . '/header/fon.png');
+        $fon  = imagecreatefrompng(__DIR__ . '/header/fon-1.png');
 
         for ($i = 0; $i < count($users); $i++) {
-            self::addAvatar($users[$i]->id, $fon, 599, 33 + ($i * 57));
-            self::addText($fon, 655, 50 + ($i * 57), $users[$i]->last_name . ' ' . $users[$i]->first_name, 10);
-            self::addText($fon, 655, 70 + ($i * 57), $users[$i]->rating);
+            self::addAvatar($users[$i]->id, $fon, 606, 41 + ($i * 57));
+            self::addText($fon, 651, 54 + ($i * 57),
+                $users[$i]->last_name . ' ' . $users[$i]->first_name, 10, 255, 255, 255, true);
+            self::addText($fon, 651, 70 + ($i * 57), $users[$i]->rating, 10, 170, 170, 170, true);
         }
 
         self::addText($fon, 100, 105, join(' ', str_split($game->word)), 27, 0, 0, 0);
         self::addText($fon, 543, 188, date('H:i'), 10);
+        self::addText($fon, 457, 188, date('H:i', strtotime($game->time) + 3600 + 1200), 10);
 
-        if ($template == 1) {
-            self::addText($fon, 457, 188, date('H:i', strtotime($game->time) + 3600 + 1200), 10);
-        }
-
-        imagepng($fon, __DIR__ . '/header/temp0.png');
-        self::setNewPhoto(__DIR__ . '/header/temp0.png');
+        imagepng($fon, __DIR__ . '/header/temp-1.png');
+        self::setNewPhoto(__DIR__ . '/header/temp-1.png');
     }
 
-    public static function addText($fon, $x, $y, $text, $size = 11, $r = 255, $g = 255, $b = 255)
+    public static function generateTemplate2()
+    {
+        $game = \QB::table(self::TABLE_GAME)
+            ->where('is_finished', '=', 1)
+            ->where('game_type', '=', 0)
+            ->first();
+
+        $word = \QB::table(Translate::TABLE)->where('word_eng', '=', $game->ans)->first();
+
+        if (! $word) {
+            return;
+        }
+
+        $users = self::getBestUsers();
+        $fon  = imagecreatefrompng(__DIR__ . '/header/fon-2.png');
+
+        for ($i = 0; $i < count($users); $i++) {
+            self::addAvatar($users[$i]->id, $fon, 606, 41 + ($i * 57));
+            self::addText($fon, 651, 54 + ($i * 57),
+                $users[$i]->last_name . ' ' . $users[$i]->first_name, 10, 255, 255, 255, true);
+            self::addText($fon, 651, 70 + ($i * 57), $users[$i]->rating, 10, 170, 170, 170, true);
+        }
+
+        $rus = strlen($word->word_rus) > 40 ? mb_substr($word->word_rus, 0, 40) . '..' : $word->word_rus;
+        $tr = strlen($word->transcription) > 40 ? mb_substr($word->transcription, 0, 40) . '..' : $word->transcription;
+
+        self::addText($fon, 100, 80, join(' ', str_split($word->word_eng)), 24, 0, 0, 0);
+        self::addText($fon, 100, 110, $rus, 15, 0, 0, 0);
+        self::addText($fon, 100, 140, '[' . $tr . ']', 15, 0, 0, 0);
+
+        self::addText($fon, 460, 188, date('H:i', strtotime($game->time) + 3600 + 1200), 10);
+        self::addText($fon, 543, 188, date('H:i'), 10);
+
+        imagepng($fon, __DIR__ . '/header/temp-2.png');
+        self::setNewPhoto(__DIR__ . '/header/temp-2.png');
+    }
+
+    public static function addText($fon, $x, $y, $text, $size = 11, $r = 255, $g = 255, $b = 255, $isBold = false)
     {
         imagettftext(
             $fon, $size, 0, $x, $y, imagecolorallocate($fon, $r, $g, $b),
-            __DIR__ . '/fonts/Roboto.ttf', $text
+            $isBold ? __DIR__ . '/fonts/Roboto-Bold.ttf' : __DIR__ . '/fonts/Roboto.ttf', $text
         );
+    }
+
+    public static function uploadImage($outfile, $infile, $neww, $newh, $quality)
+    {
+        $im = imagecreatefromjpeg($infile);
+        $im1 = imagecreatetruecolor($neww, $newh);
+        imagecopyresampled($im1, $im, 0, 0, 0, 0, $neww, $newh, imagesx($im), imagesy($im));
+
+        imagejpeg($im1, $outfile, $quality);
+        imagedestroy($im);
+        imagedestroy($im1);
     }
 
     public static function addAvatar($img, $fon, $x, $y)
     {
         $dir = __DIR__ . '/avatars/' . $img . '.jpg';
 
-        switch (mime_content_type($dir)) {
-            case 'image/jpeg':
-                $photo = imagecreatefromjpeg($dir);
-                break;
-
-            case 'image/png':
-                $photo = imagecreatefrompng($dir);
-                break;
-
-            default:
-                return;
-        }
-
-        imagecopymerge($fon, $photo, $x, $y, 0, 0, 50, 50, 100);
+        imagecopymerge($fon, imagecreatefromjpeg($dir), $x, $y, 0, 0, 35, 35, 100);
     }
 
     public static function getBestUsers()

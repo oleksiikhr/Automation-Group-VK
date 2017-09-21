@@ -4,7 +4,7 @@ body {
 }
 
 #app {
-	display: table;
+    display: table;
     position: relative;
     background: url("fon.png");
     width: 795px;
@@ -25,14 +25,14 @@ body {
 }
 
 .left span {
-	display: block;
-	-moz-transform: rotate(-90.0deg);  /* FF3.5+ */
-	-o-transform: rotate(-90.0deg);  /* Opera 10.5 */
-	-webkit-transform: rotate(-90.0deg);  /* Saf3.1+, Chrome */
-	filter:  progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083);  /* IE6,IE7 */
-	-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)"; /* IE8 */
-	margin-left: -10em;
-	margin-right: -10em;
+    display: block;
+    -moz-transform: rotate(-90.0deg);  /* FF3.5+ */
+    -o-transform: rotate(-90.0deg);  /* Opera 10.5 */
+    -webkit-transform: rotate(-90.0deg);  /* Saf3.1+, Chrome */
+    filter:  progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083);  /* IE6,IE7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)"; /* IE8 */
+    margin-left: -10em;
+    margin-right: -10em;
 }
 
 .center {
@@ -47,7 +47,7 @@ body {
     border-bottom: 1px solid;
     padding: 2px 10px 0;
     text-transform: uppercase;
-    color: rgba(0, 0, 0, 0.8);
+    color: #333;
     font-weight: bold;
     font-size: 32px;
 }
@@ -57,7 +57,7 @@ body {
     font-family: 'Concert One', cursive;
     font-size: 19px;
     width: 200px;
-    background: rgba(0, 0, 0, .6);
+    background: rgba(0, 0, 0, 0.7);
 }
 
 .right .leaders {
@@ -81,41 +81,14 @@ body {
     letter-spacing: 1px;
 }
 
-.content {
-    /* border: 1px solid #607a9a; */
-}
-
 .profile {
-    overflow: hidden;
     height: 56px;
-    border-bottom: 1px solid #a2a2a2;
+    overflow: hidden;
+    border-bottom: 1px solid #717171;
 }
 
 .profile:last-child {
-	border-bottom: 0;
-}
-
-.profile > img {
-    border-radius: 50%;
-    width: 35px;
-    float: left;
-    margin-right: 10px;
-    border: 1px solid #fff;
-}
-
-.info {
-    line-height: 16px;
-    height: 100%;
-    margin: 2px;
-    font-size: 14px;
-}
-
-.info > .name {
-    display: block;
-}
-
-.info > .rating {
-    color: #777;
+    border-bottom: 0;
 }
 
 .bottom {
@@ -136,7 +109,7 @@ body {
 }
 
 .bottom > div:first-child {
-	margin-left: 0;
+    margin-left: 0;
 }
 
 .bottom .fa {
@@ -152,4 +125,4 @@ body {
 
 .time {
     width: 62px;
-}
+};
