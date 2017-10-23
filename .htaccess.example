@@ -1,3 +1,4 @@
+# Additional protection for ip
 Order Deny,Allow
 Deny from all
 Allow from [IP]

@@ -1,14 +1,14 @@
 <?php
 
-// DEBUG
+// Debug mode
 define('DEBUG', false);
 
-// DIR
+// Dir
 define('D_ROOT', __DIR__ . '/..');
 define('D_IMG',  D_ROOT . '/resources');
 
 // Secret data
-define('CONFIRMATION', '');
+define('CONFIRMATION', ''); // For confirmation group (dialogs group)
 define('SECRET_KEY',   '');
 
 // Database
@@ -19,20 +19,30 @@ define('DB_PASS',  '');
 
 // Group
 define('G_ID',  '');
-define('G_URL', '');
+define('G_URL', ''); // For hashtags in the posts
 
-// Token
-define('T_USR',    '');
-define('T_MSG',    '');
-define('T_IMG',    '');
-define('T_GOOGLE', '');
+// Tokens
+define('T_USR',    ''); // Main token (administrator to the group)
+define('T_MSG',    ''); // For answer in dialogs group
+define('T_IMG',    ''); // For upload image in VK server
+define('T_GOOGLE', ''); // For Youtube API
 
-// Board
+/**
+ * Only for Board. (For add a new question in DB)
+ * Not support now.
+ *
+ * @see \gvk\vk\callback\Board
+ */
 define('B_POLL',   '');
 define('B_WORD',   '');
 define('B_VIDEO',  '');
 define('B_CHOOSE', '');
 
-// Additional accounts
+/**
+ * Additional token accounts.
+ * Uses only for Euro.
+ *
+ * @see \tmp\euro2017\Euro
+ */
 define('T_USR2', '');
 define('T_USR3', '');
