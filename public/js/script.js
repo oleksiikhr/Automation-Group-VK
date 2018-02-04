@@ -1,59 +1,79 @@
-$(document).ready(function () {
-    $("#poll_type1").find("input[type='submit']").on("click", function (e) {
-        var id = $("#poll_type1");
+function sendPoll(name) {
+    var form = $("#"+name);
+    var file = form.find('input[name="action"]').val() == 'add' ? 'add.php' : 'update.php';
+    var inputs = form.find(':input');
+    var attr = '?method='+name+'&secret='+form.find('input[name="secret"]').val();
 
-        var quest = id.find("input[name='quest']");
-        var correct_answer = id.find("input[name='correct_answer']");
-        var answers = id.find("textarea[name='answers']");
-        var secret = id.find("input[name='secret']").val();
+    for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].type == 'textarea')
+            attr += "&" + inputs[i].name + "=" + inputs[i].value.replace(/\n/g, '\\n');
 
-        var text = quest.val() + "\n" + correct_answer.val() + "\n" + answers.val();
+        else if (inputs[i].type != 'hidden' && inputs[i].type != 'submit')
+            attr += "&" + inputs[i].name + "=" + inputs[i].value;
+    }
 
-        $.ajax({
-            url: "controllers/control.php",
-            type: "GET",
-            data: {
-                'action': 'poll_type1',
-                'text':   text,
-                'secret': secret
-            },
-            success: function (res) {
-                quest.focus();
-                id.find("#success").empty();
-
-                if (res) {
-                    quest.empty();
-                    correct_answer.empty();
-                    answers.empty();
-
-                    id.find("#success").append("Новый опрос добавлен");
-                    return;
+    axios.get('controllers/'+file+attr)
+        .then(function (res) {
+            if (res.data) {
+                for (var i = 0; i < inputs.length; i++) {
+                    if (inputs[i].type != 'hidden' && inputs[i].type != 'submit')
+                        inputs[i].value = '';
                 }
-
-                id.find("#success").append("Ошибка");
             }
+            console.log("Response: " + res.data);
+        })
+        .catch(function (res) {
+            console.log('Error: ' + res);
         });
+}
 
-        e.preventDefault();
-    })
-});
+function findPoll(name) {
+    var form = $("#"+name);
+    var inputs = form.find(':input');
+    var attr = '?method=' + name
+        + '&key=' + inputs[0].name
+        + '&val=' + inputs[0].value
+        + '&secret=' + form.find('input[name="secret"]').val();
 
-function help() {
-    var id = $("#poll_type1");
+    axios.get('controllers/find.php'+attr)
+        .then(function (res) {
+            if (res.data) {
+                form.find('input[type="submit"]').attr('value', 'Обновить');
+                form.find('input[type="submit"]').addClass('update');
+                form.find('input[name="action"]').attr('value', 'update');
+            } else {
+                form.find('input[type="submit"]').attr('value', 'Добавить');
+                form.find('input[type="submit"]').removeClass('update');
+                form.find('input[name="action"]').attr('value', 'add');
+            }
+            console.log("Response: " + res.data);
+        })
+        .catch(function (res) {
+            console.log("Error: " + res);
+        });
+}
 
-    $.ajax({
-        url: "controllers/help.php",
-        type: "GET",
-        data: {
-            'action': 'poll_type1',
-            'quest':  id.find("input[name='quest']").val(),
-            'secret': id.find("input[name='secret']").val()
-        },
-        success: function (res) {
-            if (res)
-                id.css('background', '#333');
-            else
-                id.css('background', '#fff');
+function sendYoutube() {
+    var title = $("#youtube").find('input[name="title"]');
+    var playlist = $("#youtube").find('input[name="playlist"]');
+    var secret = $("#youtube").find('input[name="secret"]');
+
+    axios.get('controllers/add.php', {
+        params: {
+            method: 'youtube',
+            title: title.val(),
+            playlist: playlist.val(),
+            secret: secret.val()
         }
-    });
+    })
+        .then(function (res) {
+            if (res.data) {
+                title.val("");
+                playlist.val("");
+            }
+            console.log("Response: " + res.data);
+        })
+        .catch(function (res) {
+            console.log("Error: " + res);
+        });
 }

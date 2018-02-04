@@ -45,7 +45,7 @@ class Config
     {
         $playlists = \QB::table(self::TABLE)->select('value')->where('name', '=', 'youtube_playlists')->first();
 
-        return empty($playlists->value) ? [] : unserialize( base64_decode($playlists->value) );
+        return empty($playlists->value) ? [] : unserialize(base64_decode($playlists->value));
     }
 
     /**
@@ -53,14 +53,18 @@ class Config
      *
      * @param string $value
      *
-     * @return void
+     * @return boolean
      */
     public static function addYoutubePlaylist($value)
     {
+        if (preg_match('/[а-яё\s]/ui', $value)) {
+            return false;
+        }
+
         $playlists = self::getYoutubePlayList();
         $playlists[] = $value;
 
-        \QB::table(self::TABLE)->where('name', '=', 'youtube_playlists')->update([
+        return \QB::table(self::TABLE)->where('name', '=', 'youtube_playlists')->update([
             'value' => base64_encode( serialize( array_unique($playlists) ) )
         ]);
     }

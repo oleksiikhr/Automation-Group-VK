@@ -19,14 +19,16 @@ class DB
         $i = 0;
         $arr = [];
 
-        if ($count > $total)
+        if ($count > $total) {
             return \QB::table($table)->select('*')->get();
+        }
 
         while ($i < $count) {
             $temp = mt_rand(1, $total);
 
-            if ( in_array($temp, $arr) )
+            if (in_array($temp, $arr)) {
                 continue;
+            }
 
             $arr[$i++] = $temp;
         }
@@ -44,7 +46,7 @@ class DB
      */
     public static function getRandomData($table, $row = 'id')
     {
-        $id = rand( 1, self::getCountRows($table) );
+        $id = rand(1, self::getCountRows($table));
 
         return \QB::table($table)->where($row, $id)->first();
     }

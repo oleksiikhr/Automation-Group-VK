@@ -26,8 +26,9 @@ class Parse
         foreach ($q as $item) {
             $data = self::getLingorado($item->word_eng);
 
-            if ( empty($data) )
+            if (empty($data)) {
                 return;
+            }
 
             $html = str_get_html($data);
             $transcription = '';
@@ -37,8 +38,9 @@ class Parse
                 $transcription .= $partText;
             }
 
-            if ( empty($transcription) )
+            if (empty($transcription)) {
                 $transcription = '-';
+            }
 
             \QB::table(Translate::TABLE)->where('id', '=', $item->id)->update([
                 'transcription' => trim($transcription)
@@ -76,8 +78,9 @@ class Parse
     {
         $playlists = Config::getYoutubePlayList();
 
-        if ( empty($playlists) )
+        if (empty($playlists)) {
             return;
+        }
 
         $playlist = $playlists[array_rand($playlists, 1)];
         $video = Youtube::getPlaylistItems('id', $playlist, 0);
@@ -85,8 +88,9 @@ class Parse
         $num_album = \QB::table(Video::TABLE)->select('album_id')->where('playlist', '=', $playlist)->first();
         $num_album = $num_album->album_id;
 
-        if ( empty($num_album) )
+        if (empty($num_album)) {
             return;
+        }
 
         Video::updatePlaylist($video->pageInfo->totalResults, $playlist, $num_album);
     }

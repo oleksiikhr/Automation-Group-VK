@@ -4,7 +4,7 @@ namespace gvk\vk\callback;
 
 use gvk\Web;
 use gvk\vk\VK;
-use gvk\vk\methods\Photos;
+use gvk\vk\methods\Images;
 
 class Group
 {
@@ -25,7 +25,7 @@ class Group
         self::generateLogo($user->response[0]->first_name, $user->response[0]->photo_100);
         $photo = self::setNewPhoto();
 
-        return empty($photo->error) ? true : false;
+        return empty($photo->error);
     }
 
     /**
@@ -58,13 +58,13 @@ class Group
      */
     public static function setNewPhoto()
     {
-        $uploadURL = Photos::getOwnerCoverPhotoUploadServer();
+        $uploadURL = Images::getOwnerCoverPhotoUploadServer();
 
         $upload = Web::request(
             $uploadURL->response->upload_url, true, 'POST',
             ['photo' => curl_file_create(__DIR__ . '/header/temp.png')]
         );
 
-        return Photos::saveOwnerCoverPhoto($upload->hash, $upload->photo);
+        return Images::saveOwnerCoverPhoto($upload->hash, $upload->photo);
     }
 }

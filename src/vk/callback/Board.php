@@ -18,17 +18,19 @@ class Board
      */
     public static function postNew($data)
     {
-        if ($data->from_id != '-' . G_ID)
+        if ($data->from_id != '-' . G_ID) {
             return false;
+        }
 
-        if ( ! in_array($data->topic_id, [B_WORD, B_VIDEO, B_POLL, B_CHOOSE]) )
+        if (! in_array($data->topic_id, [B_WORD, B_VIDEO, B_POLL, B_CHOOSE])) {
             return false;
+        }
 
         $text = trim($data->text);
-        $commentID = (int)mb_substr( $text, mb_strpos($text, '_') + 1 );
+        $commentID = (int)mb_substr($text, mb_strpos($text, '_') + 1);
 
         // [id100000000:bp-100000000_100|Admin], - Example
-        if ( preg_match('/^\[(id|club)[0-9]+:bp-[0-9]+_[0-9]+\|.+],$/ui', $text) ) {
+        if (preg_match('/^\[(id|club)[0-9]+:bp-[0-9]+_[0-9]+\|.+],$/ui', $text)) {
             self::deleteComment($data->topic_id, $data->id);
 
             $text = self::getComments($data->topic_id, $commentID);
@@ -44,8 +46,9 @@ class Board
             case B_CHOOSE:  $is_add = Polls::addDB($text, Polls::TABLE_2); break;
         }
 
-        if ($is_add)
+        if ($is_add) {
             self::deleteComment($data->topic_id, $data->id);
+        }
 
         return $is_add;
     }

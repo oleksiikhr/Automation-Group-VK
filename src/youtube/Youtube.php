@@ -20,8 +20,8 @@ class Youtube extends Web
      */
     public static function send($method, $params, $decode = true)
     {
-        return self::request( self::Y_API . $method . '?' . http_build_query($params)
-            . '&key=' . T_GOOGLE, $decode );
+        return self::request(self::Y_API . $method . '?' . http_build_query($params)
+            . '&key=' . T_GOOGLE, $decode);
     }
 
     /**

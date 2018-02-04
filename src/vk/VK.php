@@ -7,7 +7,7 @@ use gvk\Web;
 class VK
 {
     const VK_API = 'https://api.vk.com/method/';
-    const VK_VER = '5.63';
+    const VK_VER = '5.68';
 
     /**
      * Send request to VK.
@@ -25,9 +25,9 @@ class VK
         $params['access_token'] = $token;
 
         if ($typeMethod !== 'POST') {
-            $data = Web::request( self::VK_API . $method . '?' . http_build_query($params), true );
+            $data = Web::request(self::VK_API . $method . '?' . http_build_query($params), true);
         } else {
-            $data = Web::request( self::VK_API . $method, true, 'POST', http_build_query($params) );
+            $data = Web::request(self::VK_API . $method, true, 'POST', http_build_query($params));
         }
 
         return $data;
@@ -91,18 +91,17 @@ class VK
      *
      * @param string $message
      * @param int    $post_id
-     * @param bool   $fromGroup
      *
      * @return object
      */
-    public static function wallCreateComment($message, $post_id, $fromGroup = true)
+    public static function wallCreateComment($message, $post_id)
     {
         return self::send('wall.createComment', [
             'owner_id'   => '-' . G_ID,
             'message'    => $message,
             'post_id'    => $post_id,
             'guid'       => rand(),
-            'from_group' => $fromGroup
+            'from_group' => G_ID
         ], T_USR);
     }
 }

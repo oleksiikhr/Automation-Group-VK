@@ -25,8 +25,9 @@ class Translate
         $words = preg_replace('/ +/', ' ', $text);
         $words = preg_split('/\n/', $words);
 
-        if ( count($words) != 3 )
+        if (count($words) != 3) {
             return false;
+        }
 
         $words = array_map('trim', $words);
         $words = preg_replace('/[\.\!\?]/u', '', $words);
@@ -36,18 +37,21 @@ class Translate
         }
 
         // Eng word
-        if ( ! preg_match('/^[a-z\s\']+$/u', $words[0]) )
+        if (! preg_match('/^[a-z\s\']+$/u', $words[0])) {
             return false;
+        }
 
         // Transcription
-        if ( ! preg_match('/^[а-я\,\sёЁ]+$/u', $words[1]) )
+        if (! preg_match('/^[а-я\,\sёЁ]+$/u', $words[1])) {
             return false;
+        }
 
         // Rus word
-        if ( ! preg_match('/^[а-я\,\sёЁ]+$/u', $words[2]) )
+        if (! preg_match('/^[а-я\,\sёЁ]+$/u', $words[2])) {
             return false;
+        }
 
-        $words[0] = self::upFirst( self::upI($words[0]) );
+        $words[0] = self::upFirst(self::upI($words[0]));
         $words[2] = self::upFirst($words[2]);
 
         return $words;
@@ -64,11 +68,13 @@ class Translate
     {
         $words = self::checkCallback($text);
 
-        if ( empty($words) )
+        if (empty($words)) {
             return false;
+        }
 
-        if ( ! empty( \QB::table(self::TABLE)->where('word_eng', '=', $words[0])->first() ) )
+        if (! empty(\QB::table(self::TABLE)->where('word_eng', '=', $words[0])->first())) {
             return false;
+        }
 
         return \QB::table(self::TABLE)->insert([
             'word_eng'      => $words[0],
@@ -88,18 +94,20 @@ class Translate
     public static function createPost($count, $photoID = null)
     {
         $data = DB::getDistinctData(self::TABLE, $count);
-        $message = self::SMILE . " Перевод английских слов.";
+        $message = self::SMILE . " Перевод английских слов.\n\n";
         $i = 1;
 
         foreach ($data as $item) {
             $message .= "$i. {$item->word_eng} [{$item->transcription}] - {$item->word_rus}\n";
 
-            if ($i++ % 5 == 0)
+            if ($i++ % 5 == 0) {
                 $message .= "\n";
+            }
         }
 
-        if ( ! empty($photoID) )
+        if (! empty($photoID)) {
             $photoID = 'photo-' . G_ID . '_' . $photoID;
+        }
 
         return VK::wallPost($message . self::getHashtag(), $photoID);
     }

@@ -1,0 +1,128 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+    display: table;
+    position: relative;
+    background: url("fon.png");
+    width: 795px;
+    height: 200px;
+}
+
+.left {
+    display: table-cell;
+    color: #fff;
+    font-size: 36px;
+    font-family: 'Concert One', cursive;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background: #333;
+    width: 1.5em;
+    padding: 0;
+}
+
+.left span {
+    display: block;
+    -moz-transform: rotate(-90.0deg);  /* FF3.5+ */
+    -o-transform: rotate(-90.0deg);  /* Opera 10.5 */
+    -webkit-transform: rotate(-90.0deg);  /* Saf3.1+, Chrome */
+    filter:  progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083);  /* IE6,IE7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)"; /* IE8 */
+    margin-left: -10em;
+    margin-right: -10em;
+}
+
+.center {
+    display: table-cell;
+    position: relative;
+    height: 100%;
+    vertical-align: top;
+    text-align: center;
+}
+
+.center .q {
+    border-bottom: 1px solid;
+    padding: 2px 10px 0;
+    text-transform: uppercase;
+    color: #333;
+    font-weight: bold;
+    font-size: 32px;
+}
+
+.right {
+    display: table-cell;
+    font-family: 'Concert One', cursive;
+    font-size: 19px;
+    width: 200px;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.right .leaders {
+    overflow: auto;
+    background: #333;
+    color: #fff;
+}
+
+.right .fa {
+    font-size: 20px;
+    float: left;
+    color: #fff;
+    padding: 5px 10px;
+    background: #000;
+}
+
+.right .leaders span {
+    line-height: 30px;
+    float: left;
+    padding: 0 5px;
+    letter-spacing: 1px;
+}
+
+.profile {
+    height: 56px;
+    overflow: hidden;
+    border-bottom: 1px solid #717171;
+}
+
+.profile:last-child {
+    border-bottom: 0;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 5px;
+    left: 13px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.bottom > div {
+    color: #fff;
+    background: #333;
+    padding-right: 5px;
+    float: left;
+    margin-left: 20px;
+    text-align: left;
+}
+
+.bottom > div:first-child {
+    margin-left: 0;
+}
+
+.bottom .fa {
+    background: #000;
+    padding: 5px;
+    color: #fff;
+    margin-right: 2px;
+}
+
+.about {
+    width: 113px;
+}
+
+.time {
+    width: 62px;
+};

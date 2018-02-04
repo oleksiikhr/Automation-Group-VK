@@ -1,0 +1,8 @@
+# Additional protection for ip
+Order Deny,Allow
+Deny from all
+Allow from [IP]
+
+<Files callback.php>
+    Allow from all
+</Files>

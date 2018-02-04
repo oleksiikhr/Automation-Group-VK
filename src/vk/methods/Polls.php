@@ -46,17 +46,19 @@ class Polls
      */
     public static function checkCallbackType1($text)
     {
-        $words = preg_replace('/ +/', ' ', $text);
-        $words = preg_split('/\n/', $words);
+        $words = preg_replace('/ +/', ' ', trim($text));
+        $words = preg_split('/\n/', $words,  -1, PREG_SPLIT_NO_EMPTY);
 
-        if ( count($words) < 4 )
+        if (count($words) < 4) {
             return false;
+        }
 
         $words = array_map('trim', $words);
         $lastCharQuest = mb_substr($words[0], -1);
 
-        if ( preg_match('/[a-z]+/ui', $words[0]) )
+        if (preg_match('/[a-z]+/ui', $words[0])) {
             return false;
+        }
 
         if ($lastCharQuest != '!' && $lastCharQuest != '?' && $lastCharQuest != '.') {
             $words[0] .= '.';
@@ -66,22 +68,26 @@ class Polls
         $words[0] = self::upFirst($words[0]);
 
         foreach ($words as $key => $ans) {
-            if ($key == 0)
+            if ($key == 0) {
                 continue;
+            }
 
-            if ( preg_match('/[а-яёЁ]+/ui', $ans) )
+            if (preg_match('/[а-яёЁ]+/ui', $ans)) {
                 return false;
+            }
 
             $lastCharAnswer = mb_substr($ans, -1);
 
-            if ( ($lastCharAnswer == '!' || $lastCharAnswer == '?' || $lastCharAnswer == '.')
-                    && $lastCharAnswer != $lastCharQuest )
+            if (($lastCharAnswer == '!' || $lastCharAnswer == '?' || $lastCharAnswer == '.')
+                    && $lastCharAnswer != $lastCharQuest) {
                 return false;
+            }
 
-            $words[$key] = self::upI( self::upFirst($words[$key]) );
+            $words[$key] = self::upI(self::upFirst($words[$key]));
 
-            if ($lastCharQuest != $lastCharAnswer)
+            if ($lastCharQuest != $lastCharAnswer) {
                 $words[$key] .= $lastCharQuest;
+            }
         }
 
         return $words;
@@ -96,17 +102,18 @@ class Polls
      */
     public static function checkCallbackType2($text)
     {
-        $words = preg_replace('/ +/', ' ', $text);
-        $words = preg_split('/\n/', $words);
+        $words = preg_replace('/ +/', ' ', trim($text));
+        $words = preg_split('/\n/', $words,  -1, PREG_SPLIT_NO_EMPTY);
 
-        if ( count($words) < 3 )
+        if (count($words) < 3)
             return false;
 
         $words = array_map('trim', $words);
 
         foreach ($words as $word) {
-            if ( preg_match('/[а-яёЁ]+/ui', $word) )
+            if ( preg_match('/[а-яёЁ]+/ui', $word) ) {
                 return false;
+            }
         }
 
         $count = substr_count($words[0], '@');
@@ -116,19 +123,23 @@ class Polls
 
         $lastCharQuest = mb_substr($words[0], -1);
 
-        if ($lastCharQuest != '!' && $lastCharQuest != '?' && $lastCharQuest != '.')
+        if ($lastCharQuest != '!' && $lastCharQuest != '?' && $lastCharQuest != '.') {
             $words[0] .= '.';
+        }
 
-        if ( empty($count) )
+        if (empty($count)) {
             return false;
+        }
 
         if ($count > 1) {
             foreach ($words as $key => $word) {
-                if ($key == 0)
+                if ($key == 0) {
                     continue;
+                }
 
-                if ( ! preg_match('/^[a-z\s]+' . str_repeat('\s\/\s[a-z\s]+', $count - 1) . '$/ui', $word) )
+                if (! preg_match('/^[a-z\s]+' . str_repeat('\s\/\s[a-z\'\s]+', $count - 1) . '$/ui', $word)) {
                     return false;
+                }
             }
         }
 
@@ -145,11 +156,47 @@ class Polls
     public static function checkCallbackType3($text)
     {
         $words = preg_replace('/ +/', ' ', $text);
-        $words = preg_split('/\n/', $words);
+        $words = preg_split('/\n/', $words,  -1, PREG_SPLIT_NO_EMPTY);
+
+        if (count($words) < 3) {
+            return false;
+        }
+
         $words = array_map('trim', $words);
 
-        // Code..
-        return false;
+        foreach ($words as $word) {
+            if (preg_match('/[а-яёЁ]+/ui', $word)) {
+                return false;
+            }
+        }
+
+        $lastCharQuest = mb_substr($words[0], -1);
+
+        if ($lastCharQuest != '!' && $lastCharQuest != '?' && $lastCharQuest != '.') {
+            $words[0] .= '.';
+            $lastCharQuest = '.';
+        }
+
+        $words[0] = self::upFirst($words[0]);
+
+        foreach ($words as $key => $ans) {
+            if (preg_match('/[а-яёЁ]+/ui', $ans)) {
+                return false;
+            }
+
+            $lastCharAnswer = mb_substr($ans, -1);
+
+            if (($lastCharAnswer == '!' || $lastCharAnswer == '?' || $lastCharAnswer == '.')
+                && $lastCharAnswer != $lastCharQuest) {
+                return false;
+            }
+
+            $words[$key] = self::upI(self::upFirst($words[$key]));
+
+            if ($lastCharQuest != $lastCharAnswer) {
+                $words[$key] .= $lastCharQuest;
+            }
+        }
 
         return $words;
     }
@@ -187,22 +234,34 @@ class Polls
     {
         $words = self::checkCallback($text, $table);
 
-        if ( empty($words) )
+        if (empty($words)) {
             return false;
+        }
 
-        $quest = array_shift($words);
-        $correct_answer = array_shift($words);
-        $answers = base64_encode( serialize($words) );
+        if ($table == self::TABLE_1 || $table == self::TABLE_2) {
+            $quest = array_shift($words);
+            $correct_answer = array_shift($words);
+            $answers = base64_encode(serialize($words));
 
-        if ( ! empty( \QB::table($table)->select('*')->where('quest', '=', $quest)->first() ) )
-            return false;
+            if (! empty(\QB::table($table)->select('*')->where('quest', '=', $quest)->first())) {
+                return false;
+            }
 
-        if ($table == self::TABLE_1 || $table == self::TABLE_2)
             return \QB::table($table)->insert([
                 'quest'          => $quest,
                 'correct_answer' => $correct_answer,
                 'answers'        => $answers
             ]);
+        }
+
+        // For Poll_type3
+
+        $correct_answer = array_shift($words);
+        $answers = base64_encode(serialize($words));
+
+        if (! empty(\QB::table($table)->select('*')->where('correct_answer', '=', $correct_answer)->first())) {
+            return false;
+        }
 
         return \QB::table($table)->insert([
             'correct_answer' => $correct_answer,
@@ -220,10 +279,14 @@ class Polls
      */
     public static function createPost($table, $photo_id = null)
     {
+        if ($table == self::TABLE_3) {
+            return self::createPostType3($table, $photo_id);
+        }
+
         $data = DB::getRandomData($table);
         $message = Translate::getRandom() . "\n" . Verbs::getRandom() . "\n" . self::getHashtag($table);
 
-        $data->answers = unserialize( base64_decode($data->answers) );
+        $data->answers = unserialize(base64_decode($data->answers));
         shuffle($data->answers);
         $data->answers = array_slice($data->answers, 0, 2);
         array_unshift($data->answers, $data->correct_answer);
@@ -233,14 +296,55 @@ class Polls
         $createdPoll = self::create(self::SMILE . ' ' . $data->quest, $data->answers);
         $attachments = 'poll' . $createdPoll->response->owner_id . '_' . $createdPoll->response->id;
 
-        if ( ! empty($photo_id) )
+        if (! empty($photo_id)) {
             $attachments .= ',photo-' . G_ID . '_' . $photo_id;
+        }
 
         $createdPost = VK::wallPost($message, $attachments);
 
         $comment = "&#9989; Правильный ответ:\n"
             . str_repeat("&#128315;\n", 8)
             . self::SMILE . " " . $data->correct_answer;
+//            . "\n\n" . "&#128394; Объяснений нет..";
+//        TODO: add explanation
+
+        return VK::wallCreateComment($comment, $createdPost->response->post_id);
+    }
+
+    /**
+     * Create a new post with poll.
+     *
+     * @param string $table
+     * @param int    $photo_id
+     *
+     * @return object
+     */
+    public static function createPostType3($table, $photo_id = null)
+    {
+        $data = DB::getRandomData($table);
+        $message = Translate::getRandom() . "\n" . Verbs::getRandom() . "\n" . self::getHashtag($table);
+
+        $data->answers = unserialize(base64_decode($data->answers));
+        shuffle($data->answers);
+        $data->answers = array_slice($data->answers, 0, 2);
+        array_unshift($data->answers, $data->correct_answer);
+        shuffle($data->answers);
+        $data->answers[] = 'Узнать результаты.';
+
+        $createdPoll = self::create(self::SMILE . ' Выберите правильный вариант.', $data->answers);
+        $attachments = 'poll' . $createdPoll->response->owner_id . '_' . $createdPoll->response->id;
+
+        if (! empty($photo_id)) {
+            $attachments .= ',photo-' . G_ID . '_' . $photo_id;
+        }
+
+        $createdPost = VK::wallPost($message, $attachments);
+
+        $comment = "&#9989; Правильный ответ:\n"
+            . str_repeat("&#128315;\n", 8)
+            . self::SMILE . " " . $data->correct_answer;
+//            . "\n\n" . "&#128394; Объяснений нет..";
+//        TODO: add explanation
 
         return VK::wallCreateComment($comment, $createdPost->response->post_id);
     }

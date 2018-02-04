@@ -31,11 +31,11 @@ trait Methods
      */
     public static function upFirst($str)
     {
-        return mb_strtoupper( mb_substr($str, 0, 1) ) . mb_substr($str, 1);
+        return mb_strtoupper(mb_substr($str, 0, 1)) . mb_substr($str, 1);
     }
 
     public static function getRandomString($len)
     {
-        return bin2hex( openssl_random_pseudo_bytes($len) );
+        return bin2hex(openssl_random_pseudo_bytes($len));
     }
 }
