@@ -28,6 +28,11 @@ class Poll extends Model
 		return $this->belongsTo(PollType::class);
 	}
 
+	public function tag()
+	{
+		return $this->belongsTo(Tag::class);
+	}
+
 	public function answers()
 	{
 		return $this->hasMany(PollAnswer::class);
