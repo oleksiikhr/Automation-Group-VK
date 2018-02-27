@@ -7,7 +7,7 @@ use App\PollType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class PollsController extends Controller
+class PollController extends Controller
 {
     /*
      * |----------------------------------------------------------------------
@@ -164,5 +164,4 @@ class PollsController extends Controller
         // TODO
         return response()->json(PollType::destroy($id));
     }
-
 }

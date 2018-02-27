@@ -1,18 +1,25 @@
 <?php
 
-use Illuminate\Http\Request;
+Route::group(['prefix' => 'cron'], function () {
+    Route::get('/', 'CronController@getListOfCron');
+    Route::get('{id}', 'CronController@getOneCron');
+    Route::put('{id}', 'PollController@editOneCron');
+    Route::post('/', 'PollController@createCron');
+    Route::delete('{id}', 'PollController@deleteOneCron');
+});
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+Route::group(['prefix' => 'polls'], function () {
+    Route::get('/', 'PollController@getListOfPolls');
+    Route::get('{id}', 'PollController@getOnePoll');
+    Route::put('{id}', 'PollController@editOnePoll');
+    Route::post('/', 'PollController@createPoll');
+    Route::delete('{id}', 'PollController@deleteOnePoll');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::group(['prefix' => 'types'], function () {
+        Route::get('/', 'PollController@getListOfPollTypes');
+        Route::get('{id}', 'PollController@getOnePollType');
+        Route::put('{id}', 'PollController@editOnePollType');
+        Route::post('/', 'PollController@createPollType');
+        Route::delete('{id}', 'PollController@deleteOnePollType');
+    });
 });
