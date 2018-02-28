@@ -2,7 +2,7 @@
   <div id="app">
     <el-container>
       <el-header>
-        
+
       </el-header>
       <el-container>
         <el-aside width>
@@ -25,7 +25,9 @@
             </el-menu-item>
           </el-menu>
         </el-aside>
-        <el-main>Main</el-main>
+        <el-main>
+          <router-view />
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -42,14 +44,14 @@ body {
   margin: 0;
 }
 
-.el-header {
-  padding: 0;
-}
-
 #app {
   max-width: 1000px;
   margin: 20px auto;
   border: 1px solid #e7e7e7;
   box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+}
+
+.el-header {
+  padding: 0;
 }
 </style>
