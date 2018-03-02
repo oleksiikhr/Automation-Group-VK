@@ -15,6 +15,7 @@ class CreateCronTable extends Migration
     {
         Schema::create('cron', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('group_id')->nullable();
             $table->string('name')->unique();
             $table->text('description')->nullable();
             $table->time('start_time')->nullable();
@@ -25,6 +26,10 @@ class CreateCronTable extends Migration
             $table->unsignedInteger('published_from')->nullable();
             $table->unsignedInteger('published_to')->nullable();
             $table->timestamps();
+
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
+
+            $table->index('group_id');
         });
     }
 
