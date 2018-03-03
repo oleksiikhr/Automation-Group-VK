@@ -16,7 +16,7 @@ class CreatePollTypesTable extends Migration
         Schema::create('poll_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
-            $table->boolean('quest_is_answer')->default(0);
+            $table->string('default_quest')->nullable();
 	        $table->unsignedTinyInteger('min_count_answers');
 	        $table->unsignedTinyInteger('use_count_answers');
             $table->unsignedTinyInteger('max_count_answers');
