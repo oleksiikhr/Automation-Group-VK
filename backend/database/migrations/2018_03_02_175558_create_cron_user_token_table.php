@@ -16,7 +16,7 @@ class CreateCronUserTokenTable extends Migration
         Schema::create('cron_user_token', function (Blueprint $table) {
             $table->unsignedInteger('cron_id');
             $table->unsignedInteger('user_token_id');
-            $table->timestamp('last_used');
+            $table->timestamp('last_used')->nullable();
 
             $table->foreign('cron_id')->references('id')->on('cron')->onDelete('cascade');
             $table->foreign('user_token_id')->references('id')->on('user_tokens')->onDelete('cascade');

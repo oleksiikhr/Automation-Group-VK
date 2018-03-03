@@ -16,7 +16,7 @@ class CreateCronTable extends Migration
         Schema::create('cron', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('group_id')->nullable();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->text('description')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();

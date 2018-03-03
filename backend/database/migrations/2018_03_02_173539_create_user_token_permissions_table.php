@@ -15,7 +15,7 @@ class CreateUserTokenPermissionsTable extends Migration
     {
         Schema::create('user_token_permissions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_token_id');
+            $table->unsignedInteger('user_token_id');
             $table->string('permission');
 
             $table->foreign('user_token_id')->references('id')->on('user_tokens')->onDelete('cascade');
