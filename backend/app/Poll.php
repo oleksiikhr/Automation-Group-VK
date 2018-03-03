@@ -28,9 +28,9 @@ class Poll extends Model
 		return $this->belongsTo(PollType::class);
 	}
 
-	public function tag()
+	public function tags()
 	{
-		return $this->belongsTo(Tag::class);
+		return $this->belongsToMany(Tag::class);
 	}
 
 	public function answers()

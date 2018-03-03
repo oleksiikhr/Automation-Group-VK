@@ -23,4 +23,9 @@ class PollType extends Model
 	{
 		return $this->hasMany(Poll::class);
 	}
+
+	public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
 }

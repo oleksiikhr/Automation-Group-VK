@@ -18,8 +18,18 @@ class Tag extends Model
 		'name', 'hash',
 	];
 
+    public function pollTypes()
+    {
+        return $this->belongsToMany(PollType::class);
+    }
+
 	public function polls()
 	{
-		return $this->hasMany(Poll::class);
+		return $this->belongsToMany(Poll::class);
 	}
+
+	public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
 }
