@@ -6,14 +6,14 @@
       </el-header>
       <el-container>
         <el-aside width>
-          <el-menu default-active="1" collapse>
-            <el-menu-item index="1">
+          <el-menu default-active="1" collapse router>
+            <el-menu-item index="dashboard">
               <i class="el-icon-menu"></i>
               <span slot="title">Меню</span>
             </el-menu-item>
             <el-menu-item index="2">
               <i class="el-icon-time"></i>
-              <span slot="title">Запуск</span>
+              <span slot="title">Статьи</span>
             </el-menu-item>
             <el-menu-item index="3" disabled>
               <i class="el-icon-document"></i>
@@ -34,8 +34,12 @@
 </template>
 
 <script>
+// import axios from 'axios'
+
 export default {
-  name: 'App'
+  // mounted () {
+  //   axios.get('groups')
+  // }
 }
 </script>
 
