@@ -4,13 +4,19 @@
       <el-header class="blue">
         <router-link to="groups" class="h-card-group">
           <!-- TODO Data from vuex -->
-          <img src="https://pp.userapi.com/c637217/v637217600/45610/Zpgr3st-NUw.jpg" alt="__NAME__" title="__NAME__">
-          <div class="h-name">English</div>
+          <template v-if="group">
+            <img :src="group.img" :alt="group.title" :title="group.title">
+            <div class="h-name">{{ title.group }}</div>
+          </template>
+          <template v-else>
+            <div class="no-image"></div>
+            <div class="h-name">Выберите группу</div>
+          </template>
         </router-link>
       </el-header>
       <el-container>
         <el-aside width>
-          <el-menu default-active="/"  router>
+          <el-menu default-active="/" router>
             <el-menu-item v-for="item in menu" :key="item.route" :index="item.route" :title="item.title">
               <i class="material-icons">{{ item.icon }}</i>
             </el-menu-item>
@@ -40,6 +46,11 @@ export default {
         { route: 'tags', icon: 'label', title: 'Теги' },
         { route: 'logs', icon: 'history', title: 'Логи' }
       ]
+    }
+  },
+  computed: {
+    group () {
+      return this.$store.state.groups.current
     }
   },
   mounted () {
@@ -83,9 +94,20 @@ body {
   height: 35px;
   align-items: center;
   cursor: pointer;
-  padding: 0 10px;
+  padding: 0 5px;
   box-shadow: 0 0 8px 2px #989898;
   text-decoration: none;
+  transition: .3s;
+}
+
+.h-card-group:hover {
+  background: #545c64;
+  color: #fff !important;
+  box-shadow: 0 0 4px;
+}
+
+.h-card-group:hover > .h-name {
+  color: #fff;
 }
 
 .h-card-group > img {
@@ -94,13 +116,24 @@ body {
 }
 
 .h-name {
+  position: relative;
   align-items: center;
-  text-indent: 5px;
+  text-indent: 10px;
   color: #525252;
   font-family: monospace;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.h-name::before {
+  content: "";
+  position: absolute;
+  background: #7d7d7d;
+  top: 0;
+  bottom: 0;
+  left: 5px;
+  width: 1px;
 }
 
 .el-aside .el-menu-item {
@@ -109,5 +142,12 @@ body {
 
 .el-aside .el-menu-item .material-icons {
   font-size: 20px;
+}
+
+.h-card-group > .no-image {
+  height: 27px;
+  width: 27px;
+  background: #d2d2d2;
+  border-radius: 50%;
 }
 </style>
