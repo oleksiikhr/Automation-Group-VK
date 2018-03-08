@@ -9,15 +9,16 @@ class PollType extends Model
 {
     use SoftDeletes;
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
 	protected $fillable = [
-		'name', 'quest_is_answer', 'min_count_answers', 'use_count_answers', 'max_count_answers',
+		'name', 'default_quest', 'min_count_answers', 'use_count_answers', 'max_count_answers',
 		'pattern_answer', 'pattern_correct_answer',
 	];
+
+    /* |----------------------------------------------------------------------------
+     * | Relationship
+     * |----------------------------------------------------------------------------
+     * |
+     */
 
 	public function polls()
 	{

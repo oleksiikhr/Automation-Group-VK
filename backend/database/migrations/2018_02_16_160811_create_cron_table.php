@@ -21,7 +21,7 @@ class CreateCronTable extends Migration
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
             $table->integer('frequency');
-            $table->unsignedSmallInteger('command_id');
+            $table->string('command');
             $table->unsignedInteger('command_type_id')->nullable();
             $table->unsignedInteger('published_from')->nullable();
             $table->unsignedInteger('published_to')->nullable();

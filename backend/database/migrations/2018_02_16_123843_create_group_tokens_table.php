@@ -17,6 +17,7 @@ class CreateGroupTokensTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('group_id');
             $table->string('token');
+            $table->integer('mask');
 
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
 

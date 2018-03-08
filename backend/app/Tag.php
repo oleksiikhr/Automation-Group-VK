@@ -9,14 +9,15 @@ class Tag extends Model
 {
 	use SoftDeletes;
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
 	protected $fillable = [
-		'name', 'hash',
+		'group_id', 'name', 'hash',
 	];
+
+    /* |----------------------------------------------------------------------------
+     * | Relationship
+     * |----------------------------------------------------------------------------
+     * |
+     */
 
     public function pollTypes()
     {

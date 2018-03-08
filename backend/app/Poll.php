@@ -9,19 +9,15 @@ class Poll extends Model
 {
 	use SoftDeletes;
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
 	protected $fillable = [
-		'quest', 'user_id', 'type_id',
+		'quest', 'poll_type_id',
 	];
 
-	public function user()
-	{
-		return $this->belongsTo(User::class);
-	}
+    /* |----------------------------------------------------------------------------
+     * | Relationship
+     * |----------------------------------------------------------------------------
+     * |
+     */
 
 	public function type()
 	{

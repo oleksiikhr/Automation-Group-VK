@@ -17,6 +17,7 @@ class CreateUserTokensTable extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('user_id');
             $table->string('token');
+            $table->integer('mask');
             $table->dateTime('expiry_at')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

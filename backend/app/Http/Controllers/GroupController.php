@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class GroupController extends Controller
 {
-
     /**
      * @param Request $request
      *
@@ -36,7 +35,8 @@ class GroupController extends Controller
      */
     public function editOne($id, Request $request)
     {
-        // TODO
+        // TODO Get only group_id. Fetch VK api. Fill DB.
+
         return response()->json();
     }
 
@@ -47,7 +47,8 @@ class GroupController extends Controller
      */
     public function create(Request $request)
     {
-        // TODO
+        // TODO Get only group_id. Fetch VK api. Fill DB.
+
         return response()->json();
     }
 

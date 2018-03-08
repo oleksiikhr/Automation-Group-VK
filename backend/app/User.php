@@ -10,19 +10,15 @@ class User extends Authenticatable
 {
     use Notifiable, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'id', 'address', 'first_name', 'last_name', 'image', 'is_blocked',
+        'id', 'address', 'first_name', 'last_name', 'image_50', 'is_muted', 'is_blocked',
     ];
 
-    public function polls()
-    {
-    	return $this->hasMany(Poll::class);
-    }
+    /* |----------------------------------------------------------------------------
+     * | Relationship
+     * |----------------------------------------------------------------------------
+     * |
+     */
 
     public function groups()
     {
