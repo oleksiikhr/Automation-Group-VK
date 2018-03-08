@@ -3,10 +3,9 @@
     <el-container>
       <el-header class="blue">
         <router-link to="groups" class="h-card-group">
-          <!-- TODO Data from vuex -->
-          <template v-if="group">
+          <template v-if="group.id">
             <img :src="group.img" :alt="group.title" :title="group.title">
-            <div class="h-name">{{ title.group }}</div>
+            <div class="h-name">{{ group.title }}</div>
           </template>
           <template v-else>
             <div class="no-image"></div>
@@ -97,13 +96,13 @@ body {
   padding: 0 5px;
   box-shadow: 0 0 8px 2px #989898;
   text-decoration: none;
-  transition: .3s;
+  transition: .2s;
 }
 
 .h-card-group:hover {
-  background: #545c64;
+  background: rgba(0, 0, 0, 0.2);
   color: #fff !important;
-  box-shadow: 0 0 4px;
+  box-shadow: 0 0 2px 0;
 }
 
 .h-card-group:hover > .h-name {
