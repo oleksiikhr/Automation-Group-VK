@@ -16,11 +16,11 @@ class CreateGroupsTable extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('display_name')->nullable();
+            $table->string('screen_name')->nullable();
             $table->string('photo_50')->nullable();
             $table->string('secret_key')->nullable();
-            $table->boolean('is_closed')->default(0);
             $table->boolean('deactivated')->default(0);
+            $table->boolean('vk_closed')->default(0);
             $table->boolean('vk_blocked')->default(0);
             $table->softDeletes();
             $table->timestamps();

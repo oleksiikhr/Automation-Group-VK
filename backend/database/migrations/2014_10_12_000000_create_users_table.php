@@ -19,9 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('image_50')->nullable();
-            $table->boolean('message_allow')->default(0);
-            $table->boolean('is_blocked')->default(0);
             $table->boolean('is_muted')->default(0);
+            $table->boolean('is_blocked')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

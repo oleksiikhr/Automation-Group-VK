@@ -20,6 +20,7 @@ class CreatePollTypesTable extends Migration
 	        $table->unsignedTinyInteger('min_count_answers');
 	        $table->unsignedTinyInteger('use_count_answers');
             $table->unsignedTinyInteger('max_count_answers');
+            $table->unsignedTinyInteger('max_count_correct_answers')->default(1);
             $table->string('pattern_answer')->nullable();
             $table->string('pattern_correct_answer')->nullable();
 	        $table->softDeletes();
