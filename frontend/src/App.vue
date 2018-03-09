@@ -2,7 +2,7 @@
   <div id="app">
     <el-container>
       <el-header class="blue">
-        <router-link to="groups" class="h-card-group">
+        <router-link to="/groups" class="h-card-group">
           <template v-if="group.id">
             <img :src="group.img" :alt="group.title" :title="group.title">
             <div class="h-name">{{ group.title }}</div>
@@ -39,11 +39,11 @@ export default {
     return {
       menu: [
         { route: '/', icon: 'dashboard', title: 'Главная страница' },
-        { route: 'articles', icon: 'description', title: 'Статьи' },
-        { route: 'images', icon: 'photo_library', title: 'Изображения' },
-        { route: 'videos', icon: 'video_library', title: 'Видео' },
-        { route: 'tags', icon: 'label', title: 'Теги' },
-        { route: 'logs', icon: 'history', title: 'Логи' }
+        { route: '/articles', icon: 'description', title: 'Статьи' },
+        { route: '/images', icon: 'photo_library', title: 'Изображения' },
+        { route: '/videos', icon: 'video_library', title: 'Видео' },
+        { route: '/tags', icon: 'label', title: 'Теги' },
+        { route: '/logs', icon: 'history', title: 'Логи' }
       ]
     }
   },
@@ -65,7 +65,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 body {
   margin: 0;
 }
@@ -93,64 +93,56 @@ body {
   height: 35px;
   align-items: center;
   cursor: pointer;
-  padding: 0 5px;
+  padding: 0 10px 0 5px;
   box-shadow: 0 0 8px 2px #989898;
   text-decoration: none;
   transition: .2s;
-}
-
-.h-card-group:hover {
-  background: rgba(0, 0, 0, 0.2);
-  color: #fff !important;
-  box-shadow: 0 0 2px 0;
-}
-
-.h-card-group:hover > .h-name {
-  color: #fff;
-}
-
-.h-card-group > img {
-  border-radius: 50%;
-  max-height: 27px;
+  &:hover {
+    background: rgba(0, 0, 0, 0.2);
+    color: #fff !important;
+    box-shadow: 0 0 2px 0;
+    > .h-name {
+      color: #fff;
+    }
+  }
+  > img {
+    border-radius: 50%;
+    max-height: 27px;
+  }
+  > .no-image {
+    height: 27px;
+    width: 27px;
+    border: 1px solid #d2d2d2;
+    border-radius: 50%;
+  }
 }
 
 .h-name {
   position: relative;
   align-items: center;
-  text-indent: 10px;
+  text-indent: 14px;
   color: #525252;
   font-family: monospace;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-}
-
-.h-name::before {
-  content: "";
-  position: absolute;
-  background: #7d7d7d;
-  top: 0;
-  bottom: 0;
-  left: 5px;
-  width: 1px;
+  &::before {
+    content: "";
+    position: absolute;
+    background: #7d7d7d;
+    top: 0;
+    bottom: 0;
+    left: 7px;
+    width: 1px;
+  }
 }
 
 .el-aside .el-menu-item {
   text-align: center;
+  > .material-icons {
+    font-size: 20px;
+  }
 }
-
-.el-aside .el-menu-item .material-icons {
-  font-size: 20px;
-}
-
-.h-card-group > .no-image {
-  height: 27px;
-  width: 27px;
-  border: 1px solid #d2d2d2;
-  border-radius: 50%;
-}
-
-/* */
 
 .view-content h1 {
   margin: 0 0 10px 0;

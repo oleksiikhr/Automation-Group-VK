@@ -6,7 +6,10 @@
         <span>1000 / 526</span>
       </div>
       <div class="right">
-        Time
+        <div class="time">
+          <span>25.05.18 12:15</span>
+        </div>
+        <div :class="'deactivated ' + (group.deactivated ? 'on' : 'off')"></div>
       </div>
     </div>
     <div class="body">
@@ -40,17 +43,40 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-size: 14px;
+  i {
+    font-size: 19px;
+  }
 }
 
 .left {
-  font-size: 14px;
   display: flex;
   align-items: center;
-  > i {
-    font-size: 19px;
-  }
   > span {
     text-indent: 5px;
+  }
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  > .time {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.deactivated {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px #e6e6e6;
+  margin: 0 5px 0 10px;
+  &.off {
+    background: #e43232;
+  }
+  &.on {
+    background: #3ca01b;
   }
 }
 </style>

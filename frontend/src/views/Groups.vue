@@ -7,7 +7,10 @@
       </el-col>
       <!-- TODO Widget component for Groups.vue -->
       <el-col :md="6" class="hidden-sm-and-down">
-        Test2
+        <router-link to="/groups/add" class="add-group">
+          <i class="material-icons">add</i>
+          <span>Добавить группу</span>
+        </router-link>
       </el-col>
     </el-row>
   </div>
@@ -31,3 +34,29 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.add-group {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e6e6e6;
+  padding: 20px 10px;
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+  transition: .3s;
+  > i {
+    margin-bottom: 10px;
+  }
+  > span {
+    color: #848484;
+  }
+  &:hover {
+    background: #545c64;
+    color: #fff;
+    > span {
+      color: #afafaf;
+    }
+  }
+}
+</style>
