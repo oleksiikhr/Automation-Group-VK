@@ -94,7 +94,7 @@ body {
   align-items: center;
   cursor: pointer;
   padding: 0 10px 0 5px;
-  box-shadow: 0 0 8px 2px #989898;
+  box-shadow: 0 0 8px 1px #989898;
   text-decoration: none;
   transition: .2s;
   &:hover {

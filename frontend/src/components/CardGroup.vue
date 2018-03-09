@@ -1,28 +1,36 @@
 <template>
-  <div class="card-group el-card">
-    <div class="header">
-      <div class="left">
-        <i class="material-icons">people_outline</i>
-        <span>1000 / 526</span>
+  <div class="card-group">
+    <div class="el-card">
+      <div class="header">
+        <div class="left">
+          <i class="material-icons">people_outline</i>
+          <span>{{ group.users + ' / ' + group.users_count }}</span>
+        </div>
+        <div class="right">
+          <div class="time">
+            <span>{{ updatedAt }}</span>
+            <a title="Обновить" @click="fetchUpdateGroup()">
+              <i class="material-icons">refresh</i>
+            </a>
+          </div>
+          <a :class="'deactivated ' + (group.deactivated ? 'on' : 'off')"
+             :title="group.deactivated ? 'Активировать' : 'Деативировать'"
+              @click="fetchChangeStatusGroup()"
+          ></a>
+        </div>
       </div>
-      <div class="right">
-        <div class="time">
-          <span>{{ timestampFromNow('2018-01-26 04:07:31') }}</span>
-          <a title="Обновить" @click="fetchUpdateGroup(group)">
-            <i class="material-icons">refresh</i>
+      <div class="body">
+        <!-- FIXME Default photo (local static) -->
+        <img :src="group.photo_100 ? group.photo_100 : 'https://vk.com/images/camera_100.png'"
+             :title="group.name" :alt="group.name">
+        <div class="content">
+          <h2>{{ group.name }}</h2>
+          <a :href="'https://vk.com/' + group.screen_name" title="Открыть в ВК" target="_blank"
+             rel="noopener noreferrer">
+            <i class="material-icons">http</i>{{ group.screen_name }}
           </a>
         </div>
-        <a :class="'deactivated ' + (group.deactivated ? 'on' : 'off')"
-           :title="group.deactivated ? 'Не активный' : 'Активный'"
-            @click="fetchChangeStatusGroup(group)"
-        ></a>
       </div>
-    </div>
-    <div class="body">
-
-    </div>
-    <div class="footer">
-
     </div>
   </div>
 </template>
@@ -37,17 +45,20 @@ export default {
       required: true
     }
   },
+  computed: {
+    updatedAt () {
+      return moment(this.group.updated_at).fromNow()
+    }
+  },
   methods: {
-    fetchChangeStatusGroup (group) {
+    fetchChangeStatusGroup () {
       // TODO this.$store.commit('')
-      console.log(group)
     },
-    fetchUpdateGroup (group) {
+    fetchUpdateGroup () {
       // TODO this.$store.commit('')
-      console.log(group)
     },
-    timestampFromNow (time) {
-      return moment(time).fromNow()
+    chooseGroup () {
+      console.log(this.group)
     }
   }
 }
@@ -55,9 +66,11 @@ export default {
 
 <style lang="scss" scoped>
 .card-group {
-  border: 1px solid #e6e6e6;
-  margin-bottom: 15px;
-  padding: 10px;
+  margin-bottom: 20px;
+  > .el-card {
+    border: 1px solid #e6e6e6;
+    padding: 10px;
+  }
 }
 
 .header {
@@ -65,6 +78,9 @@ export default {
   align-items: center;
   justify-content: space-between;
   font-size: 14px;
+  border-bottom: 1px solid #e6e6e6;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
   i {
     font-size: 19px;
   }
@@ -89,11 +105,13 @@ export default {
       cursor: pointer;
       font-size: 0;
       transition: .3s;
+      color: #b3b3b3;
       &:hover {
-        background: #545c64;
-        border-radius: 50%;
-        color: #fff;
+        color: #333;
       }
+    }
+    > span {
+      font-style: italic;
     }
   }
 }
@@ -113,6 +131,37 @@ export default {
   }
   &.on {
     background: #e43232;
+  }
+}
+
+.body {
+  display: flex;
+  max-height: 100px;
+  overflow: hidden;
+  > img {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.content {
+  margin-left: 10px;
+  > h2 {
+    margin: 0;
+    font-size: 22px;
+  }
+  > a {
+    display: flex;
+    align-items: center;
+    font-size: smaller;
+    text-decoration: none;
+    color: #545c64;
+    &:hover {
+      color: #222;
+    }
+    > i {
+      margin-right: 3px;
+    }
   }
 }
 </style>
