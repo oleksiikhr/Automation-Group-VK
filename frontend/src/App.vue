@@ -146,7 +146,7 @@ body {
 .h-card-group > .no-image {
   height: 27px;
   width: 27px;
-  background: #d2d2d2;
+  border: 1px solid #d2d2d2;
   border-radius: 50%;
 }
 

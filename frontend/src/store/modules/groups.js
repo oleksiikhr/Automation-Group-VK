@@ -17,6 +17,7 @@ const mutations = {
 const actions = {
   fetchGroups ({commit}) {
     // TODO Delete the sample data
+    // TODO Description (+ backend)
     commit('SET_GROUPS', [
       {
         id: 1,
