@@ -1,5 +1,7 @@
 <template>
-  <h5>CardGroup</h5>
+  <div id="card-group" class="view-content">
+    Test
+  </div>
 </template>
 
 <script>

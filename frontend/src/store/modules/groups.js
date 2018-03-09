@@ -1,4 +1,4 @@
-import axios from 'axios'
+// import axios from 'axios'
 
 const state = {
   list: [],
@@ -16,14 +16,35 @@ const mutations = {
 
 const actions = {
   fetchGroups ({commit}) {
-    axios.get('groups')
-      .then(res => {
-        console.log(res.data)
-        commit('SET_GROUPS', res.data)
-      })
-      .catch(err => {
-        console.log(err.response.data)
-      })
+    // TODO Delete the sample data
+    commit('SET_GROUPS', [
+      {
+        id: 1,
+        name: 'English',
+        photo_50: null,
+        secret_key: null,
+        deactivated: false,
+        vk_closed: false,
+        vk_blocked: false
+      },
+      {
+        id: 2,
+        name: 'Second group',
+        photo_50: null,
+        secret_key: 'test',
+        deactivated: true,
+        vk_closed: true,
+        vk_blocked: true
+      }
+    ])
+    // axios.get('groups')
+    //   .then(res => {
+    //     console.log(res.data)
+    //     commit('SET_GROUPS', res.data)
+    //   })
+    //   .catch(err => {
+    //     console.log(err.response.data)
+    //   })
   },
   setCurrentGroup ({commit}, obj) {
     commit('SET_CURRENT_GROUP', obj)

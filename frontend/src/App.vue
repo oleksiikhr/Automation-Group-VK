@@ -149,4 +149,12 @@ body {
   background: #d2d2d2;
   border-radius: 50%;
 }
+
+/* */
+
+.view-content h1 {
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid #e6e6e6;
+  padding-bottom: 5px;
+}
 </style>

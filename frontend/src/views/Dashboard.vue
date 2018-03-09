@@ -1,6 +1,6 @@
 <template>
-  <div id="dashboard">
-    <h1>Dashboard</h1>
+  <div id="dashboard" class="view-content">
+    <h1>Главная страница</h1>
   </div>
 </template>
 

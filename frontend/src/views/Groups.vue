@@ -1,7 +1,14 @@
 <template>
-  <div id="groups">
-    <h1>Groups</h1>
-    <card-group v-for="group in groups" :key="group.id" :group="group" />
+  <div id="groups" class="view-content">
+    <h1>Группы</h1>
+    <el-row :gutter="10" justify="space-between">
+      <el-col :span="18">
+        <card-group v-for="group in groups" :key="group.id" :group="group" />
+      </el-col>
+      <el-col :span="6" class="hidden-xs-only">
+        Test2
+      </el-col>
+    </el-row>
   </div>
 </template>
 
