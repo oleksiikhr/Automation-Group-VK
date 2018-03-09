@@ -8,6 +8,9 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import store from './store'
+import moment from 'moment'
+
+moment.locale('ru-RU')
 
 axios.defaults.baseURL = 'http://vk.local/api/'
 

@@ -7,9 +7,15 @@
       </div>
       <div class="right">
         <div class="time">
-          <span>25.05.18 12:15</span>
+          <span>{{ timestampFromNow('2018-01-26 04:07:31') }}</span>
+          <a title="Обновить" @click="fetchUpdateGroup(group)">
+            <i class="material-icons">refresh</i>
+          </a>
         </div>
-        <div :class="'deactivated ' + (group.deactivated ? 'on' : 'off')"></div>
+        <a :class="'deactivated ' + (group.deactivated ? 'on' : 'off')"
+           :title="group.deactivated ? 'Не активный' : 'Активный'"
+            @click="fetchChangeStatusGroup(group)"
+        ></a>
       </div>
     </div>
     <div class="body">
@@ -22,11 +28,26 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   props: {
     group: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    fetchChangeStatusGroup (group) {
+      // TODO this.$store.commit('')
+      console.log(group)
+    },
+    fetchUpdateGroup (group) {
+      // TODO this.$store.commit('')
+      console.log(group)
+    },
+    timestampFromNow (time) {
+      return moment(time).fromNow()
     }
   }
 }
@@ -63,20 +84,35 @@ export default {
   > .time {
     display: flex;
     align-items: center;
+    > a {
+      margin-left: 8px;
+      cursor: pointer;
+      font-size: 0;
+      transition: .3s;
+      &:hover {
+        background: #545c64;
+        border-radius: 50%;
+        color: #fff;
+      }
+    }
   }
 }
 
 .deactivated {
-  width: 8px;
-  height: 8px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
-  box-shadow: 0 0 0 5px #e6e6e6;
-  margin: 0 5px 0 10px;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: .3s;
+  &:hover {
+    background: #545c64 !important;
+  }
   &.off {
-    background: #e43232;
+    background: #3ca01b;
   }
   &.on {
-    background: #3ca01b;
+    background: #e43232;
   }
 }
 </style>
