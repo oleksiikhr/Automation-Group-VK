@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     group () {
-      return this.$store.state.groups.current
+      return this.$store.state.groups.selected
     }
   },
   mounted () {
@@ -137,10 +137,14 @@ body {
   }
 }
 
-.el-aside .el-menu-item {
-  text-align: center;
-  > .material-icons {
-    font-size: 20px;
+.el-aside {
+  width: 61px;
+  min-width: 61px;
+  .el-menu-item {
+    text-align: center;
+    > .material-icons {
+      font-size: 20px;
+    }
   }
 }
 

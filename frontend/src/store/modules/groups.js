@@ -2,15 +2,15 @@
 
 const state = {
   list: [],
-  current: {}
+  selected: {}
 }
 
 const mutations = {
   SET_GROUPS (state, arr) {
     state.list = arr
   },
-  SET_CURRENT_GROUP (state, obj) {
-    state.current = obj
+  SET_SELECTED_GROUP (state, obj) {
+    state.selected = obj
   }
 }
 
@@ -29,7 +29,7 @@ const actions = {
         deactivated: false,
         vk_closed: false,
         vk_blocked: false,
-        users: 5155,
+        vk_users: 5155,
         users_count: 1555,
         updated_at: '2018-03-09 16:05:31',
         created_at: '2016-03-09 16:05:31'
@@ -45,7 +45,7 @@ const actions = {
         deactivated: true,
         vk_closed: true,
         vk_blocked: true,
-        users: 15,
+        vk_users: 15,
         users_count: 0,
         updated_at: '2018-01-21 18:35:47',
         created_at: '2017-11-19 16:05:31'
@@ -60,8 +60,8 @@ const actions = {
     //     console.log(err.response.data)
     //   })
   },
-  setCurrentGroup ({commit}, obj) {
-    commit('SET_CURRENT_GROUP', obj)
+  setSelectedGroup ({commit}, obj) {
+    commit('SET_SELECTED_GROUP', obj)
   }
 }
 

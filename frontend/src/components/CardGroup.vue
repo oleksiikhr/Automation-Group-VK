@@ -2,9 +2,9 @@
   <div class="card-group">
     <div class="el-card">
       <div class="header">
-        <div class="left">
+        <div class="left" title="Количество пользователей в ВК / БД">
           <i class="material-icons">people_outline</i>
-          <span>{{ group.users + ' / ' + group.users_count }}</span>
+          <span>{{ group.vk_users + ' / ' + group.users_count }}</span>
         </div>
         <div class="right">
           <div class="time">
@@ -21,14 +21,31 @@
       </div>
       <div class="body">
         <!-- FIXME Default photo (local static) -->
-        <img :src="group.photo_100 ? group.photo_100 : 'https://vk.com/images/camera_100.png'"
-             :title="group.name" :alt="group.name">
+        <router-link :to="'group/' + group.id">
+          <img :src="group.photo_100 ? group.photo_100 : 'https://vk.com/images/camera_100.png'"
+               :title="group.name" :alt="group.name">
+        </router-link>
         <div class="content">
-          <h2>{{ group.name }}</h2>
-          <a :href="'https://vk.com/' + group.screen_name" title="Открыть в ВК" target="_blank"
-             rel="noopener noreferrer">
-            <i class="material-icons">http</i>{{ group.screen_name }}
-          </a>
+          <div>
+            <router-link :to="'group/' + group.id" class="local-link">
+              <h2>{{ group.name }}</h2>
+            </router-link>
+            <a :href="'https://vk.com/' + group.screen_name" class="vk-link"
+               title="Открыть в ВК" target="_blank" rel="noopener noreferrer">
+              <i class="material-icons">http</i>{{ group.screen_name }}
+            </a>
+          </div>
+          <div class="bottom-right">
+            <el-tag v-if="group.vk_blocked" type="danger">Заблокировано</el-tag>
+            <template v-else>
+              <el-tag :type="group.vk_closed ? 'danger' : 'success'" size="medium">
+                {{ group.vk_closed ? 'Закрыто' : 'Открыто' }}
+              </el-tag>
+              <el-button v-if="selectedGroup.id !== group.id" size="mini" @click="chooseGroup()">
+                Выбрать
+              </el-button>
+            </template>
+          </div>
         </div>
       </div>
     </div>
@@ -46,6 +63,9 @@ export default {
     }
   },
   computed: {
+    selectedGroup () {
+      return this.$store.state.groups.selected
+    },
     updatedAt () {
       return moment(this.group.updated_at).fromNow()
     }
@@ -58,7 +78,7 @@ export default {
       // TODO this.$store.commit('')
     },
     chooseGroup () {
-      console.log(this.group)
+      // TODO this.$store.commit('')
     }
   }
 }
@@ -70,6 +90,7 @@ export default {
   > .el-card {
     border: 1px solid #e6e6e6;
     padding: 10px;
+    overflow: auto;
   }
 }
 
@@ -138,19 +159,34 @@ export default {
   display: flex;
   max-height: 100px;
   overflow: hidden;
-  > img {
+  img {
     width: 100px;
     height: 100px;
+    transition: .3s;
+    &:hover {
+      opacity: .8;
+    }
   }
 }
 
 .content {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
   margin-left: 10px;
-  > h2 {
-    margin: 0;
-    font-size: 22px;
+  .local-link {
+    text-decoration: none;
+    color: #333;
+    > h2 {
+      margin: 0 0 3px;
+      font-size: 22px;
+    }
+    &:hover {
+      text-decoration: underline;
+    }
   }
-  > a {
+  .vk-link {
     display: flex;
     align-items: center;
     font-size: smaller;
@@ -162,6 +198,9 @@ export default {
     > i {
       margin-right: 3px;
     }
+  }
+  .bottom-right {
+    text-align: right;
   }
 }
 </style>
