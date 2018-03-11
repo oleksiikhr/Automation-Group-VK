@@ -1,6 +1,10 @@
 <template>
   <div id="groups" class="view-content">
-    <h1>Группы</h1>
+    <div class="section-header">
+      <h1>Группы</h1>
+      <el-button class="refresh" size="mini" icon="el-icon-refresh" :loading="isLoading"
+                 :disabled="isLoading" @click="fetchGroups()" />
+    </div>
     <el-row :gutter="10" justify="space-between">
       <el-col :md="18">
         <card-group v-for="group in groups" :key="group.id" :group="group" />
@@ -24,12 +28,21 @@ export default {
     CardGroup
   },
   activated () {
-    // FIXME If groups === null
-    this.$store.dispatch('fetchGroups')
+    if (this.groups.length < 1) {
+      this.fetchGroups()
+    }
   },
   computed: {
     groups () {
       return this.$store.state.groups.list
+    },
+    isLoading () {
+      return this.$store.state.groups.isLoading
+    }
+  },
+  methods: {
+    fetchGroups () {
+      this.$store.dispatch('fetchGroups')
     }
   }
 }

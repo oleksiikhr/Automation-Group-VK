@@ -34,8 +34,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
-
 export default {
   data () {
     return {
@@ -179,9 +177,14 @@ body {
   }
 }
 
-.view-content h1 {
-  margin: 0 0 10px 0;
+.section-header {
+  display: flex;
+  justify-content: space-between;
   border-bottom: 1px solid #e6e6e6;
+  margin: 0 0 10px 0;
   padding-bottom: 5px;
+  > h1 {
+    margin: 0;
+  }
 }
 </style>
