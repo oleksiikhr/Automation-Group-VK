@@ -7,16 +7,16 @@
           <span>{{ group.vk_users + ' / ' + group.users_count }}</span>
         </div>
         <div class="right">
-          <div class="time">
+          <div class="time-block">
             <span>{{ updatedAt }}</span>
-            <a title="Обновить" @click="fetchUpdateGroup()">
-              <i class="material-icons">refresh</i>
-            </a>
+            <el-button type="text" title="Обновить" icon="el-icon-refresh" @click="fetchUpdateGroup()"
+                       :loading="updateLoading" :disabled="groupsLoading || updateLoading"
+            />
           </div>
-          <a :class="'deactivated ' + (group.deactivated ? 'on' : 'off')"
-             :title="group.deactivated ? 'Активировать' : 'Деативировать'"
-              @click="fetchChangeStatusGroup()"
-          ></a>
+          <el-button type="text" :class="'refresh deactivated ' + (group.deactivated ? 'on' : 'off')"
+                     :title="group.deactivated ? 'Активировать' : 'Деативировать'" :loading="statusLoading"
+                     @click="fetchChangeStatusGroup()" :disabled="groupsLoading || statusLoading"
+          />
         </div>
       </div>
       <div class="body">
@@ -63,19 +63,32 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      updateLoading: false,
+      statusLoading: false
+    }
+  },
   computed: {
     selectedGroup () {
       return this.$store.state.groups.selected
     },
     updatedAt () {
       return moment(this.group.updated_at).fromNow()
+    },
+    groupsLoading () {
+      return this.$store.state.groups.isLoading
     }
   },
   methods: {
     fetchChangeStatusGroup () {
+      this.statusLoading = true
+      console.log('Change status')
       // TODO this.$store.commit('')
     },
     fetchUpdateGroup () {
+      this.updateLoading = true
+      console.log('Update')
       // TODO this.$store.commit('')
     },
     setSelectedGroup () {
@@ -119,21 +132,29 @@ export default {
 .right {
   display: flex;
   align-items: center;
-  > .time {
+  > .time-block {
     display: flex;
     align-items: center;
-    > a {
-      margin-left: 8px;
-      cursor: pointer;
-      font-size: 0;
-      transition: .3s;
-      color: #b3b3b3;
+    > .el-button {
+      opacity: .6;
       &:hover {
+        opacity: 1;
         color: #333;
       }
     }
     > span {
       font-style: italic;
+    }
+  }
+  .el-button {
+    font-size: 16px;
+    color: #6c7782;
+    padding: 0;
+    margin-left: 5px;
+    transition: .3s;
+    &.is-loading {
+      opacity: 1;
+      color: #6c7782 !important;
     }
   }
 }
@@ -142,9 +163,6 @@ export default {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  margin-left: 8px;
-  cursor: pointer;
-  transition: .3s;
   &:hover {
     background: #545c64 !important;
   }
@@ -153,6 +171,11 @@ export default {
   }
   &.on {
     background: #e43232;
+  }
+  &.is-loading {
+    width: auto;
+    height: auto;
+    background: none !important;
   }
 }
 

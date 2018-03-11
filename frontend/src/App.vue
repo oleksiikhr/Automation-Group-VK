@@ -7,7 +7,7 @@
             <img v-if="group.photo_100" :src="group.photo_100" :alt="group.name" :title="group.name">
             <div v-else class="no-image"></div>
             <div class="h-name">{{ group.name }}</div>
-            <a class="h-clear" @click="clearSelectedGroup()" title="Убрать"></a>
+            <a class="h-clear" @click.prevent="clearSelectedGroup()" title="Убрать"></a>
           </template>
           <template v-else>
             <div class="no-image"></div>

@@ -11,6 +11,7 @@
       </el-col>
       <!-- TODO Widget component for Groups.vue -->
       <el-col :md="6" class="hidden-sm-and-down">
+        <!-- TODO Dialog -->
         <router-link to="/groups/add" class="add-group">
           <i class="material-icons">add</i>
           <span>Добавить группу</span>
