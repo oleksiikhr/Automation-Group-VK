@@ -38,10 +38,11 @@
           <div class="bottom-right">
             <el-tag v-if="group.vk_blocked" type="danger">Заблокировано</el-tag>
             <template v-else>
-              <el-tag :type="group.vk_closed ? 'danger' : 'success'" size="medium">
+              <el-tag :type="group.vk_closed ? 'danger' : 'success'" size="medium"
+                      :title="(group.vk_closed ? 'Закрытая' : 'Открытая') + ' группа'">
                 {{ group.vk_closed ? 'Закрыто' : 'Открыто' }}
               </el-tag>
-              <el-button v-if="selectedGroup.id !== group.id" size="mini" @click="chooseGroup()">
+              <el-button v-if="selectedGroup.id !== group.id" size="mini" @click="setSelectedGroup()">
                 Выбрать
               </el-button>
             </template>
@@ -77,8 +78,8 @@ export default {
     fetchUpdateGroup () {
       // TODO this.$store.commit('')
     },
-    chooseGroup () {
-      // TODO this.$store.commit('')
+    setSelectedGroup () {
+      this.$store.dispatch('setSelectedGroup', this.group)
     }
   }
 }

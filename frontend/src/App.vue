@@ -4,8 +4,10 @@
       <el-header class="blue">
         <router-link to="/groups" class="h-card-group">
           <template v-if="group.id">
-            <img :src="group.img" :alt="group.title" :title="group.title">
-            <div class="h-name">{{ group.title }}</div>
+            <img v-if="group.photo_100" :src="group.photo_100" :alt="group.name" :title="group.name">
+            <div v-else class="no-image"></div>
+            <div class="h-name">{{ group.name }}</div>
+            <a class="h-clear" @click="clearSelectedGroup()" title="Убрать"></a>
           </template>
           <template v-else>
             <div class="no-image"></div>
@@ -53,14 +55,12 @@ export default {
     }
   },
   mounted () {
-    this.$router.push('/')
-    // axios.get('groups')
-    //   .then(res => {
-    //     console.log(res)
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
+    this.$router.push({ name: 'groups' })
+  },
+  methods: {
+    clearSelectedGroup () {
+      this.$store.dispatch('clearSelectedGroup')
+    }
   }
 }
 </script>
@@ -95,6 +95,7 @@ body {
   cursor: pointer;
   padding: 0 10px 0 5px;
   box-shadow: 0 0 8px 1px #989898;
+  position: relative;
   text-decoration: none;
   transition: .2s;
   &:hover {
@@ -103,6 +104,9 @@ body {
     box-shadow: 0 0 2px 0;
     > .h-name {
       color: #fff;
+    }
+    > .h-clear {
+      display: block;
     }
   }
   > img {
@@ -134,6 +138,33 @@ body {
     bottom: 0;
     left: 7px;
     width: 1px;
+  }
+}
+
+.h-clear {
+  display: none;
+  position: absolute;
+  right: 5px;
+  top: 9px;
+  width: 18px;
+  height: 18px;
+  opacity: 0.3;
+  &:hover {
+    opacity: 1;
+  }
+  &::before, &::after {
+    position: absolute;
+    left: 8px;
+    content: ' ';
+    height: 18px;
+    width: 2px;
+    background-color: #fff;
+  }
+  &:before {
+    transform: rotate(45deg);
+  }
+  &:after {
+    transform: rotate(-45deg);
   }
 }
 

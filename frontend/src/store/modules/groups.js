@@ -11,6 +11,9 @@ const mutations = {
   },
   SET_SELECTED_GROUP (state, obj) {
     state.selected = obj
+  },
+  CLEAR_SELECTED_GROUP (state) {
+    state.selected = {}
   }
 }
 
@@ -44,7 +47,7 @@ const actions = {
         secret_key: 'test',
         deactivated: true,
         vk_closed: true,
-        vk_blocked: true,
+        vk_blocked: false,
         vk_users: 15,
         users_count: 0,
         updated_at: '2018-01-21 18:35:47',
@@ -62,6 +65,9 @@ const actions = {
   },
   setSelectedGroup ({commit}, obj) {
     commit('SET_SELECTED_GROUP', obj)
+  },
+  clearSelectedGroup ({commit}) {
+    commit('CLEAR_SELECTED_GROUP')
   }
 }
 
