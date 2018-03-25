@@ -13,14 +13,8 @@ const mutations = {
   SET_SELECTED_GROUP (state, obj) {
     state.selected = obj
   },
-  CLEAR_SELECTED_GROUP (state) {
-    state.selected = {}
-  },
-  LOADING (state) {
-    state.isLoading = true
-  },
-  LOADING_FINISH (state) {
-    state.isLoading = false
+  LOADING (state, bool = true) {
+    state.isLoading = bool
   }
 }
 
@@ -66,7 +60,7 @@ const actions = {
         ]
 
         commit('SET_GROUPS', res.data)
-        commit('LOADING_FINISH')
+        commit('LOADING', false)
       })
       .catch(err => {
         console.log(err.response.data)
@@ -76,7 +70,7 @@ const actions = {
     commit('SET_SELECTED_GROUP', obj)
   },
   clearSelectedGroup ({commit}) {
-    commit('CLEAR_SELECTED_GROUP')
+    commit('CLEAR_SELECTED_GROUP', {})
   }
 }
 

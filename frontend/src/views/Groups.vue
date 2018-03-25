@@ -11,13 +11,24 @@
       </el-col>
       <!-- TODO Widget component for Groups.vue -->
       <el-col :md="6" class="hidden-sm-and-down">
-        <!-- TODO Dialog -->
-        <router-link to="/groups/add" class="add-group">
+        <a @click="dialogCreate = true" class="add-group">
           <i class="material-icons">add</i>
           <span>Добавить группу</span>
-        </router-link>
+        </a>
       </el-col>
     </el-row>
+
+    <!-- DIALOGS -->
+
+    <el-dialog title="Добавить группу" :visible.sync="dialogCreate" width="40%">
+      <span>
+        <!-- TODO Input param id -->
+      </span>
+      <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogCreate = false">Отмена</el-button>
+            <el-button type="primary" @click="fetchCreateGroup()">Добавить</el-button>
+          </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -25,6 +36,11 @@
 import CardGroup from '../components/CardGroup'
 
 export default {
+  data () {
+    return {
+      dialogCreate: false
+    }
+  },
   components: {
     CardGroup
   },
@@ -42,6 +58,9 @@ export default {
     }
   },
   methods: {
+    fetchCreateGroup () {
+
+    },
     fetchGroups () {
       this.$store.dispatch('fetchGroups')
     }
@@ -58,6 +77,7 @@ export default {
   text-align: center;
   text-decoration: none;
   color: #333;
+  cursor: pointer;
   transition: .3s;
   > i {
     margin-bottom: 10px;

@@ -47,6 +47,10 @@ class GroupController extends Controller
      */
     public function create(Request $request)
     {
+        $this->validate($request, [
+            'id' => 'required|integer|min:1'
+        ]);
+
         // TODO Get only group_id. Fetch VK api. Fill DB.
 
         return response()->json();
