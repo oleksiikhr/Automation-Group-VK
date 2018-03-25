@@ -13,14 +13,16 @@ class VkController extends Controller
     /**
      * Send request to VK.
      *
-     * @param string $method
-     * @param array  $params
-     * @param string $token
-     * @param string $typeMethod
+     * @param string $method - API
+     * @param array  $params - parameters that the method takes
+     * @param string $token - user or group
+     * @param string $typeMethod - GET, POST, etc
      *
-     * @return object
+     * @see https://vk.com/dev/methods
+     *
+     * @return mixed
      */
-    public static function request($method, $params, $token, $typeMethod = self::METHOD_GET)
+    public static function request(string $method, array $params, string $token, string $typeMethod = self::METHOD_GET): mixed
     {
         $params['v'] = self::VK_VERSION;
         $params['access_token'] = $token;
@@ -28,7 +30,7 @@ class VkController extends Controller
         if ($typeMethod !== self::METHOD_POST) {
             $data = self::curl(self::VK_API . $method . '?' . http_build_query($params));
         } else {
-            $data = self::curl(self::VK_API . $method, 'POST', http_build_query($params));
+            $data = self::curl(self::VK_API . $method, self::METHOD_POST, http_build_query($params));
         }
 
         return $data;
