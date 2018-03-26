@@ -3,67 +3,76 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\GroupToken;
 use Illuminate\Http\Request;
+use App\Http\Controllers\web\vk\methods\Groups;
+use App\Http\Controllers\web\vk\Vk;
 
 class GroupController extends Controller
 {
     /**
-     * @param Request $request
+     * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
-    public function getList(Request $request)
+    public function index()
     {
         return response()->json(Group::all());
     }
 
     /**
-     * @param string $id
+     * Display the specified resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function getOne($id)
+    public function show($id)
     {
         return response()->json(Group::findOrFail($id));
     }
 
     /**
-     * @param string $id
-     * @param Request $request
+     * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function editOne($id, Request $request)
+    public function update(Request $request, $id)
     {
-        // TODO Get only group_id. Fetch VK api. Fill DB.
-
-        return response()->json();
+        //
     }
 
     /**
-     * @param Request $request
+     * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $this->validate($request, [
             'id' => 'required|integer|min:1'
         ]);
 
-        // TODO Get only group_id. Fetch VK api. Fill DB.
+        $response = (new Groups)->getById($request->id);
+
+        // TODO Fill DB.
 
         return response()->json();
     }
 
     /**
-     * @param string $id
+     * Remove the specified resource from storage.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param  int  $id
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function deleteOne($id)
+    public function destroy($id)
     {
-        // TODO
         return response()->json(Group::destroy($id));
     }
 }
