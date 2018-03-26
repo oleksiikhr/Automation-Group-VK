@@ -2,28 +2,31 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Http\Controllers\web\enums\HttpMethod;
+
 class Web
 {
-    const METHOD_GET  = 'GET';
-    const METHOD_POST = 'POST';
-
     /**
      * Send request to any Website.
      *
-     * @param string $url
-     * @param string $method
-     * @param array  $fields
+     * @param string  $url - with GET params
+     * @param string  $method - HttpMethod class
+     * @param array   $fields - used if the HttpMethod is not GET
      *
      * @return mixed
      */
-    public static function curl(string $url, string $method = self::METHOD_GET, array $fields = []): mixed
+    public static function curl(string $url, string $method = HttpMethod::GET, ?array $fields = null): mixed
     {
         $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-        if (mb_strtoupper($method) === 'POST') {
-            curl_setopt($ch, CURLOPT_POST, 1);
+        if ($method !== HttpMethod::GET) {
+            if ($method === HttpMethod::POST) {
+                curl_setopt($ch, CURLOPT_POST, true);
+            } else {
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+            }
             curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
         }
 

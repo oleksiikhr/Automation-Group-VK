@@ -17,13 +17,13 @@ class Groups extends Vk
      *
      * @see https://vk.com/dev/fields_groups
      */
-    public function getById(?string $groupId = null, ?array $groupIds = null, ?array $fields = null): mixed
+    public function getById(?string $groupId, ?array $groupIds = null, ?array $fields = null): mixed
     {
         $response = self::request('groups.getById', [
             'group_id'  => $groupId,
             'group_ids' => $groupIds,
             'fields'    => $fields
-        ], $this->_token);
+        ]);
 
         return json_decode($response);
     }

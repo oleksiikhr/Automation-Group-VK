@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Group;
-use App\GroupToken;
 use Illuminate\Http\Request;
 use App\Http\Controllers\web\vk\methods\Groups;
-use App\Http\Controllers\web\vk\Vk;
 
 class GroupController extends Controller
 {
@@ -54,7 +52,8 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'id' => 'required|integer|min:1'
+            'id'    => 'required|integer|min:1',
+            'token' => 'required|string'
         ]);
 
         $response = (new Groups)->getById($request->id);

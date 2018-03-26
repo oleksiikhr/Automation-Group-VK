@@ -5,6 +5,7 @@ namespace App\Http\Controllers\web\vk;
 use App\UserToken;
 use Carbon\Carbon;
 use App\Http\Controllers\web\Web;
+use App\Http\Controllers\web\enums\HttpMethod;
 
 class Vk extends Web
 {
@@ -16,6 +17,11 @@ class Vk extends Web
      */
     protected $_token;
 
+    /**
+     * Add a user or group token.
+     *
+     * @param null|string $token
+     */
     public function __construct(?string $token = null)
     {
         if (! $token) {
@@ -38,23 +44,24 @@ class Vk extends Web
      *
      * @param string $method - API
      * @param array  $params - parameters that the method takes
-     * @param string $token - user or group
      * @param string $typeMethod - GET, POST, etc
      *
      * @see https://vk.com/dev/methods
      *
      * @return mixed
      */
-    public static function request(string $method, ?array $params, string $token, string $typeMethod = self::METHOD_GET): mixed
+    public function request(string $method, array $params = [], string $typeMethod = HttpMethod::GET): mixed
     {
         $params['v'] = self::VK_VERSION;
-        $params['access_token'] = $token;
+        $params['access_token'] = $this->_token;
 
-        if ($typeMethod !== self::METHOD_POST) {
+        if ($typeMethod === HttpMethod::GET) {
             $data = self::curl(self::VK_API . $method . '?' . http_build_query($params));
         } else {
-            $data = self::curl(self::VK_API . $method, self::METHOD_POST, http_build_query($params));
+            $data = self::curl(self::VK_API . $method, $typeMethod, http_build_query($params));
         }
+
+        // TODO Check response
 
         return $data;
     }
