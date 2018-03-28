@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\UserToken;
 use Illuminate\Http\Request;
 use App\Http\Controllers\web\vk\methods\Groups;
 
@@ -52,15 +53,17 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'id'    => 'required|integer|min:1',
-            'token' => 'required|string'
+            'group_id'      => 'required|integer|min:1',
+            'user_token_id' => 'required|integer|min:1'
         ]);
 
-        $response = (new Groups)->getById($request->id);
+        $userToken = UserToken::findOrFail($request->token_id);
+
+        $response = (new Groups($userToken->token))->getById($request->id);
 
         // TODO Fill DB.
 
-        return response()->json();
+        return response()->json($response);
     }
 
     /**

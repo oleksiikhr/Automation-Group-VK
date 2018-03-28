@@ -1,10 +1,8 @@
 <?php
 
-Route::group(['middleware' => 'cors'], function () {
+Route::apiResource('cron', 'CronController');
 
-    Route::apiResource('cron', 'CronController');
-
-    Route::apiResource('groups', 'GroupController');
+Route::apiResource('groups', 'GroupController');
 
 //    Route::group(['prefix' => 'polls'], function () {
 //        Route::get('/', 'PollController@getListOfPolls');
@@ -21,5 +19,3 @@ Route::group(['middleware' => 'cors'], function () {
 //            Route::delete('{id}', 'PollController@deleteOnePollType');
 //        });
 //    });
-
-});

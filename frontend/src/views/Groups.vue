@@ -22,22 +22,25 @@
 
     <el-dialog title="Добавить группу" :visible.sync="dialogCreate" width="40%">
       <span>
-        <!-- TODO Input param id -->
+        <el-input placeholder="ID, ссылка на группу" v-model="groupLink" />
       </span>
       <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogCreate = false">Отмена</el-button>
-            <el-button type="primary" @click="fetchCreateGroup()">Добавить</el-button>
-          </span>
+        <el-button @click="dialogCreate = false">Отмена</el-button>
+        <el-button type="primary" @click="fetchCreateGroup()" :loading="loading" :disabled="loading">Добавить</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import CardGroup from '../components/CardGroup'
+import axios from 'axios'
 
 export default {
   data () {
     return {
+      groupLink: '',
+      loading: false,
       dialogCreate: false
     }
   },
@@ -59,7 +62,20 @@ export default {
   },
   methods: {
     fetchCreateGroup () {
+      this.loading = true
 
+      // TODO Parse id from link, etc (this.groupLink)
+      // TODO UserTokenID param
+
+      axios.post('groups', {
+        group_id: this.groupLink
+      })
+        .then(res => {
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
     },
     fetchGroups () {
       this.$store.dispatch('fetchGroups')
