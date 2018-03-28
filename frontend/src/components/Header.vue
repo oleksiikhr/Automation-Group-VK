@@ -1,29 +1,34 @@
 <template>
-  <div class="h-panel">
-    <router-link to="/user/tokens" class="h-card-group users">
-      <template v-if="userToken.id">
-        <img v-if="userToken.photo_100" :src="userToken.photo_100" :alt="userToken.last_name" :title="userToken.last_name">
-        <div v-else class="no-image"></div>
-        <div class="h-name">{{ userToken.first_name + ' ' + userToken.last_name }}</div>
-        <a class="h-clear" @click.prevent="clearSelectedUserToken()" title="Убрать"></a>
-      </template>
-      <template v-else>
-        <div class="no-image"></div>
-        <div class="h-name">Выберите пользователя</div>
-      </template>
-    </router-link>
-    <router-link to="/groups" class="h-card-group groups">
-      <template v-if="group.id">
-        <img v-if="group.photo_100" :src="group.photo_100" :alt="group.name" :title="group.name">
-        <div v-else class="no-image"></div>
-        <div class="h-name">{{ group.name }}</div>
-        <a class="h-clear" @click.prevent="clearSelectedGroup()" title="Убрать"></a>
-      </template>
-      <template v-else>
-        <div class="no-image"></div>
-        <div class="h-name">Выберите группу</div>
-      </template>
-    </router-link>
+  <div class="h-header">
+    <div class="h-panel">
+      <router-link to="/user/tokens" class="h-card-group users">
+        <template v-if="userToken.id">
+          <img v-if="userToken.photo_100" :src="userToken.photo_100" :alt="userToken.last_name" :title="userToken.last_name">
+          <div v-else class="no-image"></div>
+          <div class="h-name">{{ userToken.first_name + ' ' + userToken.last_name }}</div>
+          <a class="h-clear" @click.prevent="clearSelectedUserToken()" title="Убрать"></a>
+        </template>
+        <template v-else>
+          <div class="no-image"></div>
+          <div class="h-name">Выберите токен</div>
+        </template>
+      </router-link>
+      <router-link to="/groups" class="h-card-group groups">
+        <template v-if="group.id">
+          <img v-if="group.photo_100" :src="group.photo_100" :alt="group.name" :title="group.name">
+          <div v-else class="no-image"></div>
+          <div class="h-name">{{ group.name }}</div>
+          <a class="h-clear" @click.prevent="clearSelectedGroup()" title="Убрать"></a>
+        </template>
+        <template v-else>
+          <div class="no-image"></div>
+          <div class="h-name">Выберите группу</div>
+        </template>
+      </router-link>
+    </div>
+    <div class="h-buttons">
+      <el-button @click="routeCron()" size="mini" icon="el-icon-setting" />
+    </div>
   </div>
 </template>
 
@@ -43,12 +48,21 @@ export default {
     },
     clearSelectedGroup () {
       this.$store.dispatch('clearSelectedGroup')
+    },
+    routeCron () {
+      this.$router.push({ name: 'cron' })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.h-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .h-panel {
   display: flex;
   align-items: center;
@@ -139,5 +153,9 @@ export default {
   &:after {
     transform: rotate(-45deg);
   }
+}
+
+.h-buttons {
+  display: flex;
 }
 </style>
