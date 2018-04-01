@@ -2,10 +2,10 @@
 
 namespace App\Http\web\vk;
 
+use App\Http\web\enums\HttpMethod;
+use App\Http\web\Web;
 use App\UserToken;
 use Carbon\Carbon;
-use App\Http\web\Web;
-use App\Http\web\enums\HttpMethod;
 
 class Vk extends Web
 {
@@ -20,7 +20,7 @@ class Vk extends Web
     /**
      * Add a user or group token.
      *
-     * @param null|string $token
+     * @param null|string  $token
      */
     public function __construct(?string $token = null)
     {
@@ -42,9 +42,9 @@ class Vk extends Web
     /**
      * Send request to VK.
      *
-     * @param string $method - API
-     * @param array  $params - parameters that the method takes
-     * @param string $typeMethod - GET, POST, etc
+     * @param string  $method - API
+     * @param array   $params - parameters that the method takes
+     * @param string  $typeMethod - GET, POST, etc
      *
      * @see https://vk.com/dev/methods
      *

@@ -9,7 +9,7 @@ class Account extends Vk
     /**
      * Gets settings of the user in this application.
      *
-     * @param int|null $userId
+     * @param int|null  $userId
      *
      * @see https://vk.com/dev/account.getAppPermissions - Method
      *

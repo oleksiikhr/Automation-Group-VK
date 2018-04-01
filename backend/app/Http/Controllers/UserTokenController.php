@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Cron;
+use App\Http\web\vk\methods\Account;
 use Illuminate\Http\Request;
+use App\UserToken;
 
-class CronController extends Controller
+class UserTokenController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +16,7 @@ class CronController extends Controller
     public function index()
     {
         // TODO Temporary
-        return response()->json(Cron::all());
+        return response()->json(UserToken::all());
     }
 
     /**
@@ -27,7 +28,7 @@ class CronController extends Controller
     public function show($id)
     {
         // TODO Temporary
-        return response()->json(Cron::findOrFail($id));
+        return response()->json(UserToken::findOrFail($id));
     }
 
     /**
@@ -52,7 +53,14 @@ class CronController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // TODO ..
+        $this->validate($request, [
+            'token' => 'required|string',
+        ]);
+
+        $account = new Account($request->token);
+
+        return response()->json($account->getAppPermissions());
     }
 
     /**
@@ -65,6 +73,6 @@ class CronController extends Controller
     public function destroy($id)
     {
         // TODO Temporary
-        return response()->json(Cron::destroy($id));
+        return response()->json(UserToken::destroy($id));
     }
 }

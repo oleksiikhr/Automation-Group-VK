@@ -10,9 +10,9 @@ class Users extends Vk
     /**
      * Returns detailed information on users.
      *
-     * @param array       $userIds
-     * @param array|null  $fields - User fields to return
-     * @param null|string $nameCase - nom, gen, dat, etc
+     * @param array        $userIds
+     * @param array|null   $fields - User fields to return
+     * @param null|string  $nameCase - nom, gen, dat, etc
      *
      * @see https://vk.com/dev/fields - User object
      * @see https://vk.com/dev/users.get - Method

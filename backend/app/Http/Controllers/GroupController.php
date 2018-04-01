@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Group;
 use App\UserToken;
 use Illuminate\Http\Request;
-use App\Http\Controllers\web\vk\methods\Groups;
+use App\Http\web\vk\methods\Groups;
 
 class GroupController extends Controller
 {
@@ -16,6 +16,7 @@ class GroupController extends Controller
      */
     public function index()
     {
+        // TODO Temporary
         return response()->json(Group::all());
     }
 
@@ -27,6 +28,7 @@ class GroupController extends Controller
      */
     public function show($id)
     {
+        // TODO Temporary
         return response()->json(Group::findOrFail($id));
     }
 
@@ -53,8 +55,8 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'group_id'      => 'required|integer|min:1',
-            'user_token_id' => 'required|integer|min:1'
+            'id'       => 'required|integer|min:1',
+            'token_id' => 'required|integer|min:1'
         ]);
 
         $userToken = UserToken::findOrFail($request->token_id);
@@ -75,6 +77,7 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
+        // TODO Temporary
         return response()->json(Group::destroy($id));
     }
 }

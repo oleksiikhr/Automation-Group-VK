@@ -4,6 +4,8 @@ Route::apiResource('cron', 'CronController');
 
 Route::apiResource('groups', 'GroupController');
 
+Route::apiResource('users/tokens', 'UserTokenController');
+
 //    Route::group(['prefix' => 'polls'], function () {
 //        Route::get('/', 'PollController@getListOfPolls');
 //        Route::get('{id}', 'PollController@getOnePoll');

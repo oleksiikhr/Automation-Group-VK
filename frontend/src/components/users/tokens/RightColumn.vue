@@ -44,7 +44,7 @@ export default {
     fetchAddToken () {
       this.create.loading = true
 
-      axios.post('users/tokens')
+      axios.post('users/tokens', this.create.form)
         .then(res => {
           console.log(res.data)
           this.$emit('created', res.data)
