@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\web\enums;
+namespace App\Http\web\enums;
 
 final class HttpMethod
 {

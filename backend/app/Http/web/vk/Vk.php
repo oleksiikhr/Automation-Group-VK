@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\web\vk;
+namespace App\Http\web\vk;
 
 use App\UserToken;
 use Carbon\Carbon;
-use App\Http\Controllers\web\Web;
-use App\Http\Controllers\web\enums\HttpMethod;
+use App\Http\web\Web;
+use App\Http\web\enums\HttpMethod;
 
 class Vk extends Web
 {

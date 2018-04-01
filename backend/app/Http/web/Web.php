@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\web;
+namespace App\Http\web;
 
-use App\Http\Controllers\web\enums\HttpMethod;
+use App\Http\web\enums\HttpMethod;
 
 class Web
 {
