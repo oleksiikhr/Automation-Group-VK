@@ -14,7 +14,6 @@ const mutations = {
     state.selected = obj
   },
   LOADING_GROUPS (state, bool = true) {
-    console.log('Test groups')
     state.loading = bool
   }
 }
@@ -73,7 +72,7 @@ const actions = {
     commit('SET_SELECTED_GROUP', obj)
   },
   clearSelectedGroup ({commit}) {
-    commit('CLEAR_SELECTED_GROUP', {})
+    commit('SET_SELECTED_GROUP', {})
   }
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div id="groups" class="view-content">
     <div class="section-header">
-      <h1>Токены</h1>
+      <h1>Токены пользователей</h1>
       <el-button class="refresh" size="mini" icon="el-icon-refresh" :loading="storeLoading"
                  :disabled="storeLoading" @click="fetchUserTokens()" />
     </div>

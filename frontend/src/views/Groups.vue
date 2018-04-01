@@ -11,12 +11,7 @@
       </el-col>
       <!-- TODO Widget component for Groups.vue -->
       <el-col :md="6" class="hidden-sm-and-down">
-        <div class="right-column groups">
-          <a @click="dialogCreate = true" class="card">
-            <i class="material-icons">add</i>
-            <span>Добавить группу</span>
-          </a>
-        </div>
+        <right-column />
       </el-col>
     </el-row>
 
@@ -35,19 +30,20 @@
 </template>
 
 <script>
+import RightColumn from '../components/groups/RightColumn'
 import CardGroup from '../components/groups/CardGroup'
 import axios from 'axios'
 
 export default {
+  components: {
+    RightColumn, CardGroup
+  },
   data () {
     return {
       groupLink: '',
       loading: false,
       dialogCreate: false
     }
-  },
-  components: {
-    CardGroup
   },
   mounted () {
     this.fetchGroups()
