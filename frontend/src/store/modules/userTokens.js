@@ -13,22 +13,24 @@ const mutations = {
   SET_SELECTED_USER_TOKEN (state, obj) {
     state.selected = obj
   },
-  LOADING (state, bool = true) {
+  LOADING_USER_TOKENS (state, bool = true) {
     state.loading = bool
   }
 }
 
 const actions = {
   fetchUserTokens ({commit}) {
-    commit('LOADING')
+    commit('LOADING_USER_TOKENS')
 
     axios.get('users/tokens')
       .then(res => {
         commit('SET_USER_TOKENS', res.data)
-        commit('LOADING', false)
+        commit('LOADING_USER_TOKENS', false)
       })
       .catch(err => {
-        console.log(err.response.data)
+        // TODO Delete console.log
+        console.log('Error userTokens.js', err.response.data)
+        commit('LOADING_USER_TOKENS', false)
       })
   },
   setSelectedUserToken ({commit}, obj) {

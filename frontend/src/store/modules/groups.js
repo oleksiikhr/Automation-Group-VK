@@ -13,14 +13,15 @@ const mutations = {
   SET_SELECTED_GROUP (state, obj) {
     state.selected = obj
   },
-  LOADING (state, bool = true) {
+  LOADING_GROUPS (state, bool = true) {
+    console.log('Test groups')
     state.loading = bool
   }
 }
 
 const actions = {
   fetchGroups ({commit}) {
-    commit('LOADING')
+    commit('LOADING_GROUPS')
 
     axios.get('groups')
       .then(res => {
@@ -60,10 +61,12 @@ const actions = {
         ]
 
         commit('SET_GROUPS', res.data)
-        commit('LOADING', false)
+        commit('LOADING_GROUPS', false)
       })
       .catch(err => {
-        console.log(err.response.data)
+        // TODO Delete console.log
+        console.log('Error groups.js', err.response.data)
+        commit('LOADING_GROUPS', false)
       })
   },
   setSelectedGroup ({commit}, obj) {

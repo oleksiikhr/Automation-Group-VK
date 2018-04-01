@@ -84,4 +84,31 @@ body {
     margin: 0;
   }
 }
+
+.right-column {
+  > .card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e6e6e6;
+    padding: 20px 10px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+    transition: .3s;
+    > i {
+      margin-bottom: 10px;
+    }
+    > span {
+      color: #848484;
+    }
+    &:hover {
+      background: #545c64;
+      color: #fff;
+      > span {
+        color: #afafaf;
+      }
+    }
+  }
+}
 </style>

@@ -11,10 +11,12 @@
       </el-col>
       <!-- TODO Widget component for Groups.vue -->
       <el-col :md="6" class="hidden-sm-and-down">
-        <a @click="dialogCreate = true" class="add-group">
-          <i class="material-icons">add</i>
-          <span>Добавить группу</span>
-        </a>
+        <div class="right-column groups">
+          <a @click="dialogCreate = true" class="card">
+            <i class="material-icons">add</i>
+            <span>Добавить группу</span>
+          </a>
+        </div>
       </el-col>
     </el-row>
 
@@ -33,7 +35,7 @@
 </template>
 
 <script>
-import CardGroup from '../components/CardGroup'
+import CardGroup from '../components/groups/CardGroup'
 import axios from 'axios'
 
 export default {
@@ -83,28 +85,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.add-group {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #e6e6e6;
-  padding: 20px 10px;
-  text-align: center;
-  text-decoration: none;
-  color: #333;
-  cursor: pointer;
-  transition: .3s;
-  > i {
-    margin-bottom: 10px;
-  }
-  > span {
-    color: #848484;
-  }
-  &:hover {
-    background: #545c64;
-    color: #fff;
-    > span {
-      color: #afafaf;
-    }
-  }
-}
+
 </style>
