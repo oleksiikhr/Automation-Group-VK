@@ -15,15 +15,15 @@ class Groups extends Vk
      * @see https://vk.com/dev/fields_groups - Group object
      * @see https://vk.com/dev/groups.getById - Method
      *
-     * @return mixed
+     * @return object
      */
-    public function getById(array $groupIds, ?array $fields = null): mixed
+    public function getById(array $groupIds, ?array $fields = null): object
     {
         $response = self::request('groups.getById', [
-            'group_ids' => implode(',', $groupIds),
-            'fields'    => $fields
+            'group_ids' => $groupIds ? implode(',', $groupIds) : null,
+            'fields'    => $fields ? implode(',', $fields) : null,
         ]);
 
-        return json_decode($response);
+        return $response;
     }
 }

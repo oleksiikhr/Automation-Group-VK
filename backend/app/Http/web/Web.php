@@ -13,9 +13,9 @@ class Web
      * @param string  $method - HttpMethod class
      * @param array   $fields - used if the HttpMethod is not GET
      *
-     * @return mixed
+     * @return string
      */
-    public static function curl(string $url, string $method = HttpMethod::GET, ?array $fields = null): mixed
+    public static function curl(string $url, string $method = HttpMethod::GET, ?array $fields = null): string
     {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

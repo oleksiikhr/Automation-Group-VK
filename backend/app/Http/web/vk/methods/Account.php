@@ -13,14 +13,12 @@ class Account extends Vk
      *
      * @see https://vk.com/dev/account.getAppPermissions - Method
      *
-     * @return mixed
+     * @return object
      */
-    public function getAppPermissions(?int $userId = null)
+    public function getAppPermissions(?int $userId = null): object
     {
-        $response = self::request('account.getAppPermissions', [
+        return self::request('account.getAppPermissions', [
             'user_id' => $userId
         ]);
-
-        return json_decode($response);
     }
 }

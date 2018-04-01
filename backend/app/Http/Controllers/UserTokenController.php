@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\web\vk\methods\Account;
+use App\Http\web\vk\methods\Users;
 use Illuminate\Http\Request;
 use App\UserToken;
 
@@ -53,14 +54,20 @@ class UserTokenController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO ..
         $this->validate($request, [
             'token' => 'required|string',
         ]);
 
-        $account = new Account($request->token);
+        $appPermissions = (new Account($request->token))->getAppPermissions();
 
-        return response()->json($account->getAppPermissions());
+        // TODO Has error => abort
+
+        $user = (new Users($request->token))->get();
+
+        // TODO Check user in DB
+        // TODO Add token to DB
+
+        return response()->json(['message' => 'Токен добавлен']);
     }
 
     /**

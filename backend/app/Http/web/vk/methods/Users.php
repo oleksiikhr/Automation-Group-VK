@@ -17,16 +17,14 @@ class Users extends Vk
      * @see https://vk.com/dev/fields - User object
      * @see https://vk.com/dev/users.get - Method
      *
-     * @return mixed
+     * @return object
      */
-    public function get(array $userIds, ?array $fields = null, ?string $nameCase = NameCase::NOMINATIVE)
+    public function get(?array $userIds = null, ?array $fields = null, ?string $nameCase = NameCase::NOMINATIVE): object
     {
-        $response = self::request('users.get', [
-            'user_ids'  => implode(',', $userIds),
-            'fields'    => implode(',', $fields),
+        return self::request('users.get', [
+            'user_ids'  => $userIds ? implode(',', $userIds) : null,
+            'fields'    => $fields ? implode(',', $fields) : null,
             'name_case' => $nameCase
         ]);
-
-        return json_decode($response);
     }
 }

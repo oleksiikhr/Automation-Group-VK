@@ -15,7 +15,12 @@ class Vk extends Web
     /**
      * @var string
      */
-    protected $_token;
+    protected $token;
+
+    /**
+     * @var bool
+     */
+    public $hasError = false;
 
     /**
      * Add a user or group token.
@@ -36,7 +41,7 @@ class Vk extends Web
             $token = $model->token;
         }
 
-        $this->_token = $token;
+        $this->token = $token;
     }
 
     /**
@@ -48,12 +53,13 @@ class Vk extends Web
      *
      * @see https://vk.com/dev/methods
      *
-     * @return mixed
+     * @return object
      */
-    public function request(string $method, array $params = [], string $typeMethod = HttpMethod::GET): mixed
+    public function request(string $method, array $params = [], string $typeMethod = HttpMethod::GET): object
     {
+        // TODO lang
         $params['v'] = self::VK_VERSION;
-        $params['access_token'] = $this->_token;
+        $params['access_token'] = $this->token;
 
         if ($typeMethod === HttpMethod::GET) {
             $data = self::curl(self::VK_API . $method . '?' . http_build_query($params));
@@ -61,8 +67,12 @@ class Vk extends Web
             $data = self::curl(self::VK_API . $method, $typeMethod, http_build_query($params));
         }
 
-        // TODO Check response
+        $response = json_decode($data);
 
-        return $data;
+        // TODO Check response
+        // TODO Temporary
+        $this->hasError = isset($response->error);
+
+        return $response;
     }
 }
