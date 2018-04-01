@@ -3,7 +3,7 @@ import axios from 'axios'
 const state = {
   list: [],
   selected: {},
-  isLoading: true
+  loading: true
 }
 
 const mutations = {
@@ -14,7 +14,7 @@ const mutations = {
     state.selected = obj
   },
   LOADING (state, bool = true) {
-    state.isLoading = bool
+    state.loading = bool
   }
 }
 

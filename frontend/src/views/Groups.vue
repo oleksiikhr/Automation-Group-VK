@@ -2,8 +2,8 @@
   <div id="groups" class="view-content">
     <div class="section-header">
       <h1>Группы</h1>
-      <el-button class="refresh" size="mini" icon="el-icon-refresh" :loading="isLoading"
-                 :disabled="isLoading" @click="fetchGroups()" />
+      <el-button class="refresh" size="mini" icon="el-icon-refresh" :loading="storeLoading"
+                 :disabled="storeLoading" @click="fetchGroups()" />
     </div>
     <el-row :gutter="10" justify="space-between">
       <el-col :md="18">
@@ -47,17 +47,15 @@ export default {
   components: {
     CardGroup
   },
-  activated () {
-    if (this.groups.length < 1) {
-      this.fetchGroups()
-    }
+  mounted () {
+    this.fetchGroups()
   },
   computed: {
     groups () {
       return this.$store.state.groups.list
     },
-    isLoading () {
-      return this.$store.state.groups.isLoading
+    storeLoading () {
+      return this.$store.state.groups.loading
     }
   },
   methods: {

@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     clearSelectedUserToken () {
-
+      this.$store.dispatch('clearSelectedUserToken')
     },
     clearSelectedGroup () {
       this.$store.dispatch('clearSelectedGroup')
