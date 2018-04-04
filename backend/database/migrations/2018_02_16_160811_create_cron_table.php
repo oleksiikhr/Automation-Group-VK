@@ -15,7 +15,7 @@ class CreateCronTable extends Migration
     {
         Schema::create('cron', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('group_id')->nullable();
+            $table->unsignedBigInteger('group_id')->nullable();
             $table->string('name');
             $table->text('description')->nullable();
             $table->time('start_time')->nullable();

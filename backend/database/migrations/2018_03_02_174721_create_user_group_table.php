@@ -15,7 +15,7 @@ class CreateUserGroupTable extends Migration
     {
         Schema::create('user_group', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
-            $table->unsignedInteger('group_id');
+            $table->unsignedBigInteger('group_id');
             $table->boolean('message_allow')->default(0);
             $table->boolean('is_muted')->default(0);
             $table->boolean('is_blocked')->default(0);

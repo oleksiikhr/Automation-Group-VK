@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\web\vk\methods\Account;
 use App\Http\web\vk\methods\Users;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\UserToken;
 
@@ -58,14 +60,24 @@ class UserTokenController extends Controller
             'token' => 'required|string',
         ]);
 
-        $appPermissions = (new Account($request->token))->getAppPermissions();
+        $response = (new Users($request->token))
+            ->get(null, ['domain', 'photo_100'])
+            ->response[0];
 
-        // TODO Has error => abort
+        $user = User::firstOrCreate(
+            ['id' => $response->id],
+            ['first_name' => $response->first_name, 'last_name' => $response->last_name,
+                'photo_100' => $response->photo_100, 'domain' => $response->domain]
+        );
 
-        $user = (new Users($request->token))->get();
+        $bitMask = (new Account($request->token))->getAppPermissions()->response;
 
-        // TODO Check user in DB
-        // TODO Add token to DB
+        $userToken = new UserToken;
+        $userToken->user_id = $user->id;
+        $userToken->token = $request->token;
+        $userToken->mask = $bitMask;
+        $userToken->last_used = Carbon::now();
+        $userToken->save();
 
         return response()->json(['message' => 'Токен добавлен']);
     }

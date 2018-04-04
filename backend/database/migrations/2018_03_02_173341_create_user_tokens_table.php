@@ -19,6 +19,7 @@ class CreateUserTokensTable extends Migration
             $table->string('token')->unique();
             $table->integer('mask');
             $table->dateTime('expiry_at')->nullable();
+            $table->dateTime('last_used');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 

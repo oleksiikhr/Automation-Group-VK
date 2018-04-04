@@ -15,9 +15,10 @@ class CreateGroupTokensTable extends Migration
     {
         Schema::create('group_tokens', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('group_id');
+            $table->unsignedBigInteger('group_id');
             $table->string('token')->unique();
             $table->integer('mask');
+            $table->dateTime('last_used');
 
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
 

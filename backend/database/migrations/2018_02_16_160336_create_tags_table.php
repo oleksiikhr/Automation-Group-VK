@@ -15,7 +15,7 @@ class CreateTagsTable extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('group_id');
+            $table->unsignedBigInteger('group_id');
             $table->string('name')->unique();
             $table->string('hash');
             $table->softDeletes();

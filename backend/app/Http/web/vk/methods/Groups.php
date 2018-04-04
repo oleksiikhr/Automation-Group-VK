@@ -19,11 +19,9 @@ class Groups extends Vk
      */
     public function getById(array $groupIds, ?array $fields = null): object
     {
-        $response = self::request('groups.getById', [
+        return self::request('groups.getById', [
             'group_ids' => $groupIds ? implode(',', $groupIds) : null,
             'fields'    => $fields ? implode(',', $fields) : null,
         ]);
-
-        return $response;
     }
 }

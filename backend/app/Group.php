@@ -9,6 +9,8 @@ class Group extends Model
 {
     use SoftDeletes;
 
+    public $incrementing = false;
+
     protected $fillable = [
         'secret_key', 'deactivated',
     ];

@@ -10,8 +10,10 @@ class User extends Authenticatable
 {
     use Notifiable, SoftDeletes;
 
+    public $incrementing = false;
+
     protected $fillable = [
-        'id', 'address', 'first_name', 'last_name', 'image_50', 'is_muted', 'is_blocked',
+        'id', 'domain', 'first_name', 'last_name', 'photo_100', 'is_muted', 'is_blocked',
     ];
 
     /* |----------------------------------------------------------------------------

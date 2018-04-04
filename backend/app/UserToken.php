@@ -6,29 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserToken extends Model
 {
-    /**
-     * Ecrypt token.
-     *
-     * @param  string  $value
-     *
-     * @return string
-     */
-    public function setTokenAttribute($value)
-    {
-        $this->attributes['token'] = encrypt($value);
-    }
+    public $timestamps = false;
 
     /**
-     * Decrypt token.
+     * The attributes that should be mutated to dates.
      *
-     * @param  string  $value
-     *
-     * @return string
+     * @var array
      */
-    public function getTokenAttribute($value)
-    {
-        return decrypt($value);
-    }
+    protected $dates = [
+        'expiry_at', 'last_used',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'token',
+    ];
 
     /* |----------------------------------------------------------------------------
      * | Relationship
