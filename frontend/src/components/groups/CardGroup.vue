@@ -2,9 +2,9 @@
   <div class="card-group">
     <div class="el-card">
       <div class="header">
-        <div class="left" title="Количество пользователей в ВК / БД">
+        <div class="left" title="Количество пользователей">
           <i class="material-icons">people_outline</i>
-          <span>{{ group.vk_users + ' / ' + group.users_count }}</span>
+          <span>{{ group.vk_users }}</span>
         </div>
         <div class="right">
           <div class="time-block">
@@ -215,7 +215,7 @@ export default {
     align-items: center;
     font-size: smaller;
     text-decoration: none;
-    color: #545c64;
+    color: #8a8a8a;
     &:hover {
       color: #222;
     }

@@ -4,30 +4,30 @@
 -->
 <template>
   <div class="right-column user-tokens">
-    <a @click="create.dialog = true" class="card">
+    <a @click="dialog = true" class="card">
       <i class="material-icons">add</i>
       <span>Добавить токен</span>
     </a>
 
     <!-- DIALOGS -->
 
-    <el-dialog title="Добавить токен пользователя" :visible.sync="create.dialog" width="40%">
+    <el-dialog title="Добавить токен пользователя" :visible.sync="dialog" width="40%">
       <div>
-        <el-form ref="form" :model="create.form" label-width="100px">
+        <el-form :model="form" label-width="100px">
           <el-form-item label="Название">
-            <el-input v-model="create.form.name" />
+            <el-input v-model="form.name" />
           </el-form-item>
           <el-form-item label="Токен">
-            <el-input v-model="create.form.token" />
+            <el-input v-model="form.token" />
           </el-form-item>
           <el-form-item label="Описание">
-            <el-input v-model="create.form.description" type="textarea" />
+            <el-input v-model="form.description" type="textarea" />
           </el-form-item>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="create.dialog = false">Отмена</el-button>
-        <el-button type="primary" @click="fetchAddToken()" :loading="create.loading" :disabled="create.loading">
+        <el-button @click="dialog = false">Отмена</el-button>
+        <el-button type="primary" @click="fetchAddToken()" :loading="loading" :disabled="loading">
           Добавить
         </el-button>
       </span>
@@ -41,30 +41,24 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      create: {
-        dialog: false,
-        loading: false,
-        form: {
-          name: '',
-          token: '',
-          description: ''
-        }
-      }
+      dialog: false,
+      loading: false,
+      form: {}
     }
   },
   methods: {
     fetchAddToken () {
-      this.create.loading = true
+      this.loading = true
 
-      axios.post('users/tokens', this.create.form)
+      axios.post('users/tokens', this.form)
         .then(res => {
-          console.log('Right column', res.data)
           this.$emit('created', res.data)
-          this.create.dialog = false
-          this.create.loading = false
+          this.dialog = false
+          this.form = {}
+          this.loading = false
         })
         .catch(() => {
-          this.create.loading = false
+          this.loading = false
         })
     }
   }

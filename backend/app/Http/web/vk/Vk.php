@@ -6,8 +6,6 @@ use App\Http\web\vk\exceptions\VkApiException;
 use App\Http\web\vk\enums\Language;
 use App\Http\web\enums\HttpMethod;
 use App\Http\web\Web;
-use App\UserToken;
-use Carbon\Carbon;
 
 class Vk extends Web
 {
@@ -72,5 +70,27 @@ class Vk extends Web
         }
 
         return $data;
+    }
+
+    /**
+     * By URL filter standard images.
+     *
+     * @param string  $image
+     *
+     * @return string|null
+     */
+    public static function filterDefaultImages($image)
+    {
+        switch ($image) {
+            case 'https://vk.com/images/deactivated_200.png':
+            case 'https://vk.com/images/deactivated_100.png':
+            case 'https://vk.com/images/deactivated_50.png':
+            case 'https://vk.com/images/camera_200.png':
+            case 'https://vk.com/images/camera_100.png':
+            case 'https://vk.com/images/camera_50.png';
+                return null;
+            default:
+                return $image;
+        }
     }
 }

@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\web\vk\methods\Account;
 use App\Http\web\vk\methods\Users;
-use App\User;
-use Carbon\Carbon;
+use App\Http\web\vk\Vk;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\UserToken;
+use App\User;
 
 class UserTokenController extends Controller
 {
@@ -19,7 +20,7 @@ class UserTokenController extends Controller
     public function index()
     {
         // TODO Temporary
-        return response()->json(UserToken::all());
+        return response()->json(UserToken::with('user')->get());
     }
 
     /**
@@ -64,21 +65,21 @@ class UserTokenController extends Controller
 
         try {
             // Get the current user from VK.
-            $response = (new Users($request->token))
-                ->get(null, ['domain', 'photo_100'])
-                ->response[0];
-
+            $vkUser = (new Users($request->token))->get(null, ['domain', 'photo_100'])->response[0];
             $bitMask = (new Account($request->token))->getAppPermissions()->response;
 
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), 422);
         }
 
-        $user = User::firstOrCreate(
-            ['id' => $response->id],
-            ['first_name' => $response->first_name, 'last_name' => $response->last_name,
-                'photo_100' => $response->photo_100, 'domain' => $response->domain]
-        );
+        $user = User::firstOrCreate([
+            'id' => $vkUser->id
+        ], [
+            'first_name' => $vkUser->first_name,
+            'last_name'  => $vkUser->last_name,
+            'photo_100'  => Vk::filterDefaultImages($vkUser->photo_100),
+            'domain'     => $vkUser->domain
+        ]);
 
         $userToken = new UserToken;
         $userToken->name = $request->name;
