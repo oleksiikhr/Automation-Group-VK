@@ -2,6 +2,7 @@
 
 namespace App\Http\web\vk;
 
+use App\Http\web\vk\exceptions\VkApiException;
 use App\Http\web\vk\enums\Language;
 use App\Http\web\enums\HttpMethod;
 use App\Http\web\Web;
@@ -14,11 +15,6 @@ class Vk extends Web
     const VK_VERSION = '5.74';
 
     /**
-     * @var bool
-     */
-    public $hasError = false;
-
-    /**
      * @var string
      */
     protected $token;
@@ -29,21 +25,14 @@ class Vk extends Web
     private $_lang;
 
     /**
-     * @var bool
-     */
-    private $_strict;
-
-    /**
      * Config request.
      *
      * @param string  $token
-     * @param bool    $strict
      * @param string  $lang
      */
-    public function __construct(string $token, bool $strict = true, string $lang = Language::Russian)
+    public function __construct(string $token, string $lang = Language::Russian)
     {
         $this->token = $token;
-        $this->_strict = $strict;
         $this->_lang = $lang;
     }
 
@@ -55,6 +44,8 @@ class Vk extends Web
      * @param string  $typeMethod - GET, POST, etc
      *
      * @see https://vk.com/dev/methods
+     *
+     * @throws VkApiException
      *
      * @return object
      */
@@ -70,17 +61,16 @@ class Vk extends Web
             $data = self::curl(self::VK_API . $method, $typeMethod, http_build_query($params));
         }
 
-        $response = json_decode($data);
+        $data = $data ? json_decode($data) : null;
 
-        // TODO Check response
-        // TODO Temporary
-        $this->hasError = isset($response->error);
-
-        if ($this->_strict && $this->hasError) {
-            return response()->json(['message' => 'Ошибка при выполнении запроса в ВК'], 422);
+        if ($data === null) {
+            throw new VkApiException('Ответ отсутствует от ВК');
         }
-        // END
 
-        return $response;
+        if (isset($data->error)) {
+            throw new VkApiException('Ошибка при выполнении запроса в ВК');
+        }
+
+        return $data;
     }
 }

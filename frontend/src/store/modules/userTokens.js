@@ -27,9 +27,7 @@ const actions = {
         commit('SET_USER_TOKENS', res.data)
         commit('LOADING_USER_TOKENS', false)
       })
-      .catch(err => {
-        // TODO Delete console.log
-        console.log('Error userTokens.js', err.response.data)
+      .catch(() => {
         commit('LOADING_USER_TOKENS', false)
       })
   },

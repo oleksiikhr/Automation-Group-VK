@@ -12,9 +12,19 @@
     <!-- DIALOGS -->
 
     <el-dialog title="Добавить токен пользователя" :visible.sync="create.dialog" width="40%">
-      <span>
-        <el-input placeholder="Токен" v-model="create.form.token" />
-      </span>
+      <div>
+        <el-form ref="form" :model="create.form" label-width="100px">
+          <el-form-item label="Название">
+            <el-input v-model="create.form.name" />
+          </el-form-item>
+          <el-form-item label="Токен">
+            <el-input v-model="create.form.token" />
+          </el-form-item>
+          <el-form-item label="Описание">
+            <el-input v-model="create.form.description" type="textarea" />
+          </el-form-item>
+        </el-form>
+      </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="create.dialog = false">Отмена</el-button>
         <el-button type="primary" @click="fetchAddToken()" :loading="create.loading" :disabled="create.loading">
@@ -35,7 +45,9 @@ export default {
         dialog: false,
         loading: false,
         form: {
-          token: ''
+          name: '',
+          token: '',
+          description: ''
         }
       }
     }
@@ -46,7 +58,7 @@ export default {
 
       axios.post('users/tokens', this.create.form)
         .then(res => {
-          console.log(res.data)
+          console.log('Right column', res.data)
           this.$emit('created', res.data)
           this.create.dialog = false
           this.create.loading = false

@@ -7,10 +7,10 @@
     </div>
     <el-row :gutter="10" justify="space-between">
       <el-col :md="18">
-        123
+        {{ userTokens }}
       </el-col>
       <el-col :md="6" class="hidden-sm-and-down">
-        <right-column />
+        <right-column @created="fetchUserTokens" />
       </el-col>
     </el-row>
   </div>

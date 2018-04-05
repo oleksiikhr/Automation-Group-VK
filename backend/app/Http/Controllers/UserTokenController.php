@@ -57,12 +57,22 @@ class UserTokenController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'token' => 'required|string',
+            'name'        => 'required|string|max:' . self::MAX_LEN_STRING_DB,
+            'description' => 'nullable|string|max:600',
+            'token'       => 'required|string',
         ]);
 
-        $response = (new Users($request->token))
-            ->get(null, ['domain', 'photo_100'])
-            ->response[0];
+        try {
+            // Get the current user from VK.
+            $response = (new Users($request->token))
+                ->get(null, ['domain', 'photo_100'])
+                ->response[0];
+
+            $bitMask = (new Account($request->token))->getAppPermissions()->response;
+
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 422);
+        }
 
         $user = User::firstOrCreate(
             ['id' => $response->id],
@@ -70,16 +80,19 @@ class UserTokenController extends Controller
                 'photo_100' => $response->photo_100, 'domain' => $response->domain]
         );
 
-        $bitMask = (new Account($request->token))->getAppPermissions()->response;
-
         $userToken = new UserToken;
+        $userToken->name = $request->name;
         $userToken->user_id = $user->id;
         $userToken->token = $request->token;
+        $userToken->description = $request->description;
         $userToken->mask = $bitMask;
         $userToken->last_used = Carbon::now();
         $userToken->save();
 
-        return response()->json(['message' => 'Токен добавлен']);
+        return response()->json([
+            'message' => 'Токен добавлен',
+            'user_token' => $userToken
+        ]);
     }
 
     /**
