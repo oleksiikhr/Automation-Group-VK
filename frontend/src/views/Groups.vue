@@ -31,7 +31,7 @@
 
 <script>
 import RightColumn from '../components/groups/RightColumn'
-import CardGroup from '../components/groups/CardGroup'
+import CardGroup from '../components/groups/Card'
 import axios from 'axios'
 
 export default {

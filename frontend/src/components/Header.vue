@@ -3,9 +3,9 @@
     <div class="h-panel">
       <router-link to="/user/tokens" class="h-card-group users">
         <template v-if="userToken.id">
-          <img v-if="userToken.photo_100" :src="userToken.photo_100" :alt="userToken.last_name" :title="userToken.last_name">
-          <div v-else class="no-image"></div>
-          <div class="h-name">{{ userToken.first_name + ' ' + userToken.last_name }}</div>
+          <!-- FIXME Full name -->
+          <img :src="userToken.user.photo_100" :alt="userToken.user.last_name" :title="userToken.user.last_name">
+          <div class="h-name">{{ userToken.name }}</div>
           <a class="h-clear" @click.prevent="clearSelectedUserToken()" title="Убрать"></a>
         </template>
         <template v-else>
@@ -15,8 +15,8 @@
       </router-link>
       <router-link to="/groups" class="h-card-group groups">
         <template v-if="group.id">
-          <img v-if="group.photo_100" :src="group.photo_100" :alt="group.name" :title="group.name">
-          <div v-else class="no-image"></div>
+          <!-- FIXME Default image -->
+          <img :src="group.photo_100" :alt="group.name" :title="group.name">
           <div class="h-name">{{ group.name }}</div>
           <a class="h-clear" @click.prevent="clearSelectedGroup()" title="Убрать"></a>
         </template>

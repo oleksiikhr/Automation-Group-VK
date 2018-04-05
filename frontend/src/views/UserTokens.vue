@@ -7,7 +7,7 @@
     </div>
     <el-row :gutter="10" justify="space-between">
       <el-col :md="18">
-        {{ userTokens }}
+        <card-user-token v-for="userToken in userTokens" :key="userToken.id" :user-token="userToken" />
       </el-col>
       <el-col :md="6" class="hidden-sm-and-down">
         <right-column @created="fetchUserTokens" />
@@ -18,10 +18,11 @@
 
 <script>
 import RightColumn from '../components/users/tokens/RightColumn'
+import CardUserToken from '../components/users/tokens/Card'
 
 export default {
   components: {
-    RightColumn
+    RightColumn, CardUserToken
   },
   mounted () {
     this.fetchUserTokens()
