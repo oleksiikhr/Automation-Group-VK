@@ -62,9 +62,7 @@ const actions = {
         commit('SET_GROUPS', res.data)
         commit('LOADING_GROUPS', false)
       })
-      .catch(err => {
-        // TODO Delete console.log
-        console.log('Error groups.js', err.response.data)
+      .catch(() => {
         commit('LOADING_GROUPS', false)
       })
   },

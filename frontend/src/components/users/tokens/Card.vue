@@ -141,8 +141,6 @@ export default {
   max-height: 100px;
   overflow: hidden;
   img {
-    width: 100px;
-    height: 100px;
     transition: .3s;
     &:hover {
       opacity: .8;

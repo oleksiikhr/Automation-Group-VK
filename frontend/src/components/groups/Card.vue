@@ -184,6 +184,7 @@ export default {
   max-height: 100px;
   overflow: hidden;
   img {
+    // FIXME Temporary width, height
     width: 100px;
     height: 100px;
     transition: .3s;

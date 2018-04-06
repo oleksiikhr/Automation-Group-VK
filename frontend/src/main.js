@@ -10,9 +10,37 @@ import axios from 'axios'
 import store from './store'
 import moment from 'moment'
 
-moment.locale('ru-RU')
-
+// Axios
 axios.defaults.baseURL = 'http://vk.local/api/'
+
+axios.interceptors.request.use((config) => {
+  const groupId = store.state.groups.selected.id || null
+  const userTokenId = store.state.userTokens.selected.id || null
+
+  switch (config.method) {
+    case 'get':
+      if (typeof config.params === 'undefined') {
+        config.params = {}
+      }
+      config.params.group_id = groupId
+      config.params.user_token_id = userTokenId
+      break
+    case 'put':
+    case 'patch':
+    case 'post':
+      // FIXME Delete console.log
+      console.log(config, config.data)
+      config.data.group_id = groupId
+      config.data.user_token_id = userTokenId
+      break
+  }
+
+  return config
+}, (err) => {
+  return Promise.reject(err)
+})
+
+moment.locale('ru-RU')
 
 Vue.use(ElementUI)
 
