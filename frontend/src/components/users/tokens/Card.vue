@@ -1,3 +1,7 @@
+<!--
+  EMIT:
+    @updated - updated info about this token
+-->
 <template>
   <div class="card-user-token">
     <div class="el-card">
@@ -7,7 +11,9 @@
         </div>
         <div class="right">
           <div class="time-block">
-            <span>{{ lastUsed }}</span>
+            <el-tooltip class="item" effect="dark" content="Последний запрос в ВК" placement="bottom">
+              <span>{{ lastUsed }}</span>
+            </el-tooltip>
             <el-button type="text" title="Обновить" icon="el-icon-refresh" @click="fetchUpdateUserToken()"
                        :loading="updateLoading" :disabled="storeLoading || updateLoading"
             />
@@ -26,7 +32,7 @@
           </div>
           <div class="bottom-right">
             <!-- TODO Edit, delete buttons -->
-            <el-button v-if="selectedUserToken.id !== userToken.id" size="mini" @click="setSelectedUserToken()">
+            <el-button v-if="!isSelected" size="mini" @click="setSelectedUserToken()">
               Выбрать
             </el-button>
           </div>
@@ -38,12 +44,17 @@
 
 <script>
 import moment from 'moment'
+import axios from 'axios'
 
 export default {
   props: {
     userToken: {
       type: Object,
       required: true
+    },
+    index: {
+      type: Number,
+      required: false
     }
   },
   data () {
@@ -60,13 +71,26 @@ export default {
     },
     storeLoading () {
       return this.$store.state.userTokens.isLoading
+    },
+    isSelected () {
+      return this.selectedUserToken.id === this.userToken.id
     }
   },
   methods: {
     fetchUpdateUserToken () {
       this.updateLoading = true
-      console.log('Update')
-      // TODO this.$store.commit('')
+
+      axios.get('users/tokens/' + this.userToken.id)
+        .then(res => {
+          if (this.isSelected) {
+            this.$store.dispatch('setSelectedUserToken', res.data)
+          }
+          this.$emit('updated', res.data, this.index)
+          this.updateLoading = false
+        })
+        .catch(() => {
+          this.updateLoading = false
+        })
     },
     setSelectedUserToken () {
       this.$store.dispatch('setSelectedUserToken', this.userToken)
@@ -159,7 +183,7 @@ export default {
     color: #333;
     > h2 {
       margin: 0 0 5px;
-      font-size: 22px;
+      font-size: 20px;
     }
     > p {
       font-size: smaller;

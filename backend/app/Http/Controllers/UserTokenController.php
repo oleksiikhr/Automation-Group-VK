@@ -27,12 +27,14 @@ class UserTokenController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        // TODO Temporary
-        return response()->json(UserToken::findOrFail($id));
+        $userToken = UserToken::with('user')->findOrFail($id);
+
+        return response()->json($userToken);
     }
 
     /**
