@@ -10,7 +10,10 @@ import axios from 'axios'
 import store from './store'
 import moment from 'moment'
 
-// Axios
+/*
+ * Axios
+ */
+
 axios.defaults.baseURL = 'http://vk.local/api/'
 
 axios.interceptors.request.use((config) => {
@@ -40,10 +43,28 @@ axios.interceptors.request.use((config) => {
   return Promise.reject(err)
 })
 
+/*
+ * Moment
+ */
+
 moment.locale('ru-RU')
 
-Vue.use(ElementUI)
+/*
+ * Router
+ */
 
+router.beforeEach((to, from, next) => {
+  store.dispatch('setActiveMenuItem', to.path)
+  window.scrollTo(0, 0)
+
+  next()
+})
+
+/*
+ * Other
+ */
+
+Vue.use(ElementUI)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

@@ -6,7 +6,7 @@
       </el-header>
       <el-container>
         <el-aside width>
-          <el-menu default-active="/" router>
+          <el-menu :default-active="activeMenuItem" router>
             <el-menu-item v-for="item in menu" :key="item.route" :index="item.route" :title="item.title">
               <i class="material-icons">{{ item.icon }}</i>
             </el-menu-item>
@@ -39,6 +39,11 @@ export default {
         { route: '/tags', icon: 'label', title: 'Теги' },
         { route: '/logs', icon: 'history', title: 'Логи' }
       ]
+    }
+  },
+  computed: {
+    activeMenuItem () {
+      return this.$store.state.template.activeMenuItem
     }
   }
 }
