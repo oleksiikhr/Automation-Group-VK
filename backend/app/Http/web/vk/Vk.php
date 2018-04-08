@@ -25,8 +25,8 @@ class Vk extends Web
     /**
      * Config request.
      *
-     * @param string  $token
-     * @param string  $lang
+     * @param string $token
+     * @param string $lang
      */
     public function __construct(string $token, string $lang = Language::Russian)
     {
@@ -37,9 +37,9 @@ class Vk extends Web
     /**
      * Send request to VK.
      *
-     * @param string  $method - API
-     * @param array   $params - parameters that the method takes
-     * @param string  $typeMethod - GET, POST, etc
+     * @param string $method - API
+     * @param array $params - parameters that the method takes
+     * @param string $typeMethod - GET, POST, etc
      *
      * @see https://vk.com/dev/methods
      *
@@ -75,7 +75,7 @@ class Vk extends Web
     /**
      * By URL filter standard images.
      *
-     * @param string  $image
+     * @param string $image
      *
      * @return string|null
      */

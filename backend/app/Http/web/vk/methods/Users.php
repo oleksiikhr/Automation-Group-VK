@@ -10,14 +10,16 @@ class Users extends Vk
     /**
      * Returns detailed information on users.
      *
-     * @param array        $userIds
-     * @param array|null   $fields - User fields to return
-     * @param null|string  $nameCase - nom, gen, dat, etc
+     * @param array|null $userIds
+     * @param array|null $fields - User fields to return
+     * @param null|string $nameCase - nom, gen, dat, etc
+     *
+     * @return object
+     *
+     * @throws \App\Http\web\vk\exceptions\VkApiException
      *
      * @see https://vk.com/dev/fields - User object
      * @see https://vk.com/dev/users.get - Method
-     *
-     * @return object
      */
     public function get(?array $userIds = null, ?array $fields = null, ?string $nameCase = NameCase::NOMINATIVE): object
     {

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\web\vk\exceptions\VkApiException;
 use App\Http\web\vk\methods\Account;
 use App\Http\web\vk\methods\Users;
-use App\Http\web\vk\Vk;
 use Illuminate\Http\Request;
+use App\Http\web\vk\Vk;
 use Carbon\Carbon;
 use App\UserToken;
 use App\User;
@@ -70,7 +71,7 @@ class UserTokenController extends Controller
             $vkUser = (new Users($request->token))->get(null, ['domain', 'photo_100'])->response[0];
             $bitMask = (new Account($request->token))->getAppPermissions()->response;
 
-        } catch (\Exception $e) {
+        } catch (VkApiException $e) {
             return response()->json($e->getMessage(), 422);
         }
 
@@ -79,7 +80,7 @@ class UserTokenController extends Controller
         ], [
             'first_name' => $vkUser->first_name,
             'last_name'  => $vkUser->last_name,
-            'photo_100'  => Vk::filterDefaultImages($vkUser->photo_100),
+            'photo'      => Vk::filterDefaultImages($vkUser->photo_100),
             'domain'     => $vkUser->domain
         ]);
 
@@ -92,10 +93,7 @@ class UserTokenController extends Controller
         $userToken->last_used = Carbon::now();
         $userToken->save();
 
-        return response()->json([
-            'message' => 'Токен добавлен',
-            'user_token' => $userToken
-        ]);
+        return response()->json($userToken);
     }
 
     /**

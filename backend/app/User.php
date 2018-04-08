@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -13,8 +13,30 @@ class User extends Authenticatable
     public $incrementing = false;
 
     protected $fillable = [
-        'id', 'domain', 'first_name', 'last_name', 'photo_100', 'is_muted', 'is_blocked',
+        'id', 'domain', 'first_name', 'last_name', 'photo', 'is_muted', 'is_blocked',
     ];
+
+    /**
+     * Get the user's image.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    public function getPhotoAttribute($value)
+    {
+        $url = env('APP_URL') . '/';
+
+        if ($this->getAttribute('is_blocked')) {
+            return $url . 'images/static/deactivated_100.png';
+        }
+
+        if (empty($value)) {
+            return $url . 'images/static/camera_100.png';
+        }
+
+        return $value;
+    }
 
     /* |----------------------------------------------------------------------------
      * | Relationship
