@@ -4,6 +4,7 @@
 -->
 <template>
   <div class="right-column user-tokens">
+    <!-- TODO get a token through a redirect from VK  -->
     <a @click="dialog = true" class="card">
       <i class="material-icons">add</i>
       <span>Добавить токен</span>

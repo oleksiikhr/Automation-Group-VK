@@ -1,5 +1,5 @@
 <template>
-  <div id="groups" class="view-content">
+  <div id="user-tokens" class="view-content">
     <div class="section-header">
       <h1>Токены пользователей</h1>
       <el-button class="refresh" size="mini" icon="el-icon-refresh" :loading="loading"
@@ -7,8 +7,11 @@
     </div>
     <el-row :gutter="10" justify="space-between">
       <el-col :md="18" class="main-content" v-loading="loading">
-        <card-user-token v-for="(userToken, index) in list" :key="userToken.id" :user-token="userToken"
-                         :index="index" @updated="handleUserTokenUpdated"/>
+        <template v-if="!loading">
+          <card-user-token v-for="(userToken, index) in list" :key="userToken.id" :user-token="userToken"
+                           :index="index" @updated="handleUserTokenUpdated"/>
+          <el-alert v-if="!haveItems" title="Токены отсутствуют" type="warning" class="no-content" show-icon />
+        </template>
       </el-col>
       <el-col :md="6" class="hidden-sm-and-down">
         <right-column @created="fetchUserTokens" />
@@ -34,6 +37,11 @@ export default {
   },
   mounted () {
     this.fetchUserTokens()
+  },
+  computed: {
+    haveItems () {
+      return this.list.length > 1
+    }
   },
   methods: {
     fetchUserTokens () {
