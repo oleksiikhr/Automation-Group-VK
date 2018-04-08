@@ -116,4 +116,8 @@ body {
     }
   }
 }
+
+.el-tooltip {
+  outline: 0;
+}
 </style>

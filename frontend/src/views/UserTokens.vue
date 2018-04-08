@@ -10,10 +10,10 @@
         <template v-if="!loading">
           <card-user-token v-for="(userToken, index) in list" :key="userToken.id" :user-token="userToken"
                            :index="index" @updated="handleUserTokenUpdated"/>
-          <el-alert v-if="!haveItems" title="Токены отсутствуют" type="warning" class="no-content" show-icon />
+          <el-alert v-if="!haveItems" title="Токены отсутствуют" type="warning" show-icon />
         </template>
       </el-col>
-      <el-col :md="6" class="hidden-sm-and-down">
+      <el-col :md="6">
         <right-column @created="fetchUserTokens" />
       </el-col>
     </el-row>
@@ -40,7 +40,7 @@ export default {
   },
   computed: {
     haveItems () {
-      return this.list.length > 1
+      return this.list.length > 0
     }
   },
   methods: {

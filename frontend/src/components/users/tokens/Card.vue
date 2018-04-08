@@ -21,10 +21,8 @@
         </div>
       </div>
       <div class="body">
-        <!-- FIXME Default photo (local static) -->
         <!-- FIXME Full name -->
-        <img :src="userToken.user.photo_100 ? userToken.user.photo_100 : 'https://vk.com/images/camera_100.png'"
-             :title="userToken.user.first_name" :alt="userToken.user.first_name">
+        <img :src="userToken.user.photo" :title="userToken.user.first_name" :alt="userToken.user.first_name">
         <div class="content">
           <div>
             <h2>{{ userToken.name }}</h2>
@@ -195,5 +193,9 @@ export default {
   .bottom-right {
     text-align: right;
   }
+}
+
+.item {
+  cursor: context-menu;
 }
 </style>

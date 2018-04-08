@@ -4,7 +4,7 @@
       <router-link to="/user/tokens" class="h-card-group users">
         <template v-if="userToken.id">
           <!-- FIXME Full name -->
-          <img :src="userToken.user.photo_100" :alt="userToken.user.last_name" :title="userToken.user.last_name">
+          <img :src="userToken.user.photo" :alt="userToken.user.last_name" :title="userToken.user.last_name">
           <div class="h-name">{{ userToken.name }}</div>
           <a class="h-clear" @click.prevent="clearSelectedUserToken()" title="Убрать"></a>
         </template>
