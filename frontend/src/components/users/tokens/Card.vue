@@ -28,12 +28,41 @@
             <h2>{{ userToken.name }}</h2>
             <p>{{ userToken.description }}</p>
           </div>
-          <div class="bottom-right">
-            <!-- TODO Edit, delete buttons -->
-            <el-button v-if="!isSelected" size="mini" @click="setSelectedUserToken()">
-              Выбрать
-            </el-button>
-          </div>
+        </div>
+      </div>
+      <div class="permissions">
+        <!-- TODO Temporary (need component - parse bitmask) -->
+        <div class="tag">notify</div>
+        <div class="tag">friends</div>
+        <div class="tag">photos</div>
+        <div class="tag">audio</div>
+        <div class="tag">video</div>
+        <div class="tag">stories</div>
+        <div class="tag">pages</div>
+        <div class="tag">status</div>
+        <div class="tag">notes</div>
+        <div class="tag">messages</div>
+        <div class="tag">wall</div>
+        <div class="tag">ads</div>
+        <div class="tag">offline</div>
+        <div class="tag">docs</div>
+        <div class="tag">groups</div>
+        <div class="tag">notifications</div>
+        <div class="tag">stats</div>
+        <div class="tag">email</div>
+        <div class="tag">market</div>
+      </div>
+      <div class="buttons">
+        <!-- TODO Click handler -->
+        <el-button type="danger" size="mini" icon="el-icon-delete" />
+        <div>
+          <!-- TODO Click handler -->
+          <el-button type="primary" size="mini">
+            Редактировать
+          </el-button>
+          <el-button v-if="!isSelected" type="info" size="mini" @click="setSelectedUserToken()">
+            Выбрать
+          </el-button>
         </div>
       </div>
     </div>
@@ -102,7 +131,7 @@ export default {
   margin-bottom: 20px;
   > .el-card {
     border: 1px solid #e6e6e6;
-    padding: 10px;
+    margin-bottom: 20px;
     overflow: auto;
   }
 }
@@ -113,10 +142,24 @@ export default {
   justify-content: space-between;
   font-size: 14px;
   border-bottom: 1px solid #e6e6e6;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
+  padding: 6px 10px;
+  background: #f9f9f9;
   i {
     font-size: 19px;
+  }
+}
+
+.body {
+  display: flex;
+  overflow: hidden;
+  padding: 10px;
+  img {
+    transition: .3s;
+    max-height: 100px;
+    max-width: 100px;
+    &:hover {
+      opacity: .8;
+    }
   }
 }
 
@@ -158,18 +201,6 @@ export default {
   }
 }
 
-.body {
-  display: flex;
-  max-height: 100px;
-  overflow: hidden;
-  img {
-    transition: .3s;
-    &:hover {
-      opacity: .8;
-    }
-  }
-}
-
 .content {
   display: flex;
   width: 100%;
@@ -184,18 +215,40 @@ export default {
       font-size: 20px;
     }
     > p {
-      font-size: smaller;
+      max-height: 71px;
       text-decoration: none;
-      margin: 0;
       color: #8a8a8a;
+      margin: 0;
+      overflow: auto;
     }
   }
-  .bottom-right {
-    text-align: right;
+}
+
+.buttons {
+  display: flex;
+  padding: 0 10px;
+  justify-content: space-between;
+  button {
+    margin: 10px 0;
   }
 }
 
 .item {
   cursor: context-menu;
+}
+
+.permissions {
+  border: 1px solid #e7e7e7;
+  border-left: 0;
+  border-right: 0;
+  color: #696969;
+  background: #f9f9f9;
+  padding: 5px 10px;
+  cursor: context-menu;
+}
+
+.tag {
+  display: inline-block;
+  margin: 2px;
 }
 </style>

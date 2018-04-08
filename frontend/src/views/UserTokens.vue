@@ -57,7 +57,7 @@ export default {
         })
     },
     handleUserTokenUpdated (val, index) {
-      this.list[index] = val
+      this.$set(this.list, index, val)
     }
   }
 }
