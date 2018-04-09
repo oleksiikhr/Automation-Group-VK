@@ -31,26 +31,9 @@
         </div>
       </div>
       <div class="permissions">
-        <!-- TODO Temporary (need component - parse bitmask) -->
-        <div class="tag">notify</div>
-        <div class="tag">friends</div>
-        <div class="tag">photos</div>
-        <div class="tag">audio</div>
-        <div class="tag">video</div>
-        <div class="tag">stories</div>
-        <div class="tag">pages</div>
-        <div class="tag">status</div>
-        <div class="tag">notes</div>
-        <div class="tag">messages</div>
-        <div class="tag">wall</div>
-        <div class="tag">ads</div>
-        <div class="tag">offline</div>
-        <div class="tag">docs</div>
-        <div class="tag">groups</div>
-        <div class="tag">notifications</div>
-        <div class="tag">stats</div>
-        <div class="tag">email</div>
-        <div class="tag">market</div>
+        <span class="tag" v-for="(permission, index) in permissions" :key="index">
+          {{ permission }}
+        </span>
       </div>
       <div class="buttons">
         <!-- TODO Click handler -->
@@ -70,6 +53,7 @@
 </template>
 
 <script>
+import { parseFromMask } from '../../../helpers/permission'
 import moment from 'moment'
 import axios from 'axios'
 
@@ -101,6 +85,9 @@ export default {
     },
     isSelected () {
       return this.selectedUserToken.id === this.userToken.id
+    },
+    permissions () {
+      return parseFromMask(this.userToken.mask)
     }
   },
   methods: {

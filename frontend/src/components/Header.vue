@@ -71,8 +71,8 @@ export default {
 .h-card-group {
   display: flex;
   flex-direction: row;
-  max-width: 250px;
-  min-width: 150px;
+  max-width: 170px;
+  min-width: 120px;
   background: #fff;
   height: 35px;
   align-items: center;
