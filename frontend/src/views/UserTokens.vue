@@ -14,7 +14,7 @@
         </template>
       </el-col>
       <el-col :md="6">
-        <right-column @created="fetchUserTokens" />
+        <right-column @created="fetchUserTokens" @added="handleAddedToken" />
       </el-col>
     </el-row>
   </div>
@@ -58,6 +58,9 @@ export default {
     },
     handleUserTokenUpdated (val, index) {
       this.$set(this.list, index, val)
+    },
+    handleAddedToken () {
+      this.fetchUserTokens()
     }
   }
 }
