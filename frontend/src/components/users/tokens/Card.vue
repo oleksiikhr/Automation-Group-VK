@@ -1,6 +1,8 @@
 <!--
   EMIT:
     @updated - updated info about this token
+    @edited - edit from dialog
+    @error - error from dialog
 -->
 <template>
   <div class="card-user-token">
@@ -15,7 +17,7 @@
               <span>{{ lastUsed }}</span>
             </el-tooltip>
             <el-button type="text" title="Обновить" icon="el-icon-refresh" @click="fetchUpdateUserToken()"
-                       :loading="updateLoading" :disabled="storeLoading || updateLoading"
+                       :loading="loadings.update" :disabled="storeLoading || loadings.update"
             />
           </div>
         </div>
@@ -39,8 +41,7 @@
         <!-- TODO Click handler -->
         <el-button type="danger" size="mini" icon="el-icon-delete" />
         <div>
-          <!-- TODO Click handler -->
-          <el-button type="primary" size="mini">
+          <el-button type="primary" size="mini" @click="dialogs.edit = !dialogs.edit">
             Редактировать
           </el-button>
           <el-button v-if="!isSelected" type="info" size="mini" @click="setSelectedUserToken()">
@@ -49,15 +50,21 @@
         </div>
       </div>
     </div>
+
+    <edit-dialog :dialog="dialogs.edit" :user-token="userToken" @edited="handleEdited" @error="handleError" />
   </div>
 </template>
 
 <script>
 import { parseFromMask } from '../../../helpers/permission'
+import EditDialog from './dialogs/Edit'
 import moment from 'moment'
 import axios from 'axios'
 
 export default {
+  components: {
+    EditDialog
+  },
   props: {
     userToken: {
       type: Object,
@@ -70,7 +77,12 @@ export default {
   },
   data () {
     return {
-      updateLoading: false
+      dialogs: {
+        edit: false
+      },
+      loadings: {
+        update: false
+      }
     }
   },
   computed: {
@@ -92,7 +104,7 @@ export default {
   },
   methods: {
     fetchUpdateUserToken () {
-      this.updateLoading = true
+      this.loadings.update = true
 
       axios.get('users/tokens/' + this.userToken.id)
         .then(res => {
@@ -100,14 +112,21 @@ export default {
             this.$store.dispatch('setSelectedUserToken', res.data)
           }
           this.$emit('updated', res.data, this.index)
-          this.updateLoading = false
+          this.loadings.update = false
         })
         .catch(() => {
-          this.updateLoading = false
+          this.loadings.update = false
+          this.$emit('error', val)
         })
     },
     setSelectedUserToken () {
       this.$store.dispatch('setSelectedUserToken', this.userToken)
+    },
+    handleEdited (val) {
+      this.$emit('edited', val)
+    },
+    handleError (val) {
+      this.$emit('error', val)
     }
   }
 }

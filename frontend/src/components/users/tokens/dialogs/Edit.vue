@@ -1,17 +1,14 @@
 <!--
   EMIT:
-    @added - added a new user token
+    @edited - edited the user token
     @error - error from server
 -->
 <template>
-  <el-dialog title="Добавить токен пользователя" :visible.sync="inDialog" width="40%">
+  <el-dialog title="Редактирование токена" :visible.sync="inDialog" width="40%">
     <div>
       <el-form :model="form" label-width="100px">
         <el-form-item label="Название">
           <el-input v-model="form.name" />
-        </el-form-item>
-        <el-form-item label="Токен">
-          <el-input v-model="form.token" />
         </el-form-item>
         <el-form-item label="Описание">
           <el-input v-model="form.description" type="textarea" />
@@ -20,7 +17,7 @@
     </div>
     <span slot="footer" class="dialog-footer">
         <el-button @click="inDialog = false">Отмена</el-button>
-        <el-button type="primary" @click="fetchAdd()" :loading="loading" :disabled="loading">
+        <el-button type="primary" @click="fetchEdit()" :loading="loading" :disabled="loading">
           Добавить
         </el-button>
       </span>
@@ -35,6 +32,10 @@ export default {
     dialog: {
       type: Boolean,
       required: true
+    },
+    userToken: {
+      type: Object,
+      required: true
     }
   },
   data () {
@@ -45,13 +46,13 @@ export default {
     }
   },
   methods: {
-    fetchAdd () {
-      this.loading = true
+    fetchEdit () {
+      this.loading = false
 
-      axios.post('users/tokens', this.form)
+      axios.put('users/tokens/' + this.userToken.id, this.form)
         .then(res => {
-          this.$emit('added', res.data)
-          this.form = {}
+          this.$emit('edited', res.data)
+          this.inDialog = false
           this.loading = false
         })
         .catch(err => {
@@ -62,6 +63,7 @@ export default {
   },
   watch: {
     dialog () {
+      this.form = JSON.parse(JSON.stringify(this.userToken))
       this.inDialog = true
     }
   }
