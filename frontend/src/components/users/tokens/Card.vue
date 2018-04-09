@@ -1,7 +1,6 @@
 <!--
   EMIT:
     @updated - updated info about this token
-    @edited - edit from dialog
     @error - error from dialog
 -->
 <template>
@@ -51,7 +50,7 @@
       </div>
     </div>
 
-    <edit-dialog :dialog="dialogs.edit" :user-token="userToken" @edited="handleEdited" @error="handleError" />
+    <edit-dialog :dialog="dialogs.edit" :user-token="userToken" @edited="handleUpdated" @error="handleError" />
   </div>
 </template>
 
@@ -114,16 +113,16 @@ export default {
           this.$emit('updated', res.data, this.index)
           this.loadings.update = false
         })
-        .catch(() => {
+        .catch(err => {
           this.loadings.update = false
-          this.$emit('error', val)
+          this.$emit('error', err.response.data)
         })
     },
     setSelectedUserToken () {
       this.$store.dispatch('setSelectedUserToken', this.userToken)
     },
-    handleEdited (val) {
-      this.$emit('edited', val)
+    handleUpdated (val) {
+      this.$emit('updated', val, this.index)
     },
     handleError (val) {
       this.$emit('error', val)

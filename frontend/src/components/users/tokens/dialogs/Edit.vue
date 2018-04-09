@@ -51,7 +51,7 @@ export default {
 
       axios.put('users/tokens/' + this.userToken.id, this.form)
         .then(res => {
-          this.$emit('edited', res.data)
+          this.$emit('edited', this.form)
           this.inDialog = false
           this.loading = false
         })
