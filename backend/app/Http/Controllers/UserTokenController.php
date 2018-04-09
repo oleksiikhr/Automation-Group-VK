@@ -48,7 +48,17 @@ class UserTokenController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name'        => 'nullable|string|max:' . self::MAX_LEN_STRING_DB,
+            'description' => 'nullable|string|max:600',
+        ]);
+
+        $userToken = UserToken::findOrFail($id);
+        $userToken->name = $request->exists('name') ? $request->name : $userToken->name;
+        $userToken->description = $request->exists('description') ? $request->description : $userToken->description;
+        $userToken->save();
+
+        return response()->json($userToken);
     }
 
     /**
