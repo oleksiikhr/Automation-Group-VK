@@ -3,8 +3,7 @@
     <div class="h-panel">
       <router-link to="/user/tokens" class="h-card-group users">
         <template v-if="userToken.id">
-          <!-- FIXME Full name -->
-          <img :src="userToken.user.photo" :alt="userToken.user.last_name" :title="userToken.user.last_name">
+          <img :src="userToken.user.photo" :alt="fullName" :title="fullName">
           <div class="h-name">{{ userToken.name }}</div>
           <a class="h-clear" @click.prevent="clearSelectedUserToken()" title="Убрать"></a>
         </template>
@@ -15,7 +14,6 @@
       </router-link>
       <router-link to="/groups" class="h-card-group groups">
         <template v-if="group.id">
-          <!-- FIXME Default image -->
           <img :src="group.photo_100" :alt="group.name" :title="group.name">
           <div class="h-name">{{ group.name }}</div>
           <a class="h-clear" @click.prevent="clearSelectedGroup()" title="Убрать"></a>
@@ -33,6 +31,8 @@
 </template>
 
 <script>
+import { fullName } from '../helpers/user'
+
 export default {
   computed: {
     group () {
@@ -40,6 +40,9 @@ export default {
     },
     userToken () {
       return this.$store.state.userTokens.selected
+    },
+    fullName () {
+      return fullName(this.userToken.user)
     }
   },
   methods: {

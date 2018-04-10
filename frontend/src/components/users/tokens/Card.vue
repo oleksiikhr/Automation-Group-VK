@@ -22,8 +22,7 @@
         </div>
       </div>
       <div class="body">
-        <!-- FIXME Full name -->
-        <img :src="userToken.user.photo" :title="userToken.user.first_name" :alt="userToken.user.first_name">
+        <img :src="userToken.user.photo" :title="fullName" :alt="fullName">
         <div class="content">
           <div>
             <h2>{{ userToken.name }}</h2>
@@ -56,6 +55,7 @@
 
 <script>
 import { parseFromMask } from '../../../helpers/permission'
+import { fullName } from '../../../helpers/user'
 import EditDialog from './dialogs/Edit'
 import moment from 'moment'
 import axios from 'axios'
@@ -80,7 +80,7 @@ export default {
         edit: false
       },
       loadings: {
-        update: false
+        update: false,
       }
     }
   },
@@ -99,6 +99,9 @@ export default {
     },
     permissions () {
       return parseFromMask(this.userToken.mask)
+    },
+    fullName () {
+      return fullName(this.userToken.user)
     }
   },
   methods: {
