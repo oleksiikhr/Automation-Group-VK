@@ -2,6 +2,7 @@
   EMIT:
     @updated - updated info about this token
     @error - error from dialog
+    @deleted - delete this token
 -->
 <template>
   <div class="card-user-token">
@@ -36,8 +37,7 @@
         </span>
       </div>
       <div class="buttons">
-        <!-- TODO Click handler -->
-        <el-button type="danger" size="mini" icon="el-icon-delete" />
+        <el-button type="danger" size="mini" icon="el-icon-delete" @click="dialogs.delete = !dialogs.delete" />
         <div>
           <el-button type="primary" size="mini" @click="dialogs.edit = !dialogs.edit">
             Редактировать
@@ -50,19 +50,21 @@
     </div>
 
     <edit-dialog :dialog="dialogs.edit" :user-token="userToken" @edited="handleUpdated" @error="handleError" />
+    <delete-dialog :dialog="dialogs.delete" :user-token="userToken" @deleted="handleDeleted" @error="handleError" />
   </div>
 </template>
 
 <script>
 import { parseFromMask } from '../../../helpers/permission'
 import { fullName } from '../../../helpers/user'
+import DeleteDialog from './dialogs/Delete'
 import EditDialog from './dialogs/Edit'
 import moment from 'moment'
 import axios from 'axios'
 
 export default {
   components: {
-    EditDialog
+    EditDialog, DeleteDialog
   },
   props: {
     userToken: {
@@ -77,10 +79,11 @@ export default {
   data () {
     return {
       dialogs: {
-        edit: false
+        edit: false,
+        delete: false
       },
       loadings: {
-        update: false,
+        update: false
       }
     }
   },
@@ -126,6 +129,9 @@ export default {
     },
     handleUpdated (val) {
       this.$emit('updated', val, this.index)
+    },
+    handleDeleted (val) {
+      this.$emit('deleted', val, this.index)
     },
     handleError (val) {
       this.$emit('error', val)

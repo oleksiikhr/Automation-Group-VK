@@ -45,12 +45,20 @@ export default {
       loading: false
     }
   },
+  computed: {
+    isSelected () {
+      return this.$store.state.userTokens.selected.id === this.userToken.id
+    }
+  },
   methods: {
     fetchEdit () {
       this.loading = false
 
       axios.put('users/tokens/' + this.userToken.id, this.form)
         .then(res => {
+          if (this.isSelected) {
+            this.$store.dispatch('setSelectedUserToken', this.form)
+          }
           this.$emit('edited', this.form)
           this.inDialog = false
           this.loading = false

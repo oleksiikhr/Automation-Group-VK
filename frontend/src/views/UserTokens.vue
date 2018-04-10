@@ -9,7 +9,7 @@
       <el-col :md="18" class="main-content" v-loading="loading">
         <template v-if="!loading">
           <card-user-token v-for="(userToken, index) in list" :key="userToken.id" :user-token="userToken"
-                           :index="index" @updated="handleUserTokenUpdated"/>
+                           :index="index" @updated="handleUserTokenUpdated" @deleted="handleUserTokenDeleted"/>
           <el-alert v-if="!haveItems" title="Токены отсутствуют" type="warning" show-icon />
         </template>
       </el-col>
@@ -58,6 +58,9 @@ export default {
     },
     handleUserTokenUpdated (val, index) {
       this.$set(this.list, index, val)
+    },
+    handleUserTokenDeleted (val, index) {
+      this.list.splice(index, 1)
     },
     handleAddedToken () {
       this.fetchUserTokens()
