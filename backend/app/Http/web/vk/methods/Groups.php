@@ -16,7 +16,7 @@ class Groups extends Vk
      *
      * @throws \App\Http\web\vk\exceptions\VkApiException
      *
-     * @see https://vk.com/dev/fields_groups - Group object
+     * @see https://vk.com/dev/objects/group - Group object
      * @see https://vk.com/dev/groups.getById - Method
      */
     public function getById(array $groupIds, ?array $fields = null): object

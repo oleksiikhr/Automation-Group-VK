@@ -12,7 +12,8 @@ class Group extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'secret_key', 'deactivated',
+        'id', 'name', 'description', 'screen_name', 'photo_100', 'members_count',
+        'is_closed', 'deactivated',
     ];
 
     /* |----------------------------------------------------------------------------

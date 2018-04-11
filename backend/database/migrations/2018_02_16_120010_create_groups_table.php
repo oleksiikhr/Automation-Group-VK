@@ -21,10 +21,10 @@ class CreateGroupsTable extends Migration
             $table->string('photo_100')->nullable();
             $table->string('secret_key')->nullable();
             $table->boolean('has_secret_key')->default(0);
-            $table->boolean('deactivated')->default(0);
-            $table->integer('vk_users')->default(0);
-            $table->boolean('vk_closed')->default(0);
-            $table->boolean('vk_blocked')->default(0);
+            $table->boolean('is_sleep')->default(0);
+            $table->unsignedInteger('members_count')->default(0);
+            $table->unsignedTinyInteger('is_closed')->default(0);
+            $table->string('deactivated')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

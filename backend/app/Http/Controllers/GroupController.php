@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Group;
-use App\UserToken;
-use Illuminate\Http\Request;
+use App\Http\web\vk\exceptions\VkApiException;
 use App\Http\web\vk\methods\Groups;
+use Illuminate\Http\Request;
+use App\UserToken;
+use App\Group;
 
 class GroupController extends Controller
 {
@@ -55,17 +56,26 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'id'       => 'required|integer|min:1',
-            'token_id' => 'required|integer|min:1'
+            'id'            => 'required|integer|min:1',
+            'user_token_id' => 'required|integer|min:1'
         ]);
 
-        $userToken = UserToken::findOrFail($request->token_id);
+        $userToken = UserToken::findOrFail($request->user_token_id);
 
-        $response = (new Groups($userToken->token))->getById($request->id);
+        try {
+            $response = (new Groups($userToken->token))
+                ->getById([$request->id], [
+                    'description', 'members_count'
+                ])
+                ->response[0];
+        } catch (VkApiException $e) {
+            return response()->json($e->getMessage(), 422);
+        }
 
-        // TODO Fill DB.
+        $group = new Group((array) $response);
+        $group->save();
 
-        return response()->json($response);
+        return response()->json($group);
     }
 
     /**
