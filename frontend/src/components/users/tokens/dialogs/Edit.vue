@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     fetchEdit () {
-      this.loading = false
+      this.loading = true
 
       axios.put('users/tokens/' + this.userToken.id, this.form)
         .then(res => {

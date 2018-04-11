@@ -48,16 +48,15 @@ export default {
   methods: {
     fetchCreateGroup () {
       // TODO parse: create.form.input (get id from link*)
-      let id
+      // TODO Temporary
+      let id = Number(this.create.form.input)
 
       this.create.loading = true
 
       axios.post('groups', {
-        id: id,
-        token_id: this.userToken.id
+        id: id
       })
         .then(res => {
-          console.log(res.data)
           this.$emit('created', res.data)
           this.create.dialog = false
           this.create.loading = false

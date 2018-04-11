@@ -52,6 +52,7 @@ export default {
         .then(res => {
           this.$emit('added', res.data)
           this.form = {}
+          this.inDialog = false
           this.loading = false
         })
         .catch(err => {
