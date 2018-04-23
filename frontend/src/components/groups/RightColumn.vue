@@ -1,42 +1,30 @@
 <!--
   EMIT:
-    @created - added new group (response from the server)
+    @added - added a new group
+    @error - error from server
 -->
 <template>
   <div class="right-column groups">
-    <a @click="create.dialog = true" class="card">
+    <a @click="dialogs.add = !dialogs.add" class="card">
       <i class="material-icons">add</i>
       <span>Добавить группу</span>
     </a>
 
-    <!-- DIALOGS -->
-
-    <el-dialog title="Добавить группу" :visible.sync="create.dialog" width="40%">
-      <span>
-        <el-input placeholder="ID, ссылка на группу" v-model="create.form.input" />
-      </span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="create.dialog = false">Отмена</el-button>
-        <el-button type="primary" @click="fetchCreateGroup()" :loading="create.loading" :disabled="create.loading">
-          Добавить
-        </el-button>
-      </span>
-    </el-dialog>
+    <add-dialog :dialog="dialogs.add" @added="handleAdded" @error="handleError" />
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import AddDialog from './dialogs/Add'
 
 export default {
+  components: {
+    AddDialog
+  },
   data () {
     return {
-      create: {
-        dialog: false,
-        loading: false,
-        form: {
-          input: ''
-        }
+      dialogs: {
+        add: false
       }
     }
   },
@@ -46,24 +34,11 @@ export default {
     }
   },
   methods: {
-    fetchCreateGroup () {
-      // TODO parse: create.form.input (get id from link*)
-      // TODO Temporary
-      let id = Number(this.create.form.input)
-
-      this.create.loading = true
-
-      axios.post('groups', {
-        id: id
-      })
-        .then(res => {
-          this.$emit('created', res.data)
-          this.create.dialog = false
-          this.create.loading = false
-        })
-        .catch(() => {
-          this.create.loading = false
-        })
+    handleAdded (val) {
+      this.$emit('added', val)
+    },
+    handleError (val) {
+      this.$emit('error', val)
     }
   }
 }

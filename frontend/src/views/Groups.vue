@@ -13,7 +13,7 @@
         </template>
       </el-col>
       <el-col :md="6">
-        <right-column />
+        <right-column @added="fetchGroups" />
       </el-col>
     </el-row>
   </div>
