@@ -10,7 +10,7 @@
           <div class="time-block">
             <span>{{ updatedAt }}</span>
             <el-button type="text" title="Обновить" icon="el-icon-refresh" @click="fetchUpdateGroup()"
-                       :loading="updateLoading" :disabled="groupsLoading || updateLoading"
+                       :loading="loadings.update" :disabled="groupsLoading || loadings.update"
             />
           </div>
           <el-button type="text" :class="'refresh deactivated ' + (group.deactivated ? 'on' : 'off')"
@@ -65,7 +65,9 @@ export default {
   },
   data () {
     return {
-      updateLoading: false,
+      loadings: {
+        update: false
+      },
       statusLoading: false
     }
   },
@@ -103,7 +105,7 @@ export default {
   margin-bottom: 20px;
   > .el-card {
     border: 1px solid #e6e6e6;
-    padding: 10px;
+    margin-bottom: 20px;
     overflow: auto;
   }
 }
@@ -114,10 +116,24 @@ export default {
   justify-content: space-between;
   font-size: 14px;
   border-bottom: 1px solid #e6e6e6;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
+  padding: 6px 10px;
+  background: #f9f9f9;
   i {
     font-size: 19px;
+  }
+}
+
+.body {
+  display: flex;
+  overflow: hidden;
+  padding: 10px;
+  img {
+    transition: .3s;
+    max-height: 100px;
+    max-width: 100px;
+    &:hover {
+      opacity: .8;
+    }
   }
 }
 
@@ -179,21 +195,6 @@ export default {
   }
 }
 
-.body {
-  display: flex;
-  max-height: 100px;
-  overflow: hidden;
-  img {
-    // FIXME Temporary width, height
-    width: 100px;
-    height: 100px;
-    transition: .3s;
-    &:hover {
-      opacity: .8;
-    }
-  }
-}
-
 .content {
   display: flex;
   width: 100%;
@@ -204,8 +205,8 @@ export default {
     text-decoration: none;
     color: #333;
     > h2 {
-      margin: 0 0 3px;
-      font-size: 22px;
+      margin: 0 0 5px;
+      font-size: 20px;
     }
     &:hover {
       text-decoration: underline;

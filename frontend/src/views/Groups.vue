@@ -6,33 +6,22 @@
                  :disabled="storeLoading" @click="fetchGroups()" />
     </div>
     <el-row :gutter="10" justify="space-between">
-      <el-col :md="18">
-        <card-group v-for="group in groups" :key="group.id" :group="group" />
+      <el-col :md="18" class="main-content" v-loading="storeLoading">
+        <template v-if="!storeLoading">
+          <card-group v-for="group in groups" :key="group.id" :group="group" />
+          <el-alert v-if="!haveItems" title="Токены отсутствуют" type="warning" show-icon />
+        </template>
       </el-col>
-      <!-- TODO Widget component for Groups.vue -->
-      <el-col :md="6" class="hidden-sm-and-down">
+      <el-col :md="6">
         <right-column />
       </el-col>
     </el-row>
-
-    <!-- DIALOGS -->
-
-    <el-dialog title="Добавить группу" :visible.sync="dialogCreate" width="40%">
-      <span>
-        <el-input placeholder="ID, ссылка на группу" v-model="groupLink" />
-      </span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogCreate = false">Отмена</el-button>
-        <el-button type="primary" @click="fetchCreateGroup()" :loading="loading" :disabled="loading">Добавить</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import RightColumn from '../components/groups/RightColumn'
 import CardGroup from '../components/groups/Card'
-import axios from 'axios'
 
 export default {
   components: {
@@ -40,9 +29,7 @@ export default {
   },
   data () {
     return {
-      groupLink: '',
-      loading: false,
-      dialogCreate: false
+      groupLink: ''
     }
   },
   mounted () {
@@ -54,25 +41,12 @@ export default {
     },
     storeLoading () {
       return this.$store.state.groups.loading
+    },
+    haveItems () {
+      return this.groups.length > 0
     }
   },
   methods: {
-    fetchCreateGroup () {
-      this.loading = true
-
-      // TODO Parse id from link, etc (this.groupLink)
-      // TODO UserTokenID param
-
-      axios.post('groups', {
-        group_id: this.groupLink
-      })
-        .then(res => {
-          this.loading = false
-        })
-        .catch(() => {
-          this.loading = false
-        })
-    },
     fetchGroups () {
       this.$store.dispatch('fetchGroups')
     }
@@ -81,5 +55,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.main-content {
+  min-height: 200px;
+}
 </style>
