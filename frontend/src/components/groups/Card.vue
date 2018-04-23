@@ -4,7 +4,7 @@
       <div class="header">
         <div class="left" title="Количество пользователей">
           <i class="material-icons">people_outline</i>
-          <span>{{ group.vk_users }}</span>
+          <span>{{ group.members_count }}</span>
         </div>
         <div class="right">
           <div class="time-block">

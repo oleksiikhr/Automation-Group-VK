@@ -115,7 +115,8 @@ class UserTokenController extends Controller
      */
     public function destroy($id)
     {
-        // TODO Temporary
-        return response()->json(UserToken::destroy($id));
+        $destroyed = UserToken::destroy($id);
+
+        return response()->json($destroyed);
     }
 }
