@@ -12,9 +12,31 @@ class Group extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'id', 'name', 'description', 'screen_name', 'photo_100', 'members_count',
+        'id', 'name', 'description', 'screen_name', 'photo', 'members_count',
         'is_closed', 'deactivated',
     ];
+
+    /**
+     * Get the group image.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    public function getPhotoAttribute($value)
+    {
+        $url = env('APP_URL') . '/';
+
+        if ($this->getAttribute('deactivated')) {
+            return $url . 'images/static/deactivated_100.png';
+        }
+
+        if (empty($value)) {
+            return $url . 'images/static/camera_100.png'; // TODO Community image
+        }
+
+        return $value;
+    }
 
     /* |----------------------------------------------------------------------------
      * | Relationship

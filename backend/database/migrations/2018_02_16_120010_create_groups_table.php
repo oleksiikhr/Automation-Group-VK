@@ -18,7 +18,7 @@ class CreateGroupsTable extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('screen_name')->nullable();
-            $table->string('photo_100')->nullable();
+            $table->string('photo')->nullable();
             $table->string('secret_key')->nullable();
             $table->boolean('has_secret_key')->default(0);
             $table->boolean('is_sleep')->default(0);

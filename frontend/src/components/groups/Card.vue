@@ -2,7 +2,7 @@
   <div class="card-group">
     <div class="el-card">
       <div class="header">
-        <div class="left" title="Количество пользователей">
+        <div class="left" title="Количество групп">
           <i class="material-icons">people_outline</i>
           <span>{{ group.members_count }}</span>
         </div>
@@ -13,8 +13,8 @@
                        :loading="loadings.update" :disabled="groupsLoading || loadings.update"
             />
           </div>
-          <el-button type="text" :class="'refresh deactivated ' + (group.deactivated ? 'on' : 'off')"
-                     :title="group.deactivated ? 'Активировать' : 'Деативировать'" :loading="statusLoading"
+          <el-button type="text" :class="'refresh deactivated ' + (group.is_sleep ? 'on' : 'off')"
+                     :title="group.is_sleep ? 'Активировать' : 'Деативировать'" :loading="statusLoading"
                      @click="fetchChangeStatusGroup()" :disabled="groupsLoading || statusLoading"
           />
         </div>
@@ -22,7 +22,7 @@
       <div class="body">
         <!-- FIXME Default photo (local static) -->
         <router-link :to="'group/' + group.id">
-          <img :src="group.photo_100 ? group.photo_100 : 'https://vk.com/images/camera_100.png'"
+          <img :src="group.photo ? group.photo : 'https://vk.com/images/camera_100.png'"
                :title="group.name" :alt="group.name">
         </router-link>
         <div class="content">
@@ -36,11 +36,11 @@
             </a>
           </div>
           <div class="bottom-right">
-            <el-tag v-if="group.vk_blocked" type="danger">Заблокировано</el-tag>
+            <el-tag v-if="group.deactivated" type="danger">{{ group.deactivated }}</el-tag>
             <template v-else>
-              <el-tag :type="group.vk_closed ? 'danger' : 'success'" size="medium"
-                      :title="(group.vk_closed ? 'Закрытая' : 'Открытая') + ' группа'">
-                {{ group.vk_closed ? 'Закрыто' : 'Открыто' }}
+              <el-tag :type="group.is_closed ? 'danger' : 'success'" size="medium"
+                      :title="(group.is_closed ? 'Закрытая' : 'Открытая') + ' группа'">
+                {{ group.is_closed ? 'Закрыто' : 'Открыто' }}
               </el-tag>
               <el-button v-if="selectedGroup.id !== group.id" size="mini" @click="setSelectedGroup()">
                 Выбрать
@@ -86,7 +86,7 @@ export default {
     fetchChangeStatusGroup () {
       this.statusLoading = true
       console.log('Change status')
-      // TODO this.$store.commit('')
+      // TODO this.$store.commit('') is_sleep
     },
     fetchUpdateGroup () {
       this.updateLoading = true

@@ -9,7 +9,7 @@
       <el-col :md="18" class="main-content" v-loading="storeLoading">
         <template v-if="!storeLoading">
           <card-group v-for="group in groups" :key="group.id" :group="group" />
-          <el-alert v-if="!haveItems" title="Токены отсутствуют" type="warning" show-icon />
+          <el-alert v-if="!haveItems" title="Группы отсутствуют" type="warning" show-icon />
         </template>
       </el-col>
       <el-col :md="6">
