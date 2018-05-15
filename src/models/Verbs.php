@@ -10,6 +10,8 @@ class Verbs extends DB
     const TABLE = 'verbs';
 
     /**
+     * Get records in random order.
+     *
      * @param int $count
      *
      * @return array
