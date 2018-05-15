@@ -1,1 +1,17 @@
-/.idea
+# phpstorm project files
+.idea
+
+# Windows thumbnail cache
+Thumbs.db
+
+# Composer vendor dir
+/vendor
+
+# Pictures (img files).
+/resources
+
+# Passwords.
+/configs/defines.php
+
+# Hide IP
+.htaccess

@@ -1,0 +1,26 @@
+{
+  "name": "Alexeykhr/Automation-Group-VK",
+  "description": "Automation of the English group.",
+  "keywords": ["VK", "BOT", "API", "GROUP"],
+  "license": "MIT",
+  "type": "project",
+  "homepage": "https://github.com/Alexeykhr/Automation-Group-VK",
+  "authors": [
+    {
+      "name": "Alexey Khrusch",
+      "role": "Developer"
+    }
+  ],
+  "require":
+  {
+    "php": ">=7.0.0",
+    "usmanhalalit/pixie": "2.*@dev"
+  },
+  "autoload":
+  {
+    "psr-4": {
+      "gvk\\": "src/",
+      "tmp\\": "templates/"
+    }
+  }
+}
