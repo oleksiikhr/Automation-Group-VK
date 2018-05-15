@@ -7,13 +7,13 @@
   "homepage": "https://github.com/Alexeykhr/Automation-Group-VK",
   "authors": [
     {
-      "name": "Alexey Khrusch",
+      "name": "Alexey Khrushch",
       "role": "Developer"
     }
   ],
   "require":
   {
-    "php": ">=7.0.0",
+    "php": ">=7.2.0",
     "usmanhalalit/pixie": "2.*@dev"
   },
   "autoload":

@@ -8,7 +8,7 @@ use gvk\vk\methods\Video;
 use gvk\vk\methods\Images;
 use gvk\vk\methods\Translate;
 
-require_once __DIR__ . '/run.php';
+require_once __DIR__ . '../server.php';
 
 $h = date('G');
 $m = date('i');
