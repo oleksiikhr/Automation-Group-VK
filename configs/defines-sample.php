@@ -1,21 +1,24 @@
 <?php
 
-// DEBUG
-define('DEBUG', false);
+// APP
+define('APP_DEBUG', false);
+define('APP_SECRET', '');
 
 // DIR
 define('D_ROOT', __DIR__ . '/..');
 define('D_IMG',  D_ROOT . '/resources');
 
 // Secret data
-define('CONFIRMATION', '');
-define('SECRET_KEY',   '');
+define('VK_CONFIRMATION', '');
+define('VK_SECRET',       '');
 
 // Database
-define('DB_HOST',  'localhost');
-define('DB_TABLE', '');
-define('DB_USER',  '');
-define('DB_PASS',  '');
+define('DB_DRIVER',   'mysql');
+define('DB_HOST',     'localhost');
+define('DB_DATABASE', '');
+define('DB_USERNAME', '');
+define('DB_PASSWORD', '');
+define('DB_PREFIX',   '');
 
 // Group
 define('G_ID',  '');
