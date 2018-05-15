@@ -1,11 +1,9 @@
-<?php
-
-use src\database\models\Verbs;
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../server.php';
 
-$db = Verbs::get();
+//if (empty($_REQUEST['secret']) || $_REQUEST['secret'] !== APP_SECRET) {
+//    die;
+//}
 
-var_dump($db); die;
-
-var_dump($_SERVER['REQUEST_URI']);
+\src\controllers\VerbsController::start();

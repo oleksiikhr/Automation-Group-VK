@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace src\database;
+namespace core\database;
 
 use PDO;
 
@@ -8,6 +8,11 @@ class DB
 {
     private static $_instance;
 
+    /**
+     * Establish a connection to the database.
+     *
+     * @return PDO
+     */
     protected static function instance(): PDO
     {
         if (self::$_instance === null) {

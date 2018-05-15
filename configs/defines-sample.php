@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 // APP
 define('APP_DEBUG', false);
@@ -11,6 +11,7 @@ define('D_IMG',  D_ROOT . '/resources');
 // Secret data
 define('VK_CONFIRMATION', '');
 define('VK_SECRET',       '');
+define('VK_LANG',         'ru');
 
 // Database
 define('DB_DRIVER',   'mysql');
@@ -25,17 +26,26 @@ define('G_ID',  '');
 define('G_URL', '');
 
 // Token
-define('T_USR',    '');
-define('T_MSG',    '');
-define('T_IMG',    '');
-define('T_GOOGLE', '');
-
-// Board
-define('B_POLL',   '');
-define('B_WORD',   '');
-define('B_VIDEO',  '');
-define('B_CHOOSE', '');
-
-// Additional accounts
-define('T_USR2', '');
-define('T_USR3', '');
+// Site - vk, google, etc
+// Type - user, group
+// Access - management, message, photo, document
+define('TOKENS', [
+    'user-main' => [
+        'site' => 'vk',
+        'type' => 'user',
+        'access' => [],
+        'token' => ''
+    ],
+    'group-message' => [
+        'site' => 'vk',
+        'type' => 'group',
+        'access' => ['message'],
+        'token' => ''
+    ],
+    'group-photo' => [
+        'site' => 'vk',
+        'type' => 'group',
+        'access' => ['photo'],
+        'token' => ''
+    ]
+]);
