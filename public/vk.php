@@ -10,6 +10,10 @@ use gvk\vk\methods\Translate;
 
 require_once __DIR__ . '../server.php';
 
+if (empty($_REQUEST['secret']) && $_REQUEST['secret'] !== getenv('APP_KEY')) {
+    die;
+}
+
 $h = date('G');
 $m = date('i');
 

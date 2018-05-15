@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "024233507cbc03d299d0cfe22e1771ce",
+    "content-hash": "98b088edc1cedd38fd232fcb27d3fbb4",
     "packages": [
         {
             "name": "usmanhalalit/pixie",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/usmanhalalit/pixie.git",
-                "reference": "35378d7acff314bf20fbd3dfa8006b1a036ffc02"
+                "reference": "648090e2d967a4a4de6c78bc465790217785facb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/usmanhalalit/pixie/zipball/35378d7acff314bf20fbd3dfa8006b1a036ffc02",
-                "reference": "35378d7acff314bf20fbd3dfa8006b1a036ffc02",
+                "url": "https://api.github.com/repos/usmanhalalit/pixie/zipball/648090e2d967a4a4de6c78bc465790217785facb",
+                "reference": "648090e2d967a4a4de6c78bc465790217785facb",
                 "shasum": ""
             },
             "require": {
@@ -60,7 +60,7 @@
                 "sql",
                 "sqlite"
             ],
-            "time": "2016-04-12 11:50:49"
+            "time": "2017-10-17T07:17:04+00:00"
         },
         {
             "name": "usmanhalalit/viocon",
@@ -108,6 +108,56 @@
                 "test"
             ],
             "time": "2013-07-13T19:54:56+00:00"
+        },
+        {
+            "name": "vlucas/phpdotenv",
+            "version": "v2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vlucas/phpdotenv.git",
+                "reference": "3cc116adbe4b11be5ec557bf1d24dc5e3a21d18c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/3cc116adbe4b11be5ec557bf1d24dc5e3a21d18c",
+                "reference": "3cc116adbe4b11be5ec557bf1d24dc5e3a21d18c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8 || ^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Dotenv\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause-Attribution"
+            ],
+            "authors": [
+                {
+                    "name": "Vance Lucas",
+                    "email": "vance@vancelucas.com",
+                    "homepage": "http://www.vancelucas.com"
+                }
+            ],
+            "description": "Loads environment variables from `.env` to `getenv()`, `$_ENV` and `$_SERVER` automagically.",
+            "keywords": [
+                "dotenv",
+                "env",
+                "environment"
+            ],
+            "time": "2016-09-01T10:05:43+00:00"
         }
     ],
     "packages-dev": [],
@@ -119,7 +169,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.0.0"
+        "php": ">=7.2.0"
     },
     "platform-dev": []
 }

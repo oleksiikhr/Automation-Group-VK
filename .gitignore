@@ -15,3 +15,6 @@ Thumbs.db
 
 # Hide IP
 .htaccess
+
+# Hide configure
+.env
