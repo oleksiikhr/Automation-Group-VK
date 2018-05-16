@@ -2,8 +2,10 @@
 
 require_once __DIR__ . '/../server.php';
 
-//if (empty($_REQUEST['secret']) || $_REQUEST['secret'] !== APP_SECRET) {
-//    die;
-//}
+if (! \core\Protect::cron()) {
+    die;
+}
+
+echo '<br><br>time: ' . (microtime(true) - APP_START);
 
 //\src\controllers\VerbsController::start();

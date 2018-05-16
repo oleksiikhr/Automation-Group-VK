@@ -8,7 +8,7 @@ define('APP_SECRET', '');
 define('D_ROOT', __DIR__ . '/..');
 define('D_IMG',  D_ROOT . '/resources');
 
-// Secret data
+// VK
 define('VK_CONFIRMATION', '');
 define('VK_SECRET',       '');
 define('VK_LANG',         'ru');
