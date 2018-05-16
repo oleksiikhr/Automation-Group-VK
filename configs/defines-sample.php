@@ -19,33 +19,7 @@ define('DB_HOST',     'localhost');
 define('DB_DATABASE', '');
 define('DB_USERNAME', '');
 define('DB_PASSWORD', '');
-define('DB_PREFIX',   '');
 
 // Group
 define('G_ID',  '');
 define('G_URL', '');
-
-// Token
-// Site - vk, google, etc
-// Type - user, group
-// Access - management, message, photo, document
-define('TOKENS', [
-    'user-main' => [
-        'site' => 'vk',
-        'type' => 'user',
-        'access' => [],
-        'token' => ''
-    ],
-    'group-message' => [
-        'site' => 'vk',
-        'type' => 'group',
-        'access' => ['message'],
-        'token' => ''
-    ],
-    'group-photo' => [
-        'site' => 'vk',
-        'type' => 'group',
-        'access' => ['photo'],
-        'token' => ''
-    ]
-]);

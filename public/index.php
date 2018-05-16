@@ -6,4 +6,4 @@ require_once __DIR__ . '/../server.php';
 //    die;
 //}
 
-\src\controllers\VerbsController::start();
+//\src\controllers\VerbsController::start();

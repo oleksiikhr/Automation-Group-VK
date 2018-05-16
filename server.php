@@ -11,3 +11,9 @@ if (APP_DEBUG) {
 }
 
 require_once D_ROOT . '/vendor/autoload.php';
+
+try {
+    \src\Token::parseInput();
+} catch (Exception $e) {
+    die($e->getMessage());
+}

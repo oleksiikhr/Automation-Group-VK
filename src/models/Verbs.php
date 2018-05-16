@@ -18,7 +18,7 @@ class Verbs extends DB
      */
     public static function getRandom(int $count = 20): array
     {
-        $query = 'SELECT * FROM ' . self::TABLE . ' ORDER BY RAND() LIMIT 20';
+        $query = 'SELECT * FROM ' . self::TABLE . ' ORDER BY RAND() LIMIT ?';
 
         $stmt = self::instance()->prepare($query);
         $stmt->bindValue(1, $count, PDO::PARAM_INT);

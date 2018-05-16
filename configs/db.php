@@ -14,5 +14,5 @@ return [
     'password'  => DB_PASSWORD,
     'charset'   => 'utf8',
     'collation' => 'utf8_unicode_ci',
-    'prefix'    => DB_PREFIX,
+    'prefix'    => '',
 ];
