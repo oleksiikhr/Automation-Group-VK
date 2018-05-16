@@ -9,7 +9,7 @@ class Token
     /**
      * @var string
      */
-    private $_token;
+    private static $_token;
 
     /**
      * @var string
@@ -17,6 +17,8 @@ class Token
     private const STORAGE_TOKENS_FILE = D_ROOT . '/configs/tokens.php';
 
     /**
+     * Receiving the required token with filters from the incoming data.
+     *
      * @return void
      *
      * @throws \Exception
@@ -56,11 +58,21 @@ class Token
             $filteredTokens[] = $token;
         }
 
-        // TODO Count tokens + rnd
+        if (! $filteredTokens) {
+            throw new \Exception('Tokens are absent');
+        }
 
-        var_dump($tokens);
-        echo '<br><br>';
-        var_dump($filteredTokens);
+        self::$_token = $filteredTokens[array_rand($filteredTokens)]['token'];
+    }
+
+    /**
+     * Get current token.
+     *
+     * @return string
+     */
+    public static function getToken(): string
+    {
+        return self::$_token;
     }
 
     /**
@@ -68,7 +80,8 @@ class Token
      *
      * @return array
      */
-    private static function getFilterTokensRequest(): array {
+    private static function getFilterTokensRequest(): array
+    {
         return [
             Request::getString('t_site'),
             Request::getString('t_type'),
