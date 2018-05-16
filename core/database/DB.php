@@ -15,7 +15,7 @@ class DB
      */
     protected static function instance(): PDO
     {
-        if (self::$_instance === null) {
+        if (is_null(self::$_instance)) {
             try {
 
                 self::$_instance = new PDO(

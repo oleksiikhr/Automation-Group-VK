@@ -6,6 +6,10 @@ if (! \core\Protect::cron()) {
     die;
 }
 
-echo '<br><br>time: ' . (microtime(true) - APP_START);
-
 //\src\controllers\VerbsController::start();
+
+
+
+
+
+echo '<br><br>time: ' . (microtime(true) - APP_START);

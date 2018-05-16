@@ -83,9 +83,9 @@ class Token
     private static function getFilterTokensRequest(): array
     {
         return [
-            Request::getString('t_site'),
-            Request::getString('t_type'),
-            Request::getString('t_access')
+            Request::getStringLowerCase('t_site'),
+            Request::getStringLowerCase('t_type'),
+            Request::getStringLowerCase('t_access')
         ];
     }
 }

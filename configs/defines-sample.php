@@ -10,16 +10,16 @@ define('D_IMG',  D_ROOT . '/resources');
 
 // VK
 define('VK_CONFIRMATION', '');
-define('VK_SECRET',       '');
-define('VK_LANG',         'ru');
+define('VK_SECRET', '');
+define('VK_LANG', 'ru');
 
 // Database
-define('DB_DRIVER',   'mysql');
-define('DB_HOST',     'localhost');
+define('DB_DRIVER', 'mysql');
+define('DB_HOST', 'localhost');
 define('DB_DATABASE', '');
 define('DB_USERNAME', '');
 define('DB_PASSWORD', '');
 
 // Group
-define('G_ID',  '');
-define('G_URL', '');
+define('G_ID', '');
+define('G_DOMAIN', '');
