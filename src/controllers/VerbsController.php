@@ -5,6 +5,7 @@ namespace src\controllers;
 use core\vk\methods\Wall;
 use src\models\Verbs;
 use core\Controller;
+use src\Token;
 
 class VerbsController implements Controller
 {
@@ -32,7 +33,7 @@ class VerbsController implements Controller
         }
 
         try {
-            return Wall::post(TOKENS['user-main']['token'], $message);
+            return Wall::post(Token::getToken(), $message);
         } catch (\Exception $e) {
             return null;
         }

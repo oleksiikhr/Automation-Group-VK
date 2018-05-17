@@ -28,7 +28,7 @@ class Wall
             'from_group'  => $fromGroup,
             'message'     => $message,
             'attachments' => $attachments,
-            'guid'        => mt_rand()
+            'guid'        => mt_rand(),
         ], HttpMethod::POST);
     }
 }

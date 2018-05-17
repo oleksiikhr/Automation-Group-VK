@@ -40,7 +40,7 @@ class VK
         $data = json_decode($data);
 
         if (isset($data->error)) {
-            throw new \Exception('Ошибка при выполнении запроса в ВК');
+            throw new \Exception('Error while executing the request in VK');
         }
 
         return $data;
