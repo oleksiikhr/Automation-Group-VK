@@ -19,7 +19,9 @@ class VerbsController
      */
     public static function start(int $count = 20)
     {
-//        $verbs = Verbs::getRandom($count);
+        $verbs = Verbs::getRandom($count);
+        var_dump($verbs);
+        die('DIE: VerbsController - start');
 //
 //        $message = self::SMILE . " Список неправильных глаголов.\n\n";
 //

@@ -10,7 +10,7 @@ class Verbs extends DB
     const TABLE = 'verbs';
 
     /**
-     * Get records in random order.
+     * Get random records from the table.
      *
      * @param int $count
      *
@@ -18,12 +18,6 @@ class Verbs extends DB
      */
     public static function getRandom(int $count = 20): array
     {
-        $query = 'SELECT * FROM ' . self::TABLE . ' ORDER BY RAND() LIMIT ?';
-
-        $stmt = self::instance()->prepare($query);
-        $stmt->bindValue(1, $count, PDO::PARAM_INT);
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
+        return self::getRandomRecords($count);
     }
 }
