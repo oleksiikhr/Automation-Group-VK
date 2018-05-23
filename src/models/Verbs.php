@@ -2,12 +2,14 @@
 
 namespace src\models;
 
-use core\database\DB;
-use PDO;
+use core\database\Model;
 
-class Verbs extends DB
+class Verbs extends Model
 {
-    const TABLE = 'verbs';
+    /**
+     * @var string
+     */
+    protected static $table = 'verbs';
 
     /**
      * Get random records from the table.

@@ -4,7 +4,7 @@ namespace src\controllers;
 
 use core\vk\methods\Wall;
 use src\models\Verbs;
-use src\Token;
+use core\Token;
 
 class VerbsController
 {

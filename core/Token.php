@@ -1,8 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace src;
-
-use core\Request;
+namespace core;
 
 class Token
 {
