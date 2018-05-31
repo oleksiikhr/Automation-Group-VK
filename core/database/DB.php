@@ -27,6 +27,8 @@ class DB
                     ]
                 );
                 self::$_instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                self::$_instance->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+                self::$_instance->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
 
             } catch (\PDOException $e) {
                 die('PDO Connection error: ' . $e->getMessage());
