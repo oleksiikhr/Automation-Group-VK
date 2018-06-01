@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Май 23 2018 г., 10:52
+-- Время создания: Июн 01 2018 г., 14:59
 -- Версия сервера: 10.1.30-MariaDB
 -- Версия PHP: 7.2.2
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `tags` (
-  `id` int(11) NOT NULL,
+  `tag_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -57,9 +57,8 @@ CREATE TABLE `words_eng` (
   `word_eng` varchar(255) NOT NULL,
   `transcription_eng` varchar(255) DEFAULT NULL,
   `transcription_rus` varchar(255) DEFAULT NULL,
-  `pos` varchar(255) NOT NULL,
   `rating` int(11) NOT NULL DEFAULT '0',
-  `favorite` int(11) NOT NULL DEFAULT '0',
+  `favorite` int(11) UNSIGNED NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   `published_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -73,7 +72,7 @@ CREATE TABLE `words_eng` (
 CREATE TABLE `words_rus` (
   `word_rus_id` int(11) NOT NULL,
   `word_rus` varchar(255) NOT NULL,
-  `pos` varchar(255) NOT NULL
+  `pos` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -85,7 +84,7 @@ CREATE TABLE `words_rus` (
 CREATE TABLE `word_eng_rus` (
   `word_eng_id` int(11) NOT NULL,
   `word_rus_id` int(11) NOT NULL,
-  `weight` int(11) NOT NULL DEFAULT '0'
+  `weight` tinyint(4) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -107,7 +106,7 @@ CREATE TABLE `word_eng_tag` (
 -- Индексы таблицы `tags`
 --
 ALTER TABLE `tags`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`tag_id`),
   ADD UNIQUE KEY `name` (`name`);
 
 --
@@ -152,7 +151,7 @@ ALTER TABLE `word_eng_tag`
 -- AUTO_INCREMENT для таблицы `tags`
 --
 ALTER TABLE `tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `tag_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `words_eng`
@@ -188,7 +187,7 @@ ALTER TABLE `word_eng_rus`
 --
 ALTER TABLE `word_eng_tag`
   ADD CONSTRAINT `word_eng_tag_fk0` FOREIGN KEY (`word_eng_id`) REFERENCES `words_eng` (`word_eng_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `word_eng_tag_fk1` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `word_eng_tag_fk1` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`tag_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

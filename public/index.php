@@ -6,7 +6,8 @@ if (! \core\Protect::cron()) {
     die;
 }
 
-\src\controllers\VerbsController::start();
+\src\controllers\WordsController::start();
+//\src\controllers\VerbsController::start();
 
 
 
