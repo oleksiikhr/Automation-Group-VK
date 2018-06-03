@@ -7,6 +7,10 @@ use PDO;
 
 class WordsEng extends Model
 {
+    const WEIGHT_SMALL    = 0;
+    const WEIGHT_AVERAGE  = 1;
+    const WEIGHT_LARGE    = 2;
+
     /**
      * @var string
      */
@@ -21,6 +25,7 @@ class WordsEng extends Model
      */
     public static function getNewList(int $count = 5): array
     {
+        // TODO GROUP_CONCAT(col1 SEPARATOR '') - tags
         $stmt = self::instance()->prepare('
             SELECT *
             FROM ' . self::$table . '
@@ -29,68 +34,48 @@ class WordsEng extends Model
             LIMIT :limit
         ');
 
-        // GROUP_CONCAT(col1 SEPARATOR '')
-
         $stmt->bindParam(':limit', $count, PDO::PARAM_INT);
         $stmt->execute();
-        $wordsEng = $stmt->fetchAll(PDO::FETCH_OBJ);
-        var_dump($wordsEng); echo '<br><br>';
+        $words = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-//        $stmt = self::instance()->prepare('
-//            SELECT we.word_eng, wr.word_rus
-//            FROM   words_eng we
-//            JOIN   word_eng_rus x ON s.stud_id = x.stud_id
-//            JOIN   word_eng_rus y ON s.stud_id = y.stud_id
-//            WHERE  wr.enabled = 1
-//        ');
+        self::appendRusWords($words);
 
-        $stmt = self::instance()->prepare('
-            SELECT we.word_eng, wr.word_rus
-            FROM words_eng AS we
-            INNER JOIN words_rus AS wr
-              ON wr.word_rus_id = wr.word_rus_id
-            INNER JOIN word_eng_rus as wer
-              ON we.word_eng_id = wer.word_eng_id
-            LIMIT 10
-        ');
-        $stmt->execute();
-        $wordsRus = $stmt->fetchAll(PDO::FETCH_OBJ);
-        var_dump($wordsRus);
-
-//        foreach ($wordsRus as $word) {
-//            if ($word->word_rus_id === $wordsEng->word_eng_id) {
-//
-//            }
-//        }
-
-//        $stmt = self::instance()->prepare('
-//            SELECT *
-//            FROM ' . self::$table . '
-//            WHERE word_eng_id IN (' . implode(',', array_column($wordsEng, 'word_eng_id')) . ')
-//        ');
+        return $words;
     }
 
     /**
-     * Get random records from the table.
+     * Get data from the database and add to the current array.
      *
-     * @param int $count
+     * @param array $words
+     * @param bool  $basicWords
      *
-     * @return array
+     * @return void
      */
-    public static function getRandom(int $count = 20): array
+    private static function appendRusWords(array &$words, bool $basicWords = true): void
     {
-        $stmt = self::instance()->prepare('
-            SELECT *
-            FROM ' . static::$table . '
-            WHERE RAND()<(SELECT ((:limit/COUNT(*))*10) FROM ' . static::$table . ')
-                AND enabled = 1
-            ORDER BY RAND()
-            LIMIT :limit
-        ');
+        $ids = array_column($words, 'word_eng_id');
 
-        $stmt->bindParam(':limit', $count, PDO::PARAM_INT);
-        $stmt->execute();
+        $sql = 'SELECT we.word_eng_id, wr.*
+            FROM words_eng AS we
+            INNER JOIN word_eng_rus AS wer
+              ON we.word_eng_id = wer.word_eng_id
+            INNER JOIN words_rus AS wr
+              ON wr.word_rus_id = wer.word_rus_id
+            WHERE we.word_eng_id IN ('.implode(',', $ids).')';
 
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
+        if ($basicWords) {
+            $sql .= ' AND (wer.weight = '.self::WEIGHT_AVERAGE.' OR wer.weight = '.self::WEIGHT_LARGE.')';
+        }
+
+        $stmt = self::instance()->query($sql);
+        $wordsRus = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+        foreach ($wordsRus as $word) {
+            $search = array_search($word->word_eng_id, $ids);
+            if (array_search($word->word_eng_id, $ids) !== false) {
+                $words[$search]->{'translate'}[] = $word;
+                continue;
+            }
+        }
     }
 }

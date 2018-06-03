@@ -1,12 +1,14 @@
 <?php declare(strict_types=1);
 
+use src\controllers\WordsController;
+
 require_once __DIR__ . '/../server.php';
 
 if (! \core\Protect::cron()) {
     die;
 }
 
-\src\controllers\WordsController::start();
+WordsController::start(WordsController::RUN_NEW);
 //\src\controllers\VerbsController::start();
 
 
