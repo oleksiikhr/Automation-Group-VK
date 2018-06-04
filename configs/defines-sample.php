@@ -3,6 +3,8 @@
 // APP
 define('APP_DEBUG', false);
 define('APP_SECRET', '');
+/** @see http://php.net/manual/en/timezones.php */
+define('APP_TIMEZONE', 'Europe/Berlin');
 
 // DIR
 define('D_ROOT', __DIR__ . '/..');
