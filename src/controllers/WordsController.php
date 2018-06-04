@@ -21,9 +21,9 @@ class WordsController
      * @param int $run
      * @param int $count
      *
-     * @return mixed
+     * @return void
      */
-    public static function start(int $run, int $count = 5)
+    public static function start(int $run, int $count = 5): void
     {
         // TODO Photo_id*
         $words = [];
@@ -38,9 +38,7 @@ class WordsController
                 die('RUN is not defined');
         }
 
-        // TODO DB set published_at
-
-        var_dump(array_column($words, 'word_eng_id')); die;
+        WordsEng::setPublishedAtNow(array_column($words, 'word_eng_id'));
 
         try {
             Wall::post(Token::getToken(), $message);

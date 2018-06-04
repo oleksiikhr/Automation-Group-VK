@@ -45,6 +45,31 @@ class WordsEng extends Model
     }
 
     /**
+     * Set published_at to now.
+     *
+     * @param array|int $ids
+     *
+     * @return bool
+     */
+    public static function setPublishedAtNow($ids)
+    {
+        if (is_array($ids)) {
+            $count = count($ids);
+            $prepare = mb_substr(str_repeat('?,', $count), 0, $count * 2 - 1);
+        } else {
+            $prepare = '?';
+        }
+
+        $stmt = self::instance()->prepare('
+            UPDATE ' . self::$table . '
+            SET published_at = "' . date('Y-m-d H:i:s') . '"
+            WHERE word_eng_id IN (' . $prepare . ')
+        ');
+
+        return $stmt->execute(is_array($ids) ? $ids : [$ids]);
+    }
+
+    /**
      * Get data from the database and add to the current array.
      *
      * @param array $words
