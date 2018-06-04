@@ -56,19 +56,22 @@ class WordsController
      */
     private static function getTextWords(array $words)
     {
-        $message = '';
+        $message = "";
 
         foreach ($words as $word) {
-            $message .= "{$word->word_eng_id}. " . ucfirst($word->word_eng);
+            $message .= "- " . ucfirst($word->word_eng);
 
             if ($word->transcription_eng) {
-                $message .= " | {$word->transcription_eng}";
+                $message .= " [{$word->transcription_eng}]";
             }
 
             if ($word->transcription_rus) {
-                $message .= " | {$word->transcription_rus}";
+                $message .= " [{$word->transcription_rus}]";
             }
 
+            $message .= " #{$word->word_eng_id}";
+
+            // Rus words
             $message .= "\n" . implode(', ', array_column($word->translate, 'word_rus')) . "\n\n";
         }
 
