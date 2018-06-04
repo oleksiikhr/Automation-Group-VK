@@ -25,26 +25,43 @@ class WordsController
      */
     public static function start(int $run, int $count = 5)
     {
-        // TODO Get only words*
         // TODO Photo_id*
+        $words = [];
+        $message = self::SMILE;
+
         switch ($run) {
             case self::RUN_NEW:
-                self::runNew($count);
+                $words = WordsEng::getNewList($count);
+                $message .= " Изучение новых слов.\n\n" . self::getTextWords($words);
                 break;
             default:
                 die('RUN is not defined');
         }
+
+        // TODO DB set published_at
+
+        var_dump(array_column($words, 'word_eng_id')); die;
+
+        try {
+            Wall::post(Token::getToken(), $message);
+        } catch (\Exception $e) {
+            die($e->getMessage());
+        }
     }
 
-    private static function runNew(int $count)
+    /**
+     * Get the text words.
+     *
+     * @param array $words
+     *
+     * @return string
+     */
+    private static function getTextWords(array $words)
     {
-        $words = WordsEng::getNewList($count);
-        $len = count($words);
-        $message = self::SMILE . " Перевод английских слов.\n\n";
+        $message = '';
 
-        for ($i = 0; $i < $len; $i++) {
-            $word = $words[$i];
-            $message .= "{$word->word_eng_id}. {$word->word_eng}";
+        foreach ($words as $word) {
+            $message .= "{$word->word_eng_id}. " . ucfirst($word->word_eng);
 
             if ($word->transcription_eng) {
                 $message .= " | {$word->transcription_eng}";
@@ -54,11 +71,9 @@ class WordsController
                 $message .= " | {$word->transcription_rus}";
             }
 
-            $message .= "\n" . implode(', ', array_column($word->translate, 'word_rus'));
-
-            $message .= "\n\n";
+            $message .= "\n" . implode(', ', array_column($word->translate, 'word_rus')) . "\n\n";
         }
 
-        Wall::post(Token::getToken(), trim($message));
+        return trim($message);
     }
 }

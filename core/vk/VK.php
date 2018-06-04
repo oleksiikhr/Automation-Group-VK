@@ -40,7 +40,7 @@ class VK
         $data = json_decode($data);
 
         if (isset($data->error)) {
-            throw new \Exception('Error while executing the request in VK');
+            throw new \Exception($data->error->error_msg);
         }
 
         return $data;

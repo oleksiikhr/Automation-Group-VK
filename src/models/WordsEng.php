@@ -63,7 +63,7 @@ class WordsEng extends Model
               ON we.word_eng_id = wer.word_eng_id
             INNER JOIN words_rus AS wr
               ON wr.word_rus_id = wer.word_rus_id
-            WHERE we.word_eng_id IN ('.implode(',', $ids).')';
+            WHERE we.word_eng_id IN (' . implode(',', $ids) . ')';
 
         if ($basicWords) {
             $sql .= ' AND (wer.weight = '.self::WEIGHT_AVERAGE.' OR wer.weight = '.self::WEIGHT_LARGE.')';
@@ -73,9 +73,9 @@ class WordsEng extends Model
         $wordsRus = $stmt->fetchAll(PDO::FETCH_OBJ);
 
         foreach ($wordsRus as $word) {
-            $search = array_search($word->word_eng_id, $ids);
-            if (array_search($word->word_eng_id, $ids) !== false) {
-                $words[$search]->{'translate'}[] = $word;
+            $searchIndex = array_search($word->word_eng_id, $ids);
+            if ($searchIndex !== false) {
+                $words[$searchIndex]->{'translate'}[] = $word;
                 continue;
             }
         }
