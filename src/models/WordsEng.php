@@ -28,8 +28,9 @@ class WordsEng extends Model
         // TODO GROUP_CONCAT(col1 SEPARATOR '') - tags
         $stmt = self::instance()->prepare('
             SELECT *
-            FROM ' . self::$table . '
+            FROM ' . self::$table . ' as wr
             WHERE enabled = 1
+                AND EXISTS (SELECT * FROM word_eng_rus wer WHERE wr.word_eng_id = wer.word_eng_id)
             ORDER BY published_at
             LIMIT :limit
         ');
@@ -55,8 +56,9 @@ class WordsEng extends Model
     {
         $ids = array_column($words, 'word_eng_id');
 
+        // TODO table (models)
         $sql = 'SELECT we.word_eng_id, wr.*
-            FROM words_eng AS we
+            FROM ' . self::$table . ' AS we
             INNER JOIN word_eng_rus AS wer
               ON we.word_eng_id = wer.word_eng_id
             INNER JOIN words_rus AS wr
