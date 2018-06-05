@@ -4,11 +4,13 @@ namespace src\controllers;
 
 use core\vk\methods\Wall;
 use src\models\WordsEng;
+use src\Controller;
 use core\Token;
 
-class WordsController
+class WordsController extends Controller
 {
     const SMILE = '&#127468;&#127463;';
+    const HASHTAG = 'words';
 
     const RUN_NEW          = 1;
     const RUN_REPEAT       = 2;
@@ -19,31 +21,59 @@ class WordsController
      * Main method.
      *
      * @param int $run
-     * @param int $count
+     * @param int $count of posts
+     * @param int|null $photoId from photo album
      *
      * @return void
      */
-    public static function start(int $run, int $count = 5): void
+    public static function start(int $run, int $count = 5, ?int $photoId = null): void
     {
-        // TODO Photo_id*
-        $words = [];
-        $message = self::SMILE;
+        $message = self::SMILE . " ";
 
         switch ($run) {
             case self::RUN_NEW:
                 $words = WordsEng::getNewList($count);
-                $message .= " Изучение новых слов.\n\n" . self::getTextWords($words);
+                $message .= "Изучение новых слов";
+                break;
+            case self::RUN_REPEAT:
+                $words = WordsEng::getRepeatList($count, $count * 4);
+                $message .= "Повторение изученных недавно слов";
                 break;
             default:
                 die('RUN is not defined');
         }
 
-        WordsEng::setPublishedAtNow(array_column($words, 'word_eng_id'));
+        // TODO Temporary
+        $message .= ' | v2';
+
+        $message .= ".\n\n" . self::getTextWords($words) . "\n\n" . self::getHashtag();
+        $attachment = $photoId ? self::getPhotoAttachment($photoId) : null;
 
         try {
-            Wall::post(Token::getToken(), $message);
+            Wall::post(Token::getToken(), $message, $attachment);
         } catch (\Exception $e) {
             die($e->getMessage());
+        }
+
+        self::endActions($run, $words);
+    }
+
+    /**
+     * Call actions after creating a post.
+     *
+     * @param int $run
+     * @param array $words
+     *
+     * @return void
+     */
+    private static function endActions(int $run, array $words): void
+    {
+        switch ($run) {
+            case self::RUN_NEW:
+                WordsEng::setPublishedAtNow(array_column($words, 'word_eng_id'));
+                break;
+            default:
+                return;
         }
     }
 
@@ -58,6 +88,7 @@ class WordsController
     {
         $message = "";
 
+        // Eng_word [transcription_eng] [transcription_rus] #id
         foreach ($words as $word) {
             $message .= "- " . ucfirst($word->word_eng);
 

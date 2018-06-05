@@ -19,7 +19,9 @@ abstract class Controller
      */
     protected static function getHashtag(): string
     {
-        return '#' . static::HASHTAG . '@' . G_DOMAIN;
+        $hashtag = '#' . static::HASHTAG . '@' . G_DOMAIN;
+
+        return $hashtag . ' #ver_2@' . G_DOMAIN;
     }
 
     /**
