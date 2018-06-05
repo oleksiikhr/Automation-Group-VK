@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace src\models;
 
@@ -19,18 +19,28 @@ class WordsEng extends Model
     /**
      * Get records that have been published a long time ago.
      *
-     * @param int $count
+     * @param int  $count
+     * @param bool $mainTranslate
      *
      * @return array
      */
-    public static function getNewList(int $count = 5): array
+    public static function getNewList(int $count = 5, bool $mainTranslate = true): array
     {
-        // TODO GROUP_CONCAT(col1 SEPARATOR '') - tags
+        if ($mainTranslate) {
+            $sqlWhereWeight = 'AND wer.weight IN (' . self::WEIGHT_AVERAGE . ',' . self::WEIGHT_LARGE . ')';
+        } else {
+            $sqlWhereWeight = null;
+        }
+
         $stmt = self::instance()->prepare('
             SELECT *
             FROM ' . self::$table . ' as wr
             WHERE enabled = 1
-                AND EXISTS (SELECT * FROM word_eng_rus wer WHERE wr.word_eng_id = wer.word_eng_id)
+                AND EXISTS (
+                    SELECT *
+                    FROM word_eng_rus wer
+                    WHERE wr.word_eng_id = wer.word_eng_id ' . $sqlWhereWeight . '
+                )
             ORDER BY published_at
             LIMIT :limit
         ');
@@ -39,7 +49,51 @@ class WordsEng extends Model
         $stmt->execute();
         $words = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-        self::appendRusWords($words);
+        self::appendRusWords($words, $mainTranslate);
+
+        return $words;
+    }
+
+    /**
+     * Get a list of recently published words.
+     *
+     * @param int  $count
+     * @param int  $countDB
+     * @param bool $mainTranslate
+     *
+     * @return array
+     */
+    public static function getRepeatList(int $count = 5, int $countDB = 5, bool $mainTranslate = true): array
+    {
+        if ($mainTranslate) {
+            $sqlWhereWeight = 'AND wer.weight IN (' . self::WEIGHT_AVERAGE . ',' . self::WEIGHT_LARGE . ')';
+        } else {
+            $sqlWhereWeight = null;
+        }
+
+        $stmt = self::instance()->prepare('
+            SELECT *
+            FROM ' . self::$table . ' as wr
+            WHERE enabled = 1
+                AND EXISTS (
+                    SELECT *
+                    FROM word_eng_rus wer
+                    WHERE wr.word_eng_id = wer.word_eng_id ' . $sqlWhereWeight . '
+                )
+            ORDER BY published_at DESC
+            LIMIT :limit
+        ');
+
+        $stmt->bindParam(':limit', $countDB, PDO::PARAM_INT);
+        $stmt->execute();
+        $words = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+        if ($count < $countDB) {
+            shuffle($words);
+            array_splice($words, $count);
+        }
+
+        self::appendRusWords($words, $mainTranslate);
 
         return $words;
     }

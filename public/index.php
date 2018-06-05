@@ -8,7 +8,7 @@ if (! \core\Protect::cron()) {
     die;
 }
 
-WordsController::start(WordsController::RUN_NEW);
+WordsController::start(WordsController::RUN_REPEAT, 10, 456240584);
 //\src\controllers\VerbsController::start();
 
 

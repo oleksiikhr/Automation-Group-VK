@@ -9,7 +9,7 @@ abstract class Controller
      */
     protected const HASHTAG = '';
 
-    // todo?
+    // TODO?
     protected const SMILE = '';
 
     /**
@@ -21,11 +21,12 @@ abstract class Controller
     {
         $hashtag = '#' . static::HASHTAG . '@' . G_DOMAIN;
 
-        return $hashtag . ' #ver_2@' . G_DOMAIN;
+        // TODO Temporary
+        return $hashtag . ' #ver2@' . G_DOMAIN;
     }
 
     /**
-     * todo All attachments (for)*
+     * TODO All attachments (for)*
      *
      * @param int $photoId
      *

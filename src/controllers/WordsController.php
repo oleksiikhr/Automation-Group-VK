@@ -17,6 +17,8 @@ class WordsController extends Controller
     const RUN_BAD_KNOWING  = 3;
     const RUN_FAVORITE     = 4;
 
+    const COUNT_LAST_WORDS_REPEAT = 30;
+
     /**
      * Main method.
      *
@@ -36,7 +38,7 @@ class WordsController extends Controller
                 $message .= "Изучение новых слов";
                 break;
             case self::RUN_REPEAT:
-                $words = WordsEng::getRepeatList($count, $count * 4);
+                $words = WordsEng::getRepeatList($count, self::COUNT_LAST_WORDS_REPEAT);
                 $message .= "Повторение изученных недавно слов";
                 break;
             default:
@@ -44,7 +46,7 @@ class WordsController extends Controller
         }
 
         // TODO Temporary
-        $message .= ' | v2';
+        $message .= ' | ver2';
 
         $message .= ".\n\n" . self::getTextWords($words) . "\n\n" . self::getHashtag();
         $attachment = $photoId ? self::getPhotoAttachment($photoId) : null;
