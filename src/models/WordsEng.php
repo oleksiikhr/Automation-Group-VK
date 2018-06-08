@@ -17,20 +17,19 @@ class WordsEng extends Model
     protected static $table = 'words_eng';
 
     /**
-     * Get records that have been published a long time ago.
+     * Get word list.
      *
      * @param int  $count
+     * @param int  $countDB
+     * @param bool $orderDesc
      * @param bool $mainTranslate
      *
      * @return array
      */
-    public static function getNewList(int $count = 5, bool $mainTranslate = true): array
+    public static function getListOrderPublishedAt(int $count = 5, int $countDB = 5, bool $orderDesc = false, bool $mainTranslate = true): array
     {
-        if ($mainTranslate) {
-            $sqlWhereWeight = 'AND wer.weight IN (' . self::WEIGHT_AVERAGE . ',' . self::WEIGHT_LARGE . ')';
-        } else {
-            $sqlWhereWeight = null;
-        }
+        $sqlWhereWeight = $mainTranslate ? 'AND wer.weight IN (' . self::WEIGHT_AVERAGE . ',' . self::WEIGHT_LARGE . ')' : null;
+        $sqlOrderByColumn = 'published_at' . ($orderDesc ? ' DESC' : null);
 
         $stmt = self::instance()->prepare('
             SELECT *
@@ -41,50 +40,11 @@ class WordsEng extends Model
                     FROM word_eng_rus wer
                     WHERE wr.word_eng_id = wer.word_eng_id ' . $sqlWhereWeight . '
                 )
-            ORDER BY published_at
+            ORDER BY ' . $sqlOrderByColumn . '
             LIMIT :limit
         ');
 
         $stmt->bindParam(':limit', $count, PDO::PARAM_INT);
-        $stmt->execute();
-        $words = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-        self::appendRusWords($words, $mainTranslate);
-
-        return $words;
-    }
-
-    /**
-     * Get a list of recently published words.
-     *
-     * @param int  $count
-     * @param int  $countDB
-     * @param bool $mainTranslate
-     *
-     * @return array
-     */
-    public static function getRepeatList(int $count = 5, int $countDB = 5, bool $mainTranslate = true): array
-    {
-        if ($mainTranslate) {
-            $sqlWhereWeight = 'AND wer.weight IN (' . self::WEIGHT_AVERAGE . ',' . self::WEIGHT_LARGE . ')';
-        } else {
-            $sqlWhereWeight = null;
-        }
-
-        $stmt = self::instance()->prepare('
-            SELECT *
-            FROM ' . self::$table . ' as wr
-            WHERE enabled = 1
-                AND EXISTS (
-                    SELECT *
-                    FROM word_eng_rus wer
-                    WHERE wr.word_eng_id = wer.word_eng_id ' . $sqlWhereWeight . '
-                )
-            ORDER BY published_at DESC
-            LIMIT :limit
-        ');
-
-        $stmt->bindParam(':limit', $countDB, PDO::PARAM_INT);
         $stmt->execute();
         $words = $stmt->fetchAll(PDO::FETCH_OBJ);
 
@@ -99,13 +59,21 @@ class WordsEng extends Model
     }
 
     /**
+     *
+     */
+    public static function getListOrderRating()
+    {
+
+    }
+
+    /**
      * Set published_at to now.
      *
      * @param array|int $ids
      *
      * @return bool
      */
-    public static function setPublishedAtNow($ids)
+    public static function setPublishedAtNow($ids): bool
     {
         if (is_array($ids)) {
             $count = count($ids);
@@ -124,14 +92,40 @@ class WordsEng extends Model
     }
 
     /**
+     * Decrease rating by 1.
+     *
+     * @param array|int $ids
+     *
+     * @return bool
+     */
+    public static function decrementRating($ids): bool
+    {
+        if (is_array($ids)) {
+            $count = count($ids);
+            $prepare = mb_substr(str_repeat('?,', $count), 0, $count * 2 - 1);
+        } else {
+            $prepare = '?';
+        }
+
+        $stmt = self::instance()->prepare('
+            UPDATE ' . self::$table . '
+            SET rating = rating - 1
+            WHERE word_eng_id IN (' . $prepare . ')
+                AND rating > 0
+        ');
+
+        return $stmt->execute(is_array($ids) ? $ids : [$ids]);
+    }
+
+    /**
      * Get data from the database and add to the current array.
      *
      * @param array $words
-     * @param bool  $basicWords
+     * @param bool  $mainTranslate
      *
      * @return void
      */
-    private static function appendRusWords(array &$words, bool $basicWords = true): void
+    private static function appendRusWords(array &$words, bool $mainTranslate = true): void
     {
         $ids = array_column($words, 'word_eng_id');
 
@@ -144,8 +138,8 @@ class WordsEng extends Model
               ON wr.word_rus_id = wer.word_rus_id
             WHERE we.word_eng_id IN (' . implode(',', $ids) . ')';
 
-        if ($basicWords) {
-            $sql .= ' AND (wer.weight = '.self::WEIGHT_AVERAGE.' OR wer.weight = '.self::WEIGHT_LARGE.')';
+        if ($mainTranslate) {
+            $sql .= ' AND (wer.weight = ' . self::WEIGHT_AVERAGE . ' OR wer.weight = ' . self::WEIGHT_LARGE . ')';
         }
 
         $stmt = self::instance()->query($sql);

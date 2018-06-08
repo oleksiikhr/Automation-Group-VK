@@ -34,16 +34,22 @@ class WordsController extends Controller
 
         switch ($run) {
             case self::RUN_NEW:
-                $words = WordsEng::getNewList($count);
+                $words = WordsEng::getListOrderPublishedAt($count, $count);
                 $message .= "Изучение новых слов";
                 break;
             case self::RUN_REPEAT:
-                $words = WordsEng::getRepeatList($count, self::COUNT_LAST_WORDS_REPEAT);
-                $message .= "Повторение изученных недавно слов";
+                $words = WordsEng::getListOrderPublishedAt($count, self::COUNT_LAST_WORDS_REPEAT, true);
+                $message .= "Повтор изученных недавно слов";
+                break;
+            case self::RUN_BAD_KNOWING:
+                $words = WordsEng::getListOrderRating($count);
+                $message .= "Повтор плохо знающий слов";
                 break;
             default:
                 die('RUN is not defined');
         }
+
+        echo json_encode($words); die;
 
         // TODO Temporary
         $message .= ' | ver2';
@@ -70,9 +76,14 @@ class WordsController extends Controller
      */
     private static function endActions(int $run, array $words): void
     {
+        $ids = array_column($words, 'word_eng_id');
+
         switch ($run) {
             case self::RUN_NEW:
-                WordsEng::setPublishedAtNow(array_column($words, 'word_eng_id'));
+                WordsEng::setPublishedAtNow($ids);
+                break;
+            case self::RUN_BAD_KNOWING:
+                WordsEng::decrementRating($ids);
                 break;
             default:
                 return;

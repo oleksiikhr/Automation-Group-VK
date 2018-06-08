@@ -11,7 +11,6 @@ Thumbs.db
 /resources
 
 # Passwords.
-/configs/defines.php
 /configs/tokens.php
 
 # Hide IP

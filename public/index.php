@@ -8,6 +8,8 @@ if (! \core\Protect::cron()) {
     die;
 }
 
+die('Here');
+
 WordsController::start(WordsController::RUN_REPEAT, 10, 456240584);
 //\src\controllers\VerbsController::start();
 
