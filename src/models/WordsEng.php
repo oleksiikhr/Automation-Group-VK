@@ -27,9 +27,7 @@ class WordsEng extends Model
     {
         $query = \QB::table(self::TABLE)
             ->selectDistinct(self::TABLE . '.*')
-            ->leftJoin('word_eng_rus', 'word_eng_rus.word_eng_id', '=', self::TABLE . '.word_eng_id')
             ->where(self::TABLE . '.enabled', '=', 1)
-            ->whereIn('word_eng_rus.weight', [self::WEIGHT_AVERAGE, self::WEIGHT_LARGE])
             ->orderBy(self::TABLE . '.' . $orderColumn, $orderBy)
             ->limit($count)
             ->offset($offset);
@@ -88,14 +86,14 @@ class WordsEng extends Model
         $query = \QB::table(self::TABLE)
             ->select([
                 self::TABLE . '.word_eng_id',
-                'words_rus.*', 'word_eng_rus.weight'
+                WordsRus::TABLE . '.*', WordEngRus::TABLE . '.weight'
             ])
-            ->join('word_eng_rus', 'word_eng_rus.word_eng_id', '=', self::TABLE . '.word_eng_id')
-            ->join('words_rus', 'words_rus.word_rus_id', '=', 'word_eng_rus.word_rus_id')
+            ->join(WordEngRus::TABLE, WordEngRus::TABLE . '.word_eng_id', '=', self::TABLE . '.word_eng_id')
+            ->join(WordsRus::TABLE, WordsRus::TABLE . '.word_rus_id', '=', WordEngRus::TABLE . '.word_rus_id')
             ->whereIn(self::TABLE . '.word_eng_id', $ids);
 
         if ($mainTranslate) {
-            $query->whereIn('word_eng_rus.weight', [self::WEIGHT_AVERAGE, self::WEIGHT_LARGE]);
+            $query->whereIn(WordEngRus::TABLE . '.weight', [self::WEIGHT_AVERAGE, self::WEIGHT_LARGE]);
         }
 
         $wordsRus = $query->get();

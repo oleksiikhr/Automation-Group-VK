@@ -27,8 +27,6 @@ class Verbs extends Model
                 WordsEng::TABLE . '.word_eng'
             ])
             ->join(WordsEng::TABLE, WordsEng::TABLE . '.word_eng_id', '=', self::TABLE . '.word_eng_id')
-            ->leftJoin('word_eng_rus', 'word_eng_rus.word_eng_id', '=', self::TABLE . '.word_eng_id')
-            ->whereIn('word_eng_rus.weight', [WordsEng::WEIGHT_AVERAGE, WordsEng::WEIGHT_LARGE])
             ->orderBy($orderColumn, $orderBy)
             ->limit($count)
             ->offset($offset);

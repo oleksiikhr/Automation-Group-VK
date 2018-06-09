@@ -123,7 +123,11 @@ class WordsController extends Controller
             $message .= " [#{$word->word_eng_id}]";
 
             // Rus words
-            $message .= "\n" . implode(', ', array_column($word->translate, 'word_rus')) . "\n\n";
+            if (isset($word->translate)) {
+                $message .= "\n" . implode(', ', array_column($word->translate, 'word_rus'));
+            }
+
+            $message .= "\n\n";
         }
 
         return trim($message);
