@@ -5,28 +5,30 @@ namespace src\models;
 class WordsEng
 {
     const TABLE = 'words_eng';
-    
+
     const WEIGHT_SMALL    = 0;
     const WEIGHT_AVERAGE  = 1;
     const WEIGHT_LARGE    = 2;
 
     /**
-     * Get word list.
+     * Get a list of English words along with the translation.
      *
      * @param int    $count
      * @param int    $offset
+     * @param string $orderColumn
      * @param string $orderBy
      *
      * @return array
      */
-    public static function getListOrderPublishedAt(int $count = 5, int $offset = 0, string $orderBy = 'ASC'): array
+    public static function getList(int $count = 5, int $offset = 0, string $orderColumn = 'published_at',
+                                                   string $orderBy = 'ASC'): array
     {
         $query = \QB::table(self::TABLE)
             ->selectDistinct(self::TABLE . '.*')
             ->leftJoin('word_eng_rus', 'word_eng_rus.word_eng_id', '=', self::TABLE . '.word_eng_id')
             ->where(self::TABLE . '.enabled', '=', 1)
             ->whereIn('word_eng_rus.weight', [self::WEIGHT_AVERAGE, self::WEIGHT_LARGE])
-            ->orderBy(self::TABLE . '.published_at', $orderBy)
+            ->orderBy(self::TABLE . '.' . $orderColumn, $orderBy)
             ->limit($count)
             ->offset($offset);
 
@@ -40,30 +42,48 @@ class WordsEng
     /**
      * Set published_at to now.
      *
-     * @param array|int $ids
+     * @param array $ids
      *
      * @return bool
      */
-    public static function setPublishedAtNow($ids): bool
+    public static function setPublishedAtNow(array $ids): bool
     {
-        return \QB::table(self::TABLE)
-            ->whereIn('word_eng_id', is_array($ids) ? $ids : [$ids])
-            ->update(['published_at' => date('Y-m-d H:i:s')]);
+        return (bool) \QB::table(self::TABLE)
+            ->whereIn('word_eng_id', $ids)
+            ->update(['published_at' => date('Y-m-d H:i:s')])
+            ->rowCount();
     }
 
     /**
-     * Decrease rating by 1.
+     * Change the current word rating.
      *
-     * @param array|int $ids
+     * @param array $ids
+     * @param int   $val
      *
      * @return bool
      */
-    public static function decrementRating($ids): bool
+    public static function addRating(array $ids, int $val): bool
     {
-        return \QB::table(self::TABLE)
-            ->whereIn('word_eng_id', is_array($ids) ? $ids : [$ids])
-            ->where('rating', '>', 0)
-            ->update(['rating' => \QB::raw('rating - 1')]);
+        return (bool) \QB::table(self::TABLE)
+            ->whereIn('word_eng_id', $ids)
+            ->update(['rating' => \QB::raw('rating + ' . $val)])
+            ->rowCount();
+    }
+
+    /**
+     * Change the current word favorite.
+     *
+     * @param array $ids
+     * @param int   $val
+     *
+     * @return bool
+     */
+    public static function addFavorite(array $ids, int $val): bool
+    {
+        return (bool) \QB::table(self::TABLE)
+            ->whereIn('word_eng_id', $ids)
+            ->update(['rating' => \QB::raw('favorite + ' . $val)])
+            ->rowCount();
     }
 
     /**

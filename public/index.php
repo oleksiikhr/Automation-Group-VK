@@ -8,8 +8,11 @@ if (! \core\Protect::cron()) {
     die;
 }
 
-WordsController::start(WordsController::RUN_NEW, 10, 10, 0);
-//\src\controllers\VerbsController::start();
+// Words
+//WordsController::start(WordsController::RUN_NEW, 5, 0, 456240584);
+//WordsController::start(WordsController::RUN_REPEAT, 20, 0, 456240584, 5);
+//WordsController::start(WordsController::RUN_BAD_KNOWING, 5, 0, 456240584);
+//WordsController::start(WordsController::RUN_FAVORITE, 5, 0, 456240584);
 
 
 

@@ -22,44 +22,43 @@ class WordsController extends Controller
     /**
      * Main method.
      *
-     * @param int $run
-     * @param int $count of words
-     * @param int $limit the number of records to retrieve from the database
-     * @param int $offset
-     * @param int|null $photoId from photo album
+     * @param int      $run
+     * @param int      $limit the number of records to retrieve from the database
+     * @param int      $offset
+     * @param int|null $cut of words
+     * @param int|null $photoId from photo album in VK
      *
      * @return void
      */
-    public static function start(int $run, int $count = 5, int $limit = 5, int $offset = 0, ?int $photoId = null): void
+    public static function start(int $run, int $limit = 5, int $offset = 0, ?int $photoId = null, ?int $cut = null): void
     {
         $message = self::SMILE . " ";
 
         switch ($run) {
             case self::RUN_NEW:
                 $message .= "Изучение новых слов";
-                $words = WordsEng::getListOrderPublishedAt($limit, $offset);
+                $words = WordsEng::getList($limit, $offset);
                 break;
             case self::RUN_REPEAT:
                 $message .= "Повтор изученных недавно слов";
-                $words = WordsEng::getListOrderPublishedAt($limit, $offset, 'DESC');
+                $words = WordsEng::getList($limit, $offset, 'published_at', 'DESC');
                 break;
-//            case self::RUN_BAD_KNOWING:
-//                $words = WordsEng::getListOrderRating($count);
-//                $message .= "Повтор плохо знающий слов";
-//                break;
+            case self::RUN_BAD_KNOWING:
+                $message .= "Повтор плохо изученных слов";
+                $words = WordsEng::getList($limit, $offset, 'rating', 'DESC');
+                break;
+            case self::RUN_FAVORITE:
+                $message .= "Изучение слов выбранных сообществом";
+                $words = WordsEng::getList($limit, $offset, 'favorite', 'DESC');
+                break;
             default:
-                die('RUN is not defined');
+                die('WordsController - RUN is not defined');
         }
 
-        if ($count > $limit) {
+        if ($cut) {
             shuffle($words);
-            array_splice($words, $count);
+            array_splice($words, $cut);
         }
-
-        echo json_encode($words); die;
-
-        // TODO Temporary
-        $message .= ' | ver2';
 
         $message .= ".\n\n" . self::getTextWords($words) . "\n\n" . self::getHashtag();
         $attachment = $photoId ? self::getPhotoAttachment($photoId) : null;
@@ -70,30 +69,29 @@ class WordsController extends Controller
             die($e->getMessage());
         }
 
-        self::endActions($run, $words);
+        self::endActions($run, array_column($words, 'word_eng_id'));
     }
 
     /**
      * Call actions after creating a post.
      *
-     * @param int $run
-     * @param array $words
+     * @param int   $run
+     * @param array $ids
      *
      * @return void
      */
-    private static function endActions(int $run, array $words): void
+    private static function endActions(int $run, array $ids): void
     {
-        $ids = array_column($words, 'word_eng_id');
-
         switch ($run) {
             case self::RUN_NEW:
                 WordsEng::setPublishedAtNow($ids);
                 break;
             case self::RUN_BAD_KNOWING:
-                WordsEng::decrementRating($ids);
+                WordsEng::addRating($ids, -1);
                 break;
-            default:
-                return;
+            case self::RUN_FAVORITE:
+                WordsEng::addFavorite($ids, -1);
+                break;
         }
     }
 
@@ -108,7 +106,11 @@ class WordsController extends Controller
     {
         $message = "";
 
-        // Eng_word [transcription_eng] [transcription_rus] #id
+        /*
+         * Structure:
+         *     Eng_word [transcription_eng] [transcription_rus] #id
+         *     rus_word1, rus_word2, ..
+         */
         foreach ($words as $word) {
             $message .= "- " . ucfirst($word->word_eng);
 
