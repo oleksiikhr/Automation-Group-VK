@@ -17,8 +17,6 @@ class WordsController extends Controller
     const RUN_BAD_KNOWING  = 3;
     const RUN_FAVORITE     = 4;
 
-    const COUNT_LAST_WORDS_REPEAT = 30;
-
     /**
      * Main method.
      *
@@ -108,7 +106,7 @@ class WordsController extends Controller
 
         /*
          * Structure:
-         *     Eng_word [transcription_eng] [transcription_rus] #id
+         *     Eng_word [transcription_eng] [transcription_rus] [#id]
          *     rus_word1, rus_word2, ..
          */
         foreach ($words as $word) {
@@ -122,7 +120,7 @@ class WordsController extends Controller
                 $message .= " [{$word->transcription_rus}]";
             }
 
-            $message .= " #{$word->word_eng_id}";
+            $message .= " [#{$word->word_eng_id}]";
 
             // Rus words
             $message .= "\n" . implode(', ', array_column($word->translate, 'word_rus')) . "\n\n";

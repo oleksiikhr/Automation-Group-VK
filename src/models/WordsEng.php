@@ -2,7 +2,9 @@
 
 namespace src\models;
 
-class WordsEng
+use src\Model;
+
+class WordsEng extends Model
 {
     const TABLE = 'words_eng';
 
@@ -37,21 +39,6 @@ class WordsEng
         self::appendRusWords($words);
 
         return $words;
-    }
-
-    /**
-     * Set published_at to now.
-     *
-     * @param array $ids
-     *
-     * @return bool
-     */
-    public static function setPublishedAtNow(array $ids): bool
-    {
-        return (bool) \QB::table(self::TABLE)
-            ->whereIn('word_eng_id', $ids)
-            ->update(['published_at' => date('Y-m-d H:i:s')])
-            ->rowCount();
     }
 
     /**
@@ -94,12 +81,15 @@ class WordsEng
      *
      * @return void
      */
-    private static function appendRusWords(array &$words, bool $mainTranslate = true): void
+    public static function appendRusWords(array &$words, bool $mainTranslate = true): void
     {
         $ids = array_column($words, 'word_eng_id');
 
         $query = \QB::table(self::TABLE)
-            ->select([self::TABLE . '.word_eng_id', 'words_rus.*', 'word_eng_rus.weight'])
+            ->select([
+                self::TABLE . '.word_eng_id',
+                'words_rus.*', 'word_eng_rus.weight'
+            ])
             ->join('word_eng_rus', 'word_eng_rus.word_eng_id', '=', self::TABLE . '.word_eng_id')
             ->join('words_rus', 'words_rus.word_rus_id', '=', 'word_eng_rus.word_rus_id')
             ->whereIn(self::TABLE . '.word_eng_id', $ids);
@@ -113,5 +103,17 @@ class WordsEng
         foreach ($wordsRus as $word) {
             $words[array_search($word->word_eng_id, $ids)]->{'translate'}[] = $word;
         }
+    }
+
+    /**
+     * Set published_at to now.
+     *
+     * @param array $ids
+     *
+     * @return bool
+     */
+    public static function setPublishedAtNow(array $ids): bool
+    {
+        return parent::setPublishedAtNow($ids);
     }
 }
