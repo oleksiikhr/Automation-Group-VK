@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.7
+-- version 4.8.1
 -- https://www.phpmyadmin.net/
 --
--- Хост: 127.0.0.1
--- Время создания: Июн 01 2018 г., 14:59
--- Версия сервера: 10.1.30-MariaDB
--- Версия PHP: 7.2.2
+-- Хост: localhost
+-- Время создания: Июн 09 2018 г., 10:49
+-- Версия сервера: 10.1.33-MariaDB
+-- Версия PHP: 7.2.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- База данных: `new_english`
+-- База данных: `english`
 --
 
 -- --------------------------------------------------------
@@ -58,7 +58,7 @@ CREATE TABLE `words_eng` (
   `transcription_eng` varchar(255) DEFAULT NULL,
   `transcription_rus` varchar(255) DEFAULT NULL,
   `rating` int(11) NOT NULL DEFAULT '0',
-  `favorite` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `favorite` int(11) NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   `published_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -85,17 +85,6 @@ CREATE TABLE `word_eng_rus` (
   `word_eng_id` int(11) NOT NULL,
   `word_rus_id` int(11) NOT NULL,
   `weight` tinyint(4) UNSIGNED NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `word_eng_tag`
---
-
-CREATE TABLE `word_eng_tag` (
-  `word_eng_id` int(11) NOT NULL,
-  `tag_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -137,13 +126,6 @@ ALTER TABLE `word_eng_rus`
   ADD KEY `word_eng_rus_fk1` (`word_rus_id`);
 
 --
--- Индексы таблицы `word_eng_tag`
---
-ALTER TABLE `word_eng_tag`
-  ADD PRIMARY KEY (`word_eng_id`,`tag_id`),
-  ADD KEY `word_eng_tag_fk1` (`tag_id`);
-
---
 -- AUTO_INCREMENT для сохранённых таблиц
 --
 
@@ -181,13 +163,6 @@ ALTER TABLE `verbs`
 ALTER TABLE `word_eng_rus`
   ADD CONSTRAINT `word_eng_rus_fk0` FOREIGN KEY (`word_eng_id`) REFERENCES `words_eng` (`word_eng_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `word_eng_rus_fk1` FOREIGN KEY (`word_rus_id`) REFERENCES `words_rus` (`word_rus_id`) ON DELETE CASCADE;
-
---
--- Ограничения внешнего ключа таблицы `word_eng_tag`
---
-ALTER TABLE `word_eng_tag`
-  ADD CONSTRAINT `word_eng_tag_fk0` FOREIGN KEY (`word_eng_id`) REFERENCES `words_eng` (`word_eng_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `word_eng_tag_fk1` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`tag_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
