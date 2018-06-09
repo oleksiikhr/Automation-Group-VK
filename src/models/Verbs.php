@@ -2,9 +2,7 @@
 
 namespace src\models;
 
-use core\database\Model;
-
-class Verbs extends Model
+class Verbs
 {
     /**
      * @var string

@@ -23,30 +23,37 @@ class WordsController extends Controller
      * Main method.
      *
      * @param int $run
-     * @param int $count of posts
+     * @param int $count of words
+     * @param int $limit the number of records to retrieve from the database
+     * @param int $offset
      * @param int|null $photoId from photo album
      *
      * @return void
      */
-    public static function start(int $run, int $count = 5, ?int $photoId = null): void
+    public static function start(int $run, int $count = 5, int $limit = 5, int $offset = 0, ?int $photoId = null): void
     {
         $message = self::SMILE . " ";
 
         switch ($run) {
             case self::RUN_NEW:
-                $words = WordsEng::getListOrderPublishedAt($count, $count);
                 $message .= "Изучение новых слов";
+                $words = WordsEng::getListOrderPublishedAt($limit, $offset);
                 break;
             case self::RUN_REPEAT:
-                $words = WordsEng::getListOrderPublishedAt($count, self::COUNT_LAST_WORDS_REPEAT, true);
                 $message .= "Повтор изученных недавно слов";
+                $words = WordsEng::getListOrderPublishedAt($limit, $offset, 'DESC');
                 break;
-            case self::RUN_BAD_KNOWING:
-                $words = WordsEng::getListOrderRating($count);
-                $message .= "Повтор плохо знающий слов";
-                break;
+//            case self::RUN_BAD_KNOWING:
+//                $words = WordsEng::getListOrderRating($count);
+//                $message .= "Повтор плохо знающий слов";
+//                break;
             default:
                 die('RUN is not defined');
+        }
+
+        if ($count > $limit) {
+            shuffle($words);
+            array_splice($words, $count);
         }
 
         echo json_encode($words); die;
