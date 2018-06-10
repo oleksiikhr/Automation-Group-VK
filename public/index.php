@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-//use src\controllers\VerbsController;
+use src\controllers\VerbsController;
 //use src\controllers\WordsController;
 
 require_once __DIR__ . '/../server.php';
@@ -16,6 +16,6 @@ if (! \core\Protect::cron()) {
 //WordsController::start(WordsController::RUN_FAVORITE, 5, 0, 456240584);
 
 // Verbs
-//VerbsController::start(10);
+//VerbsController::start(5, 0, 456242834);
 
 echo '<br><br>time: ' . (microtime(true) - APP_START);

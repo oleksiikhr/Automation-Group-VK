@@ -5,6 +5,7 @@ namespace src\controllers;
 use core\vk\methods\Wall;
 use src\models\Verbs;
 use src\Controller;
+use core\vk\VK;
 use core\Token;
 
 class VerbsController extends Controller
@@ -24,12 +25,11 @@ class VerbsController extends Controller
     public static function start(int $count = 5, int $offset = 0, ?int $photoId = null): void
     {
         $verbs = Verbs::getList($count, $offset);
-        $message = self::SMILE . " Список неправельных глаголов\n\n"
+        $message = self::SMILE . " Список неправильных глаголов\n\n"
             . self::getTextWords($verbs) . "\n\n" . self::getHashtag();
-        $attachment = $photoId ? self::getPhotoAttachment($photoId) : null;
 
         try {
-            Wall::post(Token::getToken(), $message, $attachment);
+            Wall::post(Token::getToken(), $message, VK::getAttachmentGroup(['photo' => $photoId]));
         } catch (\Exception $e) {
             die($e->getMessage());
         }

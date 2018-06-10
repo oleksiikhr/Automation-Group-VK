@@ -5,6 +5,7 @@ namespace src\controllers;
 use core\vk\methods\Wall;
 use src\models\WordsEng;
 use src\Controller;
+use core\vk\VK;
 use core\Token;
 
 class WordsController extends Controller
@@ -59,10 +60,9 @@ class WordsController extends Controller
         }
 
         $message .= ".\n\n" . self::getTextWords($words) . "\n\n" . self::getHashtag();
-        $attachment = $photoId ? self::getPhotoAttachment($photoId) : null;
 
         try {
-            Wall::post(Token::getToken(), $message, $attachment);
+            Wall::post(Token::getToken(), $message, VK::getAttachmentGroup(['photo' => $photoId]));
         } catch (\Exception $e) {
             die($e->getMessage());
         }

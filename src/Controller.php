@@ -21,19 +21,7 @@ abstract class Controller
     {
         $hashtag = '#' . static::HASHTAG . '@' . G_DOMAIN;
 
-        // TODO Temporary
+        // FIXME Temporary
         return $hashtag . ' #ver2@' . G_DOMAIN;
-    }
-
-    /**
-     * TODO All attachments (for)*
-     *
-     * @param int $photoId
-     *
-     * @return string
-     */
-    public static function getPhotoAttachment(int $photoId): string
-    {
-        return 'photo-' . G_ID . '_' . $photoId;
     }
 }
