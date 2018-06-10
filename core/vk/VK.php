@@ -14,9 +14,9 @@ class VK
     /**
      * Send request to VK.
      *
-     * @param string $method
-     * @param array $params
      * @param string $token
+     * @param string $method
+     * @param array  $params
      * @param string $typeMethod
      *
      * @see https://vk.com/dev/methods

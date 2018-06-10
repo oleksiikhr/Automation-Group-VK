@@ -10,10 +10,10 @@ class Wall
     /**
      * Allows you to create a record on the wall.
      *
-     * @param string $token
+     * @param string      $token
      * @param string|null $message
      * @param string|null $attachments
-     * @param bool $fromGroup
+     * @param bool        $fromGroup
      *
      * @return mixed
      *

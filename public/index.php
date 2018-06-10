@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use src\controllers\VerbsController;
+//use src\controllers\VerbsController;
 //use src\controllers\WordsController;
 
 require_once __DIR__ . '/../server.php';
