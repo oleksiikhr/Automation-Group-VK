@@ -10,7 +10,7 @@ use core\Token;
 
 class WordsController extends Controller
 {
-    const SMILE = '&#127468;&#127463;';
+    const SMILE   = '&#127468;&#127463;';
     const HASHTAG = 'words';
 
     const RUN_NEW          = 1;
@@ -22,33 +22,33 @@ class WordsController extends Controller
      * Main method.
      *
      * @param int      $run
-     * @param int      $limit the number of records to retrieve from the database
+     * @param int      $count
      * @param int      $offset
      * @param int|null $cut of words
      * @param int|null $photoId from photo album in VK
      *
      * @return void
      */
-    public static function start(int $run, int $limit = 5, int $offset = 0, ?int $photoId = null, ?int $cut = null): void
+    public static function start(int $run, int $count = 5, int $offset = 0, ?int $photoId = null, ?int $cut = null): void
     {
         $message = self::SMILE . " ";
 
         switch ($run) {
             case self::RUN_NEW:
                 $message .= "Изучение новых слов";
-                $words = WordsEng::getList($limit, $offset);
+                $words = WordsEng::getList($count, $offset);
                 break;
             case self::RUN_REPEAT:
                 $message .= "Повтор изученных недавно слов";
-                $words = WordsEng::getList($limit, $offset, 'published_at', 'DESC');
+                $words = WordsEng::getList($count, $offset, 'published_at', 'DESC');
                 break;
             case self::RUN_BAD_KNOWING:
                 $message .= "Повтор плохо изученных слов";
-                $words = WordsEng::getList($limit, $offset, 'rating', 'DESC');
+                $words = WordsEng::getList($count, $offset, 'rating', 'DESC');
                 break;
             case self::RUN_FAVORITE:
                 $message .= "Изучение слов выбранных сообществом";
-                $words = WordsEng::getList($limit, $offset, 'favorite', 'DESC');
+                $words = WordsEng::getList($count, $offset, 'favorite', 'DESC');
                 break;
             default:
                 die('WordsController - RUN is not defined');
@@ -100,7 +100,7 @@ class WordsController extends Controller
      *
      * @return string
      */
-    private static function getTextWords(array $words)
+    private static function getTextWords(array $words): string
     {
         $message = "";
 

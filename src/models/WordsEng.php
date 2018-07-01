@@ -23,7 +23,7 @@ class WordsEng extends Model
      * @return array
      */
     public static function getList(int $count = 5, int $offset = 0, string $orderColumn = 'published_at',
-                                                   string $orderBy = 'ASC'): array
+                                   string $orderBy = 'ASC'): array
     {
         $query = \QB::table(self::TABLE)
             ->selectDistinct(self::TABLE . '.*')
