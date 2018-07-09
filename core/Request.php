@@ -7,8 +7,7 @@ class Request
     /**
      * Get value from Request in lowercase.
      *
-     * @param string $name
-     *
+     * @param  string  $name
      * @return null|string
      */
     public static function getStringLowerCase(string $name)

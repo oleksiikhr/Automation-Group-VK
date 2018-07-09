@@ -1,10 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace src\models;
 
-use src\Model;
+use core\database\Model;
 
 class WordEngRus extends Model
 {
-    const TABLE = 'word_eng_rus';
+    /**
+     * @var string
+     */
+    protected $table = 'word_eng_rus';
 }

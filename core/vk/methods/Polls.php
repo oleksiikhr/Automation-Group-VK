@@ -10,16 +10,16 @@ class Polls
     /**
      * Allows you to create polls.
      *
-     * @param string $token
-     * @param string $question
-     * @param array  $answers - MAX 10
-     * @param bool   $isAnonymous
-     *
+     * @param  string  $token
+     * @param  string  $question
+     * @param  array   $answers - max length is 10
+     * @param  bool    $isAnonymous
      * @return mixed
+     * @throws \Exception
+     *
      *
      * @see https://vk.com/dev/polls.create
      *
-     * @throws \Exception
      */
     public static function create(string $token, string $question, array $answers, bool $isAnonymous = true)
     {

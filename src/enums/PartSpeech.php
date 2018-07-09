@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace src\enums;
 
-class PartSpeech
+final class PartSpeech
 {
     const AUXILIARY_VERB = 'auxiliary verb';
     const ABBREVIATION = 'abbreviation';

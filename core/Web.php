@@ -9,12 +9,10 @@ class Web
     /**
      * Send request to any Website.
      *
-     * @param string $url - with GET params
-     * @param string $method - HttpMethod class
-     * @param string|null $fields - used if the HttpMethod is not GET
-     *
+     * @param  string       $url - with GET params
+     * @param  string       $method - HttpMethod class
+     * @param  string|null  $fields - used if the HttpMethod is not GET
      * @return string
-     *
      * @throws \Exception
      */
     public static function curl(string $url, string $method = HttpMethod::GET, ?string $fields = null): string

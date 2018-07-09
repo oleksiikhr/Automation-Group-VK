@@ -2,39 +2,44 @@
 
 namespace src\models;
 
-use src\Model;
+use core\database\Model;
 
 class WordsEng extends Model
 {
-    const TABLE = 'words_eng';
+    const WEIGHT_SMALL = 0;
+    const WEIGHT_AVERAGE = 1;
+    const WEIGHT_LARGE = 2;
 
-    const WEIGHT_SMALL    = 0;
-    const WEIGHT_AVERAGE  = 1;
-    const WEIGHT_LARGE    = 2;
+    /**
+     * @var string
+     */
+    protected $table = 'words_eng';
+
+    /**
+     * @var string
+     */
+    protected $primaryKey = 'word_eng_id';
 
     /**
      * Get a list of English words along with the translation.
      *
-     * @param int    $count
-     * @param int    $offset
-     * @param string $orderColumn
-     * @param string $orderBy
-     *
+     * @param  int     $count
+     * @param  int     $offset
+     * @param  string  $orderColumn
+     * @param  string  $orderBy
      * @return array
      */
-    public static function getList(int $count = 5, int $offset = 0, string $orderColumn = 'published_at',
-                                   string $orderBy = 'ASC'): array
+    public function getList(int $count = 5, int $offset = 0, string $orderColumn = 'published_at',
+                            string $orderBy = 'ASC'): array
     {
-        $query = \QB::table(self::TABLE)
-            ->selectDistinct(self::TABLE . '.*')
-            ->where(self::TABLE . '.enabled', '=', 1)
-            ->orderBy(self::TABLE . '.' . $orderColumn, $orderBy)
+        $words = $this->getTable()
+            ->select('*')
+            ->orderBy($orderColumn, $orderBy)
             ->limit($count)
-            ->offset($offset);
+            ->offset($offset)
+            ->get();
 
-        $words = $query->get();
-
-        self::appendRusWords($words);
+        $this->appendRusWords($words);
 
         return $words;
     }
@@ -42,61 +47,66 @@ class WordsEng extends Model
     /**
      * Change the current word rating.
      *
-     * @param array $ids
-     * @param int   $val
-     *
+     * @param  array|int  $ids
+     * @param  int        $value
      * @return bool
      */
-    public static function addRating(array $ids, int $val): bool
+    public function addRating($ids, int $value): bool
     {
-        return (bool) \QB::table(self::TABLE)
-            ->whereIn('word_eng_id', $ids)
-            ->update(['rating' => \QB::raw('rating + ' . $val)])
+        $query = $this->getTable()->where('rating', '>', 0);
+
+        if (is_array($ids)) {
+            $query->whereIn($this->primaryKey, $ids);
+        } else {
+            $query->where($this->primaryKey, '=', $ids);
+        }
+
+        return (bool) $query->update(['rating' => \QB::raw("rating + {$value}")])
             ->rowCount();
     }
 
     /**
      * Change the current word favorite.
      *
-     * @param array $ids
-     * @param int   $val
-     *
+     * @param  array|int  $ids
+     * @param  int        $value
      * @return bool
      */
-    public static function addFavorite(array $ids, int $val): bool
+    public function addFavorite($ids, int $value): bool
     {
-        return (bool) \QB::table(self::TABLE)
-            ->whereIn('word_eng_id', $ids)
-            ->update(['rating' => \QB::raw('favorite + ' . $val)])
+        $query = $this->getTable()->where('favorite', '>', 0);
+
+        if (is_array($ids)) {
+            $query->whereIn($this->primaryKey, $ids);
+        } else {
+            $query->where($this->primaryKey, '=', $ids);
+        }
+
+        return (bool) $query->update(['favorite' => \QB::raw("favorite + {$value}")])
             ->rowCount();
     }
 
     /**
      * Get data from the database and add to the current array.
      *
-     * @param array $words
-     * @param bool  $mainTranslate
-     *
+     * @param  array  $words
      * @return void
      */
-    public static function appendRusWords(array &$words, bool $mainTranslate = true): void
+    private function appendRusWords(array &$words): void
     {
-        $ids = array_column($words, 'word_eng_id');
+        $ids = array_column($words, $this->primaryKey);
 
-        $query = \QB::table(self::TABLE)
+        $wordsRus = $this->getTable()
             ->select([
-                self::TABLE . '.word_eng_id',
-                WordsRus::TABLE . '.*', WordEngRus::TABLE . '.weight'
+                $this->getTablePrimaryColumn(),
+                'words_rus.*',
+                'word_eng_rus.weight'
             ])
-            ->join(WordEngRus::TABLE, WordEngRus::TABLE . '.word_eng_id', '=', self::TABLE . '.word_eng_id')
-            ->join(WordsRus::TABLE, WordsRus::TABLE . '.word_rus_id', '=', WordEngRus::TABLE . '.word_rus_id')
-            ->whereIn(self::TABLE . '.word_eng_id', $ids);
-
-        if ($mainTranslate) {
-            $query->whereIn(WordEngRus::TABLE . '.weight', [self::WEIGHT_AVERAGE, self::WEIGHT_LARGE]);
-        }
-
-        $wordsRus = $query->get();
+            ->join('word_eng_rus', 'word_eng_rus.word_eng_id', '=', $this->getTablePrimaryColumn())
+            ->join('words_rus', 'words_rus.word_rus_id', '=', 'word_eng_rus.word_rus_id')
+            ->whereIn('word_eng_rus.weight', [self::WEIGHT_AVERAGE, self::WEIGHT_LARGE])
+            ->whereIn($this->getTableName() . '.word_eng_id', $ids)
+            ->get();
 
         foreach ($wordsRus as $word) {
             $words[array_search($word->word_eng_id, $ids)]->{'translate'}[] = $word;
@@ -104,14 +114,15 @@ class WordsEng extends Model
     }
 
     /**
-     * Set published_at to now.
+     * Get Random record.
      *
-     * @param array $ids
-     *
-     * @return bool
+     * @return object
      */
-    public static function setPublishedAtNow(array $ids): bool
+    public function getRandomRecord(): object
     {
-        return parent::setPublishedAtNow($ids);
+        $words = [parent::getRandomRecord()];
+        self::appendRusWords($words);
+
+        return $words[0];
     }
 }

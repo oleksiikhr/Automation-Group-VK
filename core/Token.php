@@ -18,7 +18,6 @@ class Token
      * Receiving the required token with filters from the incoming data.
      *
      * @return void
-     *
      * @throws \Exception
      */
     public static function parseInput()

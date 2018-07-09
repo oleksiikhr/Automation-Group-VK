@@ -2,51 +2,41 @@
 
 namespace src\models;
 
-use src\Model;
+use core\database\Model;
 
 class Verbs extends Model
 {
-    const TABLE = 'verbs';
+    /**
+     * @var string
+     */
+    protected $table = 'verbs';
+
+    /**
+     * @var string
+     */
+    protected $primaryKey = 'word_eng_id';
 
     /**
      * Get random records from the table.
      *
-     * @param int    $count
-     * @param int    $offset
-     * @param string $orderColumn
-     * @param string $orderBy
-     *
+     * @param  int     $count
+     * @param  int     $offset
+     * @param  string  $orderColumn
+     * @param  string  $orderBy
      * @return array
      */
-    public static function getList(int $count = 5, int $offset = 0, string $orderColumn = 'published_at',
-                                   string $orderBy = 'ASC'): array
+    public function getList(int $count = 5, int $offset = 0, string $orderColumn = 'published_at',
+                            string $orderBy = 'ASC'): array
     {
-        $query = \QB::table(self::TABLE)
-            ->selectDistinct([
-                self::TABLE . '.*',
-                WordsEng::TABLE . '.word_eng'
+        return $this->getTable()
+            ->select([
+                $this->table . '.*',
+                'words_eng.word_eng'
             ])
-            ->join(WordsEng::TABLE, WordsEng::TABLE . '.word_eng_id', '=', self::TABLE . '.word_eng_id')
+            ->leftJoin('words_eng', 'words_eng.word_eng_id', '=', $this->table . '.word_eng_id')
             ->orderBy($orderColumn, $orderBy)
             ->limit($count)
-            ->offset($offset);
-
-        $words = $query->get();
-
-        WordsEng::appendRusWords($words);
-
-        return $words;
-    }
-
-    /**
-     * Set published_at to now.
-     *
-     * @param array $ids
-     *
-     * @return bool
-     */
-    public static function setPublishedAtNow(array $ids): bool
-    {
-        return parent::setPublishedAtNow($ids);
+            ->offset($offset)
+            ->get();
     }
 }
