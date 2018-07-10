@@ -8,7 +8,8 @@ use core\vk\VK;
 class Wall
 {
     /**
-     * Allows you to create a post on the wall.
+     * Adds a new post on a user wall or community wall.
+     * Can also be used to publish suggested or scheduled posts.
      *
      * @param  string       $token
      * @param  string|null  $message

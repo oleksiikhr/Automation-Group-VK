@@ -8,7 +8,7 @@ use core\vk\VK;
 class Polls
 {
     /**
-     * Allows you to create polls.
+     * Creates polls that can be attached to the users' or communities' posts.
      *
      * @param  string  $token
      * @param  string  $question
@@ -17,9 +17,7 @@ class Polls
      * @return mixed
      * @throws \Exception
      *
-     *
      * @see https://vk.com/dev/polls.create
-     *
      */
     public static function create(string $token, string $question, array $answers, bool $isAnonymous = true)
     {
@@ -34,6 +32,6 @@ class Polls
             'question'     => $question,
             'is_anonymous' => $isAnonymous,
             'add_answers'  => json_encode($answers),
-        ], HttpMethod::GET);
+        ], HttpMethod::POST);
     }
 }
