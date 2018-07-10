@@ -23,8 +23,7 @@ abstract class Controller
     {
         $hashtags = '';
 
-        foreach ($this->hashtags as $hashtag)
-        {
+        foreach ($this->hashtags as $hashtag) {
             $hashtags .= '#' . $hashtag . '@' . G_DOMAIN . ' ';
         }
 

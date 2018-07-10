@@ -19,7 +19,7 @@ class WordsNew extends WordsController
 
     public function getWords(): array
     {
-        return $this->model->getList($this->count, $this->offset);
+        return $this->model->getList($this->count, $this->offset, 'published_at');
     }
 
     public function complete(array $ids): bool

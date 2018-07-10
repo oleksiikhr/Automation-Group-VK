@@ -23,23 +23,27 @@ class WordsEng extends Model
     /**
      * Get a list of English words along with the translation.
      *
-     * @param  int     $count
-     * @param  int     $offset
-     * @param  string  $orderColumn
-     * @param  string  $orderBy
+     * @param  int          $count
+     * @param  int          $offset
+     * @param  string|null  $orderColumn
+     * @param  string       $orderBy
+     * @param  bool         $appendRusWords
      * @return array
      */
-    public function getList(int $count = 5, int $offset = 0, string $orderColumn = 'published_at',
-                            string $orderBy = 'ASC'): array
+    public function getList(int $count = 5, int $offset = 0, ?string $orderColumn = null,
+                            string $orderBy = 'ASC', $appendRusWords = true): array
     {
-        $words = $this->getTable()
-            ->select('*')
-            ->orderBy($orderColumn, $orderBy)
-            ->limit($count)
-            ->offset($offset)
-            ->get();
+        $query = $this->getTable()->select('*');
 
-        $this->appendRusWords($words);
+        if ($orderColumn) {
+            $query->orderBy($orderColumn, $orderBy);
+        }
+
+        $words = $query->limit($count)->offset($offset)->get();
+
+        if ($appendRusWords) {
+            $this->appendRusWords($words);
+        }
 
         return $words;
     }
@@ -105,7 +109,7 @@ class WordsEng extends Model
             ->join('word_eng_rus', 'word_eng_rus.word_eng_id', '=', $this->getTablePrimaryColumn())
             ->join('words_rus', 'words_rus.word_rus_id', '=', 'word_eng_rus.word_rus_id')
             ->whereIn('word_eng_rus.weight', [self::WEIGHT_AVERAGE, self::WEIGHT_LARGE])
-            ->whereIn($this->getTableName() . '.word_eng_id', $ids)
+            ->whereIn($this->getTablePrimaryColumn(), $ids)
             ->get();
 
         foreach ($wordsRus as $word) {
