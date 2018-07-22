@@ -3,12 +3,16 @@
 //use src\controllers\words\types\WordsFavorite;
 //use src\controllers\words\types\WordsNew;
 //use src\controllers\verbs\VerbsController;
+//use src\controllers\photos\types\Card;
 
 require_once __DIR__ . '/../server.php';
 
 if (! \core\Protect::cron()) {
     die;
 }
+
+// Images
+//(new Card())->start();
 
 // Words
 //(new WordsNew(10, 0))->start(456240584);
