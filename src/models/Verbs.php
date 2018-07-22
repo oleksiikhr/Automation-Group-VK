@@ -34,6 +34,7 @@ class Verbs extends Model
                 'words_eng.word_eng'
             ])
             ->leftJoin('words_eng', 'words_eng.word_eng_id', '=', $this->table . '.word_eng_id')
+            ->where('words_eng.enabled', 1)
             ->orderBy($orderColumn, $orderBy)
             ->limit($count)
             ->offset($offset)

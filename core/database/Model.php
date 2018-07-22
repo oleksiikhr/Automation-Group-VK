@@ -54,28 +54,6 @@ abstract class Model
     }
 
     /**
-     * Get random record.
-     *
-     * @return object
-     */
-    public function getRandomRecord(): object
-    {
-        return $this->getTable()
-            ->where($this->primaryKey, '=', $this->getRandomNumberRecord())
-            ->first();
-    }
-
-    /**
-     * Get a random number between 1 and the number of records.
-     *
-     * @return integer
-     */
-    public function getRandomNumberRecord(): int
-    {
-        return mt_rand(1, $this->getCountRecords());
-    }
-
-    /**
      * Get string for query builder.
      *
      * @return string
@@ -97,7 +75,7 @@ abstract class Model
      * Handle dynamic static method calls into the method.
      *
      * @param  string  $method
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @return mixed
      */
     public static function __callStatic($method, $parameters)

@@ -33,7 +33,7 @@ class WordsEng extends Model
     public function getList(int $count = 5, int $offset = 0, ?string $orderColumn = null,
                             string $orderBy = 'ASC', $appendRusWords = true): array
     {
-        $query = $this->getTable()->select('*');
+        $query = $this->getTable()->select('*')->where('enabled', 1);
 
         if ($orderColumn) {
             $query->orderBy($orderColumn, $orderBy);
@@ -115,18 +115,5 @@ class WordsEng extends Model
         foreach ($wordsRus as $word) {
             $words[array_search($word->word_eng_id, $ids)]->{'translate'}[] = $word;
         }
-    }
-
-    /**
-     * Get Random record.
-     *
-     * @return object
-     */
-    public function getRandomRecord(): object
-    {
-        $words = [parent::getRandomRecord()];
-        self::appendRusWords($words);
-
-        return $words[0];
     }
 }

@@ -50,18 +50,6 @@ abstract class WordsController extends PostController implements WordsInterface
     }
 
     /**
-     * Get one word for another posts.
-     *
-     * @return string
-     */
-    public function getSingle()
-    {
-        $word = $this->model->getRandomRecord();
-
-        return $this->smile . ' ' . self::getTextWords([$word]);
-    }
-
-    /**
      * Get the text words.
      *
      * @param  array  $words
