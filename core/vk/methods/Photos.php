@@ -27,15 +27,15 @@ class Photos
      * Saves a photo to a user's or community's wall after being uploaded.
      *
      * @param  string  $token
-     * @param  string  $photo
-     * @param  string  $server
-     * @param  string  $hash
+     * @param  string|int  $photo
+     * @param  string|int  $server
+     * @param  string|int  $hash
      * @return mixed
      * @throws \Exception
      *
      * @see https://vk.com/dev/photos.saveWallPhoto
      */
-    public static function saveWallPhotoGroup(string $token, string $photo, string $server, string $hash)
+    public static function saveWallPhotoGroup(string $token, $photo, $server, $hash)
     {
         return VK::send($token, 'photos.saveWallPhoto', [
             'group_id' => G_ID,
@@ -49,10 +49,10 @@ class Photos
      * Receives server address for uploading community cover.
      *
      * @param  string  $token
-     * @param  int     $cropX - X coordinate of the left-upper corner.
-     * @param  int     $cropY - Y coordinate of the left-upper corner.
-     * @param  int     $cropX2 - X coordinate of the right-bottom corner.
-     * @param  int     $cropY2 - Y coordinate of the right-bottom corner.
+     * @param  int  $cropX - X coordinate of the left-upper corner.
+     * @param  int  $cropY - Y coordinate of the left-upper corner.
+     * @param  int  $cropX2 - X coordinate of the right-bottom corner.
+     * @param  int  $cropY2 - Y coordinate of the right-bottom corner.
      * @return mixed
      * @throws \Exception
      *
