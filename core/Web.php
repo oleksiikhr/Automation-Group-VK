@@ -9,9 +9,9 @@ class Web
     /**
      * Send request to any Website.
      *
-     * @param  string       $url - with GET params
-     * @param  string       $method - HttpMethod class
-     * @param  string|null  $fields - used if the HttpMethod is not GET
+     * @param  string  $url - with GET parameters
+     * @param  string  $method - HttpMethod
+     * @param  string|null  $fields - http_build_query
      * @return string
      * @throws \Exception
      */
@@ -34,7 +34,33 @@ class Web
         curl_close($ch);
 
         if (! $result) {
-            throw new \Exception('Server error');
+            throw new \Exception(curl_error($ch), curl_errno($ch));
+        }
+
+        return $result;
+    }
+
+    /**
+     * Upload files to the server.
+     *
+     * @param  string  $url
+     * @param  array  $fields
+     * @return string
+     * @throws \Exception
+     */
+    public static function uploadFiles(string $url, array $fields): string
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        if (! $result) {
+            throw new \Exception(curl_error($ch), curl_errno($ch));
         }
 
         return $result;
