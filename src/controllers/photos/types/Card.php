@@ -18,10 +18,10 @@ class Card extends PhotosController
      * Choose file to upload on servers VK.
      *
      * @param  array $files
-     * @return array
+     * @return array indexes
      */
     public function chooseFiles(array $files): array
     {
-        return [$files[array_rand($files, 1)]];
+        return [array_rand($files, 1)];
     }
 }

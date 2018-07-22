@@ -28,15 +28,16 @@ abstract class PhotosController extends FileController implements PhotosInterfac
      */
     public function start()
     {
-        $files = $this->chooseFiles($this->getFilesRecursive($this->pathEntry));
+        $files = $this->getFilesRecursive($this->pathEntry);
+        $chosenIndexes = $this->chooseFiles($files);
         $attachments = '';
 
         if (count($files) < 1) {
             die('PhotosController - files are empty');
         }
 
-        foreach ($files as $key => $file) {
-            $uri = realpath($this->pathExit . '/' . $file);
+        foreach ($chosenIndexes as $index) {
+            $uri = realpath($this->pathExit . '/' . $files[$index]);
             try {
                 $server = Photos::getWallUploadServer(Token::getToken());
                 $upload = self::uploadPhoto($server->response->upload_url, $uri);
