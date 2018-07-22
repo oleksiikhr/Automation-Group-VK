@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace core\vk\enums;
 
@@ -10,16 +10,17 @@ final class Attachment
     /**
      * Getting the line for the attachment.
      *
-     * @param  array  $arr
+     * @param  array $arr
+     * @param  string  $pageId
      * @return string|null
      */
-    public static function generate(array $arr): ?string
+    public static function generate(array $arr, $pageId = '-' . G_ID): ?string
     {
         $str = null;
 
         foreach ($arr as $key => $value) {
             if (! is_null($value)) {
-                $str .= $key . '-' . G_ID . '_' . $value . ',';
+                $str .= $key . $pageId . '_' . $value . ',';
             }
         }
 
