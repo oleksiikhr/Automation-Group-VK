@@ -19,7 +19,7 @@ class Polls
      *
      * @see https://vk.com/dev/polls.create
      */
-    public static function create(string $token, string $question, array $answers, bool $isAnonymous = true)
+    public static function createGroup(string $token, string $question, array $answers, bool $isAnonymous = true)
     {
         $count = count($answers);
 
