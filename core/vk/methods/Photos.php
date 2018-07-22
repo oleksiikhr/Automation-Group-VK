@@ -11,16 +11,15 @@ class Photos
      * Returns the server address for photo upload onto a user's wall.
      *
      * @param  string  $token
-     * @param  int     $groupId
      * @return mixed
      * @throws \Exception
      *
      * @see https://vk.com/dev/photos.getWallUploadServer
      */
-    public static function getWallUploadServer(string $token, int $groupId)
+    public static function getWallUploadServer(string $token)
     {
         return VK::send($token, 'photos.getWallUploadServer', [
-            'group_id' => $groupId,
+            'group_id' => G_ID,
         ], HttpMethod::GET);
     }
 
