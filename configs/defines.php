@@ -7,7 +7,7 @@ define('APP_TIMEZONE', getenv('APP_TIMEZONE') ?: 'Europe/Berlin');
 
 // DIR
 define('D_ROOT', __DIR__ . '/..');
-define('D_IMG',  D_ROOT . '/resources');
+define('D_RESOURCES',  D_ROOT . '/resources');
 
 // VK
 define('VK_CONFIRMATION', getenv('VK_CONFIRMATION') ?: '');
