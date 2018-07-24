@@ -1,5 +1,4 @@
 # Automation Group VK (in development)
-
 <p align="center">
 <a href="https://github.com/Alexeykhr/Automation-Group-VK/tree/v1.0">The Old Version</a> |
 <a href="https://vk.com/eng_day">Group in VK</a> |
@@ -16,7 +15,8 @@
 2. run composer install
 3. copy .env.example to .env and configure
 4. copy configs/tokens-example.php to configs/tokens.php and configure
-5. Setup cron to file on every minute: /public/index.php
+5. Import database.sql to itself
+6. Setup cron to file on every minute: /public/index.php
 
 ## Request params:
 ```
@@ -28,6 +28,7 @@ Filters for selecting the correct token (configs/tokens.php):
 - t_type
 - t_access
 ```
+
 *Example query:*
 ```
 https://localhost/?t_site=vk&t_type=user&t_access=photo,video&secret=123456
