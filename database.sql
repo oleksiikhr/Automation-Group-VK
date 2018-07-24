@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.1
+-- version 4.7.7
 -- https://www.phpmyadmin.net/
 --
--- Хост: localhost
--- Время создания: Июн 09 2018 г., 10:49
--- Версия сервера: 10.1.33-MariaDB
--- Версия PHP: 7.2.6
+-- Хост: 127.0.0.1
+-- Время создания: Июл 24 2018 г., 21:35
+-- Версия сервера: 10.1.30-MariaDB
+-- Версия PHP: 7.2.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,8 +19,21 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- База данных: `english`
+-- База данных: `new_english`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `learn`
+--
+
+CREATE TABLE `learn` (
+  `learn_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `published_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -58,7 +71,7 @@ CREATE TABLE `words_eng` (
   `transcription_eng` varchar(255) DEFAULT NULL,
   `transcription_rus` varchar(255) DEFAULT NULL,
   `rating` int(11) NOT NULL DEFAULT '0',
-  `favorite` int(11) NOT NULL DEFAULT '0',
+  `favorite` int(11) UNSIGNED NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   `published_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -90,6 +103,13 @@ CREATE TABLE `word_eng_rus` (
 --
 -- Индексы сохранённых таблиц
 --
+
+--
+-- Индексы таблицы `learn`
+--
+ALTER TABLE `learn`
+  ADD PRIMARY KEY (`learn_id`),
+  ADD UNIQUE KEY `title` (`title`);
 
 --
 -- Индексы таблицы `tags`
@@ -130,6 +150,12 @@ ALTER TABLE `word_eng_rus`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `learn`
+--
+ALTER TABLE `learn`
+  MODIFY `learn_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT для таблицы `tags`
 --
 ALTER TABLE `tags`
@@ -139,13 +165,13 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT для таблицы `words_eng`
 --
 ALTER TABLE `words_eng`
-  MODIFY `word_eng_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `word_eng_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35895;
 
 --
 -- AUTO_INCREMENT для таблицы `words_rus`
 --
 ALTER TABLE `words_rus`
-  MODIFY `word_rus_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `word_rus_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25863;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц

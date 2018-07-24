@@ -7,6 +7,7 @@
 //use src\controllers\photos\types\PhotosCard;
 //use src\controllers\photos\types\PhotosJoke;
 //use src\controllers\verbs\VerbsController;
+//use src\controllers\learn\LearnController;
 //use src\controllers\words\types\WordsNew;
 
 require_once __DIR__ . '/../server.php';
@@ -14,6 +15,9 @@ require_once __DIR__ . '/../server.php';
 if (! \core\Protect::cron()) {
     die;
 }
+
+// Learn
+//(new LearnController)->start(456241870);
 
 // Images
 //(new PhotosCard(mt_rand(1, 10)))->start();
