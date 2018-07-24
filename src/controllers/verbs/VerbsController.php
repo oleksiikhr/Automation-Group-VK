@@ -20,6 +20,11 @@ class VerbsController extends PostController
      */
     protected $hashtags = ['verbs'];
 
+    /**
+     * @var string
+     */
+    private $_title = 'Список неправильных глаголов';
+
     public function __construct(int $count = 5, int $offset = 0)
     {
         parent::__construct(new Verbs, $count, $offset);
@@ -35,8 +40,7 @@ class VerbsController extends PostController
     {
         $verbs = $this->model->getList($this->count, $this->offset);
 
-        $message = $this->smile . " Список неправильных глаголов\n\n"
-            . self::getTextWords($verbs) . "\n\n" . $this->getHashtag();
+        $message = $this->smile . " {$this->_title}\n\n" . self::getTextWords($verbs) . "\n\n" . $this->getHashtag();
 
         $attachments = Attachment::generate([Attachment::PHOTO => $photoId]);
 
@@ -46,7 +50,7 @@ class VerbsController extends PostController
             die($e->getMessage());
         }
 
-        $this->model->setPublishedAtNow(array_column($verbs, 'word_eng_id'));
+        $this->model->setPublishedAtNow(array_column($verbs, $this->model->getPrimaryKey()));
     }
 
     /**
