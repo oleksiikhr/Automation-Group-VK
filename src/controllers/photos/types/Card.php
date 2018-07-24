@@ -11,7 +11,7 @@ class Card extends PhotosController
     public function __construct()
     {
         parent::__construct();
-        $this->addHashtag($this->folder);
+        $this->addHashtag("photos_{$this->folder}");
     }
 
     /**

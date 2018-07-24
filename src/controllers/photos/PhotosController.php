@@ -14,6 +14,11 @@ abstract class PhotosController extends FileController implements PhotosInterfac
     /**
      * @var string
      */
+    protected $hashtags = ['photos'];
+
+    /**
+     * @var string
+     */
     protected $folder;
 
     public function __construct()
@@ -48,11 +53,8 @@ abstract class PhotosController extends FileController implements PhotosInterfac
             }
         }
 
-        // TODO Message
-        // TODO Hashtags
-
         try {
-            Wall::post(Token::getToken(), 'Test', $attachments);
+            Wall::post(Token::getToken(), $this->getHashtag(), $attachments);
         } catch (\Exception $e) {
             die($e->getMessage());
         }
