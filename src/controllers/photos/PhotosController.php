@@ -21,9 +21,16 @@ abstract class PhotosController extends FileController implements PhotosInterfac
      */
     protected $folder;
 
-    public function __construct()
+    /**
+     * @var int - MAX 10
+     */
+    private $_count = 1;
+
+    public function __construct(int $count = 1)
     {
         parent::__construct($this->folder);
+        $this->addHashtag("photos_{$this->folder}");
+        $this->_count = $count > 10 ? 10 : $count;
     }
 
     /**
@@ -34,12 +41,13 @@ abstract class PhotosController extends FileController implements PhotosInterfac
     public function start()
     {
         $files = $this->getFilesRecursive($this->pathEntry);
-        $chosenIndexes = $this->chooseFiles($files);
-        $attachments = '';
 
         if (count($files) < 1) {
             die('PhotosController - files are empty');
         }
+
+        $chosenIndexes = $this->chooseFiles($files);
+        $attachments = '';
 
         foreach ($chosenIndexes as $index) {
             $uri = realpath($this->pathExit . '/' . $files[$index]);
@@ -75,5 +83,23 @@ abstract class PhotosController extends FileController implements PhotosInterfac
         ]);
 
         return json_decode($res);
+    }
+
+    /**
+     * Choose file(s) to upload on servers VK.
+     *
+     * @param  array $files
+     * @return array indexes
+     */
+    private function chooseFiles(array $files): array
+    {
+        if ($this->_count > 1) {
+            if (count($files) < $this->_count) {
+                return array_keys($files);
+            }
+            return array_rand($files, $this->_count);
+        }
+
+        return [array_rand($files, $this->_count)];
     }
 }

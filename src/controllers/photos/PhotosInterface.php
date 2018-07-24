@@ -4,11 +4,5 @@ namespace src\controllers\photos;
 
 interface PhotosInterface
 {
-    /**
-     * Choose file to upload on servers VK.
-     *
-     * @param  array  $files
-     * @return array indexes
-     */
-    public function chooseFiles(array $files): array;
+    //
 }

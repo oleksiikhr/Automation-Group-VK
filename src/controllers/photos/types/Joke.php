@@ -4,7 +4,7 @@ namespace src\controllers\photos\types;
 
 use src\controllers\photos\PhotosController;
 
-class Card extends PhotosController
+class Joke extends PhotosController
 {
-    protected $folder = 'card';
+    protected $folder = 'joke';
 }
