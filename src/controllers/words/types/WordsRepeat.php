@@ -17,6 +17,8 @@ class WordsRepeat extends WordsController
     protected $title = 'Повтор изученных недавно слов';
 
     /**
+     * How many words to display.
+     *
      * @var int|null
      */
     private $_cut = null;
