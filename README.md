@@ -1,29 +1,36 @@
 # Automation Group VK (in development)
 
+<p align="center">
+<a href="https://github.com/Alexeykhr/Automation-Group-VK/tree/v1.0">The Old Version</a> |
+<a href="https://vk.com/eng_day">Group in VK</a> |
+<a href="https://vk.com/alexeykhr">Author in VK</a>
+</p>
+
 ## Requirements:
-```
-php 7.2 or newer
-extension pdo_mysql
-```
+1. PHP 7.2 or newer.
+2. MySQL, SQLite or PostgreSQL.
+3. Cron (optional).
+
+## Getting started
+1. git clone git://github.com/Alexeykhr/Automation-Group-VK.git
+2. run composer install
+3. copy .env.example to .env and configure
+4. copy configs/tokens-example.php to configs/tokens.php and configure
+5. Setup cron to file on every minute: /public/index.php
 
 ## Request params:
-**To run the script (configs/defines.php - APP_SECRET):**
 ```
-secret
+To protect the file from accidentally running the script (.env - APP_SECRET):
+- secret
+
+Filters for selecting the correct token (configs/tokens.php):
+- t_site
+- t_type
+- t_access
 ```
-*Example:*
+*Example query:*
 ```
-https://example.com/?secret=123
-```
-**To select a token (configs/tokens.php):**
-```
-t_site
-t_type
-t_access
-```
-*Example:*
-```
-https://example.com/?t_site=vk&t_type=user&t_access=photo,video
+https://localhost/?t_site=vk&t_type=user&t_access=photo,video&secret=123456
 ```
 
 ## License
