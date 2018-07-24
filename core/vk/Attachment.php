@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace core\vk\enums;
+namespace core\vk;
 
-final class Attachment
+class Attachment
 {
     const PHOTO = 'photo';
-    // TODO
+    // TODO another support types
 
     /**
      * Getting the line for the attachment.
@@ -14,7 +14,7 @@ final class Attachment
      * @param  string  $pageId
      * @return string|null
      */
-    public static function generate(array $arr, $pageId = '-' . G_ID): ?string
+    public static function generate(array $arr, string $pageId = '-' . G_ID): ?string
     {
         $str = null;
 

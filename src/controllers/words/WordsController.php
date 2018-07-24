@@ -3,9 +3,9 @@
 namespace src\controllers\words;
 
 use src\controllers\PostController;
-use core\vk\enums\Attachment;
 use core\vk\methods\Wall;
 use src\models\WordsEng;
+use core\vk\Attachment;
 use core\Token;
 
 abstract class WordsController extends PostController implements WordsInterface

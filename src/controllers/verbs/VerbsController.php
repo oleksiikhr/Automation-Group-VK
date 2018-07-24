@@ -3,8 +3,8 @@
 namespace src\controllers\verbs;
 
 use src\controllers\PostController;
-use core\vk\enums\Attachment;
 use core\vk\methods\Wall;
+use core\vk\Attachment;
 use src\models\Verbs;
 use core\Token;
 

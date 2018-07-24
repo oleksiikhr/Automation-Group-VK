@@ -3,9 +3,9 @@
 namespace src\controllers\photos;
 
 use src\controllers\FileController;
-use core\vk\enums\Attachment;
 use core\vk\methods\Photos;
 use core\vk\methods\Wall;
+use core\vk\Attachment;
 use core\Token;
 use core\Web;
 
