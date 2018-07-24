@@ -46,8 +46,7 @@ abstract class WordsController extends PostController implements WordsInterface
     {
         $words = $this->getWords();
 
-        $message = "{$this->smile} {$this->getTitle()}\n\n"
-            . self::getTextWords($words) . "\n\n" . $this->getHashtag();
+        $message = "{$this->smile} {$this->title}\n\n" . self::getTextWords($words) . "\n\n{$this->getHashtag()}";
 
         $attachments = Attachment::generate([Attachment::PHOTO => $photoId]);
 
