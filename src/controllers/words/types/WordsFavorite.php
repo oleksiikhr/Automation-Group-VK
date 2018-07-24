@@ -6,22 +6,32 @@ use src\controllers\words\WordsController;
 
 class WordsFavorite extends WordsController
 {
-    public function __construct(int $count = 5, int $offset = 0)
-    {
-        parent::__construct($count, $offset);
-        $this->addHashtag('words_favorite');
-    }
+    /**
+     * @var string
+     */
+    protected $name = 'favorite';
 
-    public function getTitle(): string
-    {
-        return 'Изучение слов выбранных сообществом';
-    }
+    /**
+     * @var string
+     */
+    protected $title = 'Изучение слов выбранных сообществом';
 
+    /**
+     * Get an array of words from the database.
+     *
+     * @return array
+     */
     public function getWords(): array
     {
         return $this->model->getList($this->count, $this->offset, 'favorite', 'DESC');
     }
 
+    /**
+     * Code execution after a successful post.
+     *
+     * @param  array  $ids
+     * @return bool
+     */
     public function complete(array $ids): bool
     {
         return $this->model->addFavorite($ids, -1);

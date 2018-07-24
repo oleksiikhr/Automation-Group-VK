@@ -7,6 +7,16 @@ use src\controllers\words\WordsController;
 class WordsRepeat extends WordsController
 {
     /**
+     * @var string
+     */
+    protected $name = 'repeat';
+
+    /**
+     * @var string
+     */
+    protected $title = 'Повтор изученных недавно слов';
+
+    /**
      * @var int|null
      */
     private $_cut = null;
@@ -15,14 +25,13 @@ class WordsRepeat extends WordsController
     {
         parent::__construct($count, $offset);
         $this->_cut = $cut;
-        $this->addHashtag('words_repeat');
     }
 
-    public function getTitle(): string
-    {
-        return 'Повтор изученных недавно слов';
-    }
-
+    /**
+     * Get an array of words from the database.
+     *
+     * @return array
+     */
     public function getWords(): array
     {
         $words = $this->model->getList($this->count, $this->offset, 'published_at', 'DESC');
@@ -35,6 +44,12 @@ class WordsRepeat extends WordsController
         return $words;
     }
 
+    /**
+     * Code execution after a successful post.
+     *
+     * @param  array  $ids
+     * @return bool
+     */
     public function complete(array $ids): bool
     {
         return true;

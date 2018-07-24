@@ -6,22 +6,32 @@ use src\controllers\words\WordsController;
 
 class WordsNew extends WordsController
 {
-    public function __construct(int $count = 5, int $offset = 0)
-    {
-        parent::__construct($count, $offset);
-        $this->addHashtag('words_new');
-    }
+    /**
+     * @var string
+     */
+    protected $name = 'new';
 
-    public function getTitle(): string
-    {
-        return 'Изучение новых слов';
-    }
+    /**
+     * @var string
+     */
+    protected $title = 'Изучение новых слов';
 
+    /**
+     * Get an array of words from the database.
+     *
+     * @return array
+     */
     public function getWords(): array
     {
         return $this->model->getList($this->count, $this->offset, 'published_at');
     }
 
+    /**
+     * Code execution after a successful post.
+     *
+     * @param  array  $ids
+     * @return bool
+     */
     public function complete(array $ids): bool
     {
         return $this->model->setPublishedAtNow($ids);

@@ -6,22 +6,32 @@ use src\controllers\words\WordsController;
 
 class WordsBadKnowing extends WordsController
 {
-    public function __construct(int $count = 5, int $offset = 0)
-    {
-        parent::__construct($count, $offset);
-        $this->addHashtag('words_bad_knowing');
-    }
+    /**
+     * @var string
+     */
+    protected $name = 'bad_knowing';
 
-    public function getTitle(): string
-    {
-        return 'Повтор плохо изученных слов';
-    }
+    /**
+     * @var string
+     */
+    protected $title = 'Повтор плохо изученных слов';
 
+    /**
+     * Get an array of words from the database.
+     *
+     * @return array
+     */
     public function getWords(): array
     {
         return $this->model->getList($this->count, $this->offset, 'rating', 'DESC');
     }
 
+    /**
+     * Code execution after a successful post.
+     *
+     * @param  array  $ids
+     * @return bool
+     */
     public function complete(array $ids): bool
     {
         return $this->model->addRating($ids, -1);

@@ -20,9 +20,20 @@ abstract class WordsController extends PostController implements WordsInterface
      */
     protected $hashtags = ['words'];
 
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $title;
+
     public function __construct(int $count = 5, int $offset = 0)
     {
         parent::__construct(new WordsEng, $count, $offset);
+        $this->addHashtag("words_{$this->name}");
     }
 
     /**
