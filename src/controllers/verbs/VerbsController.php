@@ -40,7 +40,7 @@ class VerbsController extends PostController
     {
         $verbs = $this->model->getList($this->count, $this->offset);
 
-        $message = $this->smile . " {$this->_title}\n\n" . self::getTextWords($verbs) . "\n\n" . $this->getHashtag();
+        $message = "{$this->smile} {$this->_title}\n\n" . self::getTextWords($verbs) . "\n\n{$this->getHashtag()}";
 
         $attachments = Attachment::generate([Attachment::PHOTO => $photoId]);
 
