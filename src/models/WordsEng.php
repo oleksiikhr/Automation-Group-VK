@@ -23,11 +23,11 @@ class WordsEng extends Model
     /**
      * Get a list of English words along with the translation.
      *
-     * @param  int          $count
-     * @param  int          $offset
+     * @param  int  $count
+     * @param  int  $offset
      * @param  string|null  $orderColumn
-     * @param  string       $orderBy
-     * @param  bool         $appendRusWords
+     * @param  string  $orderBy
+     * @param  bool  $appendRusWords
      * @return array
      */
     public function getList(int $count = 5, int $offset = 0, ?string $orderColumn = null,
@@ -52,7 +52,7 @@ class WordsEng extends Model
      * Change the current word rating.
      *
      * @param  array|int  $ids
-     * @param  int        $value
+     * @param  int  $value
      * @return bool
      */
     public function addRating($ids, int $value): bool
@@ -73,7 +73,7 @@ class WordsEng extends Model
      * Change the current word favorite.
      *
      * @param  array|int  $ids
-     * @param  int        $value
+     * @param  int  $value
      * @return bool
      */
     public function addFavorite($ids, int $value): bool

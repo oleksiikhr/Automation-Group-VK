@@ -19,8 +19,8 @@ class Verbs extends Model
     /**
      * Get random records from the table.
      *
-     * @param  int     $count
-     * @param  int     $offset
+     * @param  int  $count
+     * @param  int  $offset
      * @param  string  $orderColumn
      * @param  string  $orderBy
      * @return array
