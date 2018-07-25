@@ -23,7 +23,7 @@ class WordsNew extends WordsController
      */
     public function getWords(): array
     {
-        return $this->model->getList($this->count, $this->offset, 'published_at');
+        return $this->model->getList($this->count, $this->offset);
     }
 
     /**

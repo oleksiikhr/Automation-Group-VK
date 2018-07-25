@@ -30,16 +30,16 @@ class WordsEng extends Model
      * @param  bool  $appendRusWords
      * @return array
      */
-    public function getList(int $count = 5, int $offset = 0, ?string $orderColumn = null,
+    public function getList(int $count = 5, int $offset = 0, ?string $orderColumn = 'published_at',
                             string $orderBy = 'ASC', $appendRusWords = true): array
     {
-        $query = $this->getTable()->select('*')->where('enabled', 1);
-
-        if ($orderColumn) {
-            $query->orderBy($orderColumn, $orderBy);
-        }
-
-        $words = $query->limit($count)->offset($offset)->get();
+        $words = $this->getTable()
+            ->select('*')
+            ->where('enabled', 1)
+            ->orderBy($orderColumn, $orderBy)
+            ->limit($count)
+            ->offset($offset)
+            ->get();
 
         if ($appendRusWords) {
             $this->appendRusWords($words);
