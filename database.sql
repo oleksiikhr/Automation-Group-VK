@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Июл 24 2018 г., 21:35
+-- Время создания: Июл 25 2018 г., 20:54
 -- Версия сервера: 10.1.30-MariaDB
 -- Версия PHP: 7.2.2
 
@@ -38,12 +38,27 @@ CREATE TABLE `learn` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `tags`
+-- Структура таблицы `polls`
 --
 
-CREATE TABLE `tags` (
-  `tag_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL
+CREATE TABLE `polls` (
+  `poll_id` int(11) UNSIGNED NOT NULL,
+  `quest` varchar(255) DEFAULT NULL,
+  `type` int(11) NOT NULL,
+  `published_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `poll_answers`
+--
+
+CREATE TABLE `poll_answers` (
+  `poll_answer_id` int(11) NOT NULL,
+  `poll_id` int(10) UNSIGNED NOT NULL,
+  `answer` varchar(255) NOT NULL,
+  `is_correct` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -112,11 +127,18 @@ ALTER TABLE `learn`
   ADD UNIQUE KEY `title` (`title`);
 
 --
--- Индексы таблицы `tags`
+-- Индексы таблицы `polls`
 --
-ALTER TABLE `tags`
-  ADD PRIMARY KEY (`tag_id`),
-  ADD UNIQUE KEY `name` (`name`);
+ALTER TABLE `polls`
+  ADD PRIMARY KEY (`poll_id`),
+  ADD UNIQUE KEY `poll_id` (`quest`,`type`) USING BTREE;
+
+--
+-- Индексы таблицы `poll_answers`
+--
+ALTER TABLE `poll_answers`
+  ADD PRIMARY KEY (`poll_answer_id`),
+  ADD UNIQUE KEY `poll_id` (`poll_id`,`answer`);
 
 --
 -- Индексы таблицы `verbs`
@@ -156,10 +178,16 @@ ALTER TABLE `learn`
   MODIFY `learn_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT для таблицы `tags`
+-- AUTO_INCREMENT для таблицы `polls`
 --
-ALTER TABLE `tags`
-  MODIFY `tag_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `polls`
+  MODIFY `poll_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT для таблицы `poll_answers`
+--
+ALTER TABLE `poll_answers`
+  MODIFY `poll_answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `words_eng`
@@ -176,6 +204,12 @@ ALTER TABLE `words_rus`
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
+
+--
+-- Ограничения внешнего ключа таблицы `poll_answers`
+--
+ALTER TABLE `poll_answers`
+  ADD CONSTRAINT `poll_answers_ibfk_1` FOREIGN KEY (`poll_id`) REFERENCES `polls` (`poll_id`) ON DELETE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `verbs`
