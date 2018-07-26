@@ -12,21 +12,15 @@ class Polls
      *
      * @param  string  $token
      * @param  string  $question
-     * @param  array   $answers - max length is 10
-     * @param  bool    $isAnonymous
+     * @param  array  $answers
+     * @param  bool  $isAnonymous
      * @return mixed
      * @throws \Exception
      *
      * @see https://vk.com/dev/polls.create
      */
-    public static function createGroup(string $token, string $question, array $answers, bool $isAnonymous = true)
+    public static function create(string $token, string $question, array $answers, bool $isAnonymous = true)
     {
-        $count = count($answers);
-
-        if ($count < 1 || 10 < $count) {
-            throw new \Exception('polls.create - Количество ответов должно быть от 0 до 10');
-        }
-
         return VK::send($token, 'polls.create', [
             'owner_id'     => '-' . G_ID,
             'question'     => $question,
