@@ -52,7 +52,6 @@ class Polls extends Model
     {
         $answers = $this->getTable()
             ->select('poll_answers.*')
-            ->orderBy('is_correct', 'DESC')
             ->leftJoin('poll_answers', 'poll_answers.poll_id', '=', $this->getTablePrimaryColumn())
             ->get();
 
