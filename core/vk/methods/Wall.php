@@ -11,10 +11,10 @@ class Wall
      * Adds a new post on a user wall or community wall.
      * Can also be used to publish suggested or scheduled posts.
      *
-     * @param  string       $token
+     * @param  string   $token
      * @param  string|null  $message
      * @param  string|null  $attachments
-     * @param  bool         $fromGroup
+     * @param  bool  $fromGroup
      * @return mixed
      * @throws \Exception
      *
@@ -29,5 +29,27 @@ class Wall
             'attachments' => $attachments,
             'guid'        => mt_rand(),
         ], HttpMethod::POST);
+    }
+
+    /**
+     * Adds a comment to a post on a user wall or community wall.
+     *
+     * @param  string  $token
+     * @param  int  $postId
+     * @param  string  $message
+     * @return mixed
+     * @throws \Exception
+     *
+     * @see https://vk.com/dev/wall.createComment
+     */
+    public static function createComment(string $token, int $postId, string $message)
+    {
+        return VK::send($token, 'wall.createComment', [
+            'owner_id'   => '-' . G_ID,
+            'post_id'    => $postId,
+            'message'    => $message,
+            'from_group' => G_ID,
+            'guid'       => mt_rand(),
+        ]);
     }
 }
