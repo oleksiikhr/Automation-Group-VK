@@ -5,7 +5,7 @@ namespace core\vk;
 class Attachment
 {
     const PHOTO = 'photo';
-    // TODO another support types
+    const POLL  = 'poll';
 
     /**
      * Getting the line for the attachment.
