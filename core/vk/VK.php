@@ -9,7 +9,7 @@ class VK
 {
     const VK_API = 'https://api.vk.com/method/';
 
-    const VK_VERSION = '5.74';
+    const VK_VERSION = '5.80';
 
     /**
      * Send request to VK.
