@@ -1,8 +1,11 @@
 # Automation Group VK (in development)
 <p align="center">
-<a href="https://github.com/Alexeykhr/Automation-Group-VK/tree/v1.0">The Old Version</a> |
-<a href="https://vk.com/eng_day">Group in VK</a> |
-<a href="https://vk.com/alexeykhr">Author in VK</a>
+  <a href="https://vk.com/eng_day">Group in VK |
+  <a href="https://vk.com/alexeykhr">Author in VK</a>
+</p>
+<p>
+  <a href="https://github.com/Alexeykhr/Automation-Group-VK/tree/v1.0">Version 1.0</a>
+  - callback API, upload youtube playlists, custom templates
 </p>
 
 ## Requirements:
@@ -33,6 +36,17 @@ Filters for selecting the correct token (configs/tokens.php):
 ```
 https://localhost/?t_site=vk&t_type=user&t_access=photo,video&secret=123456
 ```
+
+## TODO
+Types of posts:
+- [ ] stories
+- [ ] exam
+- [ ] videos
+- [x] words
+- [x] photos
+- [x] verbs
+- [x] polls
+- [x] learn
 
 ## License
 MIT
