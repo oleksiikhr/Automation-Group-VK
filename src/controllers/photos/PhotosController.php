@@ -51,11 +51,16 @@ abstract class PhotosController extends FileController implements PhotosInterfac
 
         foreach ($chosenIndexes as $index) {
             $uri = realpath($this->pathExit . '/' . $files[$index]);
+
             try {
                 $server = Photos::getWallUploadServer(Token::getToken());
+
                 $upload = self::uploadPhoto($server->response->upload_url, $uri);
+
                 $res = Photos::saveWallPhotoGroup(Token::getToken(), $upload->photo, $upload->server, $upload->hash);
+
                 $attachments .= Attachment::generate([Attachment::PHOTO => $res->response[0]->id], $res->response[0]->owner_id) . ',';
+
             } catch (\Exception $e) {
                 die($e->getMessage());
             }

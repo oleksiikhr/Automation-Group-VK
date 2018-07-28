@@ -11,10 +11,10 @@ class Attachment
      * Getting the line for the attachment.
      *
      * @param  array $arr
-     * @param  string  $pageId
+     * @param  string|int  $pageId
      * @return string|null
      */
-    public static function generate(array $arr, string $pageId = '-' . G_ID): ?string
+    public static function generate(array $arr, $pageId = '-' . G_ID): ?string
     {
         $str = null;
 
