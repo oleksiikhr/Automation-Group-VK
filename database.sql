@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Июл 25 2018 г., 20:54
+-- Время создания: Июл 28 2018 г., 15:41
 -- Версия сервера: 10.1.30-MariaDB
 -- Версия PHP: 7.2.2
 
@@ -45,6 +45,7 @@ CREATE TABLE `polls` (
   `poll_id` int(11) UNSIGNED NOT NULL,
   `quest` varchar(255) DEFAULT NULL,
   `type` int(11) NOT NULL,
+  `correctAnswer` varchar(255) NOT NULL,
   `published_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -57,8 +58,7 @@ CREATE TABLE `polls` (
 CREATE TABLE `poll_answers` (
   `poll_answer_id` int(11) NOT NULL,
   `poll_id` int(10) UNSIGNED NOT NULL,
-  `answer` varchar(255) NOT NULL,
-  `is_correct` tinyint(1) NOT NULL DEFAULT '0'
+  `answer` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -181,25 +181,25 @@ ALTER TABLE `learn`
 -- AUTO_INCREMENT для таблицы `polls`
 --
 ALTER TABLE `polls`
-  MODIFY `poll_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `poll_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `poll_answers`
 --
 ALTER TABLE `poll_answers`
-  MODIFY `poll_answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `poll_answer_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `words_eng`
 --
 ALTER TABLE `words_eng`
-  MODIFY `word_eng_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35895;
+  MODIFY `word_eng_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `words_rus`
 --
 ALTER TABLE `words_rus`
-  MODIFY `word_rus_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25863;
+  MODIFY `word_rus_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
