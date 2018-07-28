@@ -1,0 +1,10 @@
+<?php declare(strict_types=1);
+
+namespace src\controllers\photos\types;
+
+use src\controllers\photos\PhotosController;
+
+class PhotosJoke extends PhotosController
+{
+    protected $folder = 'joke';
+}

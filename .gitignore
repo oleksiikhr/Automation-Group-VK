@@ -1,17 +1,20 @@
 # phpstorm project files
 .idea
 
-# windows thumbnail cache
+# Windows thumbnail cache
 Thumbs.db
 
-# composer vendor dir
+# Composer vendor dir
 /vendor
 
-# pictures.
-resources/
+# Pictures (img files).
+/resources
 
-# passwords.
-/configs/defines.php
+# Passwords.
+/configs/tokens.php
 
-# htaccess
+# Hide IP
 .htaccess
+
+# Hide configure
+.env

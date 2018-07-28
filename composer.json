@@ -7,19 +7,24 @@
   "homepage": "https://github.com/Alexeykhr/Automation-Group-VK",
   "authors": [
     {
-      "name": "Alexey Khrusch",
+      "name": "Alexey Khrushch",
       "role": "Developer"
     }
   ],
   "require":
   {
-    "php": ">=7.0.0",
-    "usmanhalalit/pixie": "2.*@dev"
+    "php": ">=7.2.0",
+    "usmanhalalit/pixie": "2.*@dev",
+    "vlucas/phpdotenv": "^2.4",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*"
   },
   "autoload":
   {
     "psr-4": {
-      "gvk\\": "src/",
+      "src\\": "src/",
+      "core\\": "core/",
       "tmp\\": "templates/"
     }
   }

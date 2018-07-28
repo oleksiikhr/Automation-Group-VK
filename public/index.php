@@ -1,73 +1,70 @@
-<?php
-require_once __DIR__ . '/run.php';
+<?php declare(strict_types=1);
 
-$key = \gvk\Config::setRandomSecretKey();
-?>
+use src\controllers\photos\types as photos;
+use src\controllers\polls\types as polls;
+use src\controllers\words\types as words;
+use src\controllers\verbs;
+use src\controllers\learn;
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+require_once __DIR__ . '/../server.php';
 
-    <title>English - Добавление данных в БД</title>
+// .env - APP_SECRET
+if (! \core\Protect::cron()) {
+    die;
+}
 
-    <link href="css/style.css" rel="stylesheet">
+$h = (int)date('G');
+$m = (int)date('i');
 
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/axios.js"></script>
-    <script type="text/javascript" src="js/script.js"></script>
-</head>
-<body>
+/**
+ * | ------------------------------------------------------------------------
+ * | The file is run using the crown every minute.
+ * | ------------------------------------------------------------------------
+ * |
+ * | @var $h - Hours
+ * | @var $m - Minutes
+ * |
+ */
 
-<div class="section poll_type1">
-    <span>Опрос 1</span>
+// TODO Polls - start($photoId)
+// TODO Create table?
+// TODO Change time
 
-    <form id="poll_type1">
-        <input type="text" name="quest" placeholder="Вопрос" onblur="findPoll('poll_type1');" required>
-        <input type="text" name="correct_answer" placeholder="Правильный ответ" required>
-        <textarea name="answers" title="Ответы" rows="4" placeholder="Ответы" required></textarea>
-        <input type="hidden" name="secret" value="<?= $key; ?>">
-        <input type="hidden" name="action" value="add">
-        <input type="submit" value="Добавить" onclick="sendPoll('poll_type1'); return false;">
-    </form>
-</div>
+if ($m === 0) {
 
-<div class="section poll_type2">
-    <span>Опрос 2</span>
+    if     ($h % 3 == 0)
+        (new polls\PollsTranslate)->start();
 
-    <form id="poll_type2">
-        <input type="text" name="quest" placeholder="Вопрос" onblur="findPoll('poll_type2');" required>
-        <input type="text" name="correct_answer" placeholder="Правильный ответ" required>
-        <textarea name="answers" title="Ответы" rows="4" placeholder="Ответы" required></textarea>
-        <input type="hidden" name="secret" value="<?= $key; ?>">
-        <input type="hidden" name="action" value="add">
-        <input type="submit" value="Добавить" onclick="sendPoll('poll_type2'); return false;">
-    </form>
-</div>
+    elseif ($h % 3 == 1)
+        (new polls\PollsMissing)->start();
 
-<div class="section poll_type3">
-    <span>Опрос 3</span>
+    elseif ($h % 3 == 2)
+        (new words\WordsNew(10, 0))->start(456240584);
 
-    <form id="poll_type3">
-        <input type="text" name="correct_answer" placeholder="Правильный ответ" onblur="findPoll('poll_type3');" required>
-        <textarea name="answers" title="Ответы" rows="4" placeholder="Ответы" required></textarea>
-        <input type="hidden" name="secret" value="<?= $key; ?>">
-        <input type="hidden" name="action" value="add">
-        <input type="submit" value="Добавить" onclick="sendPoll('poll_type3'); return false;">
-    </form>
-</div>
+}
+elseif ($m === 30) {
 
-<div class="section youtube">
-    <span>Youtube</span>
+    if (in_array($h, [12]))
+        (new learn\LearnController)->start(456241870);
 
-    <form id="youtube">
-        <input type="text" name="title" placeholder="Название" required>
-        <input type="text" name="playlist" placeholder="Плейлист" required>
-        <input type="hidden" name="secret" value="<?= $key; ?>">
-        <input type="submit" value="Добавить" onclick="sendYoutube(); return false;">
-    </form>
+    // etc
 
-</body>
-</html>
+}
+
+// Polls
+//(new polls\PollsFind)->start();
+
+// Photos
+//(new photos\PhotosCard(mt_rand(1, 10)))->start();
+//(new photos\PhotosJoke(mt_rand(1, 10)))->start();
+//(new photos\PhotosLearn(10))->start();
+
+// Words
+//(new words\WordsFavorite(10, 0))->start(456240584);
+//(new words\WordsBadKnowing(10, 0))->start(456240584);
+//(new words\WordsRepeat(mt_rand(10, 50), mt_rand(0, 20), 10))->start(456240584);
+
+// Verbs
+//(new verbs\VerbsController())->start(456242834);
+
+echo '<br><br>time: ' . (microtime(true) - APP_START);

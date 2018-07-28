@@ -1,0 +1,10 @@
+# Apache server
+# To work this file - you need to rename it to ".htaccess"
+
+# To access all files by IP (except callback.php)
+Order Deny, Allow
+Deny from all
+Allow from REPLACE_BY_YOUR_IP
+<Files callback.php>
+  Allow from all
+</Files>

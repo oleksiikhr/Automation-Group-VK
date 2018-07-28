@@ -1,17 +1,19 @@
 <?php
 
 /**
- * Connect to DB.
+ * Connect to Database.
  *
  * @see https://github.com/usmanhalalit/pixie docs
+ *
+ * @return array
  */
 
 return [
-    'driver'    => 'mysql',
-    'host'      => DB_HOST,
-    'database'  => DB_TABLE,
-    'username'  => DB_USER,
-    'password'  => DB_PASS,
+    'driver'    => getenv('DB_CONNECTION') ?: 'mysql',
+    'host'      => getenv('DB_HOST') ?: '127.0.0.1',
+    'database'  => getenv('DB_DATABASE') ?: 'english',
+    'username'  => getenv('DB_USERNAME') ?: 'root',
+    'password'  => getenv('DB_PASSWORD') ?: '',
     'charset'   => 'utf8',
     'collation' => 'utf8_unicode_ci',
     'prefix'    => '',

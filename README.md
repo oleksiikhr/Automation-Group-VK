@@ -1,50 +1,52 @@
-# Automation Group VK
-
+# Automation Group VK (in development)
 <p align="center">
-<a href="https://vk.com/eng_day">Link example</a> |
-<a href="https://vk.com/alexeykhr">Issues</a>
+  <a href="https://vk.com/eng_day">Group in VK |
+  <a href="https://vk.com/alexeykhr">Author in VK</a>
+</p>
+<p>
+  <a href="https://github.com/Alexeykhr/Automation-Group-VK/tree/v1.0">Version 1.0</a>
+  - callback API, upload youtube playlists, custom templates
 </p>
 
-## Installing
-- Download this repo or fork
-- Rename defines-sample.php to defines.php
-- Configuration all files in configs folder
-- Write in console: "composer update"
-- Run public/init.php file
-- Add new polls in DB tables
-- Setup cron task on public/run.php. Don't forget get parameter (?token=SECRET_KEY)
-- Rename .htaccess.example to .htaccess and change ip. (for additional protection)
+## Requirements:
+1. PHP 7.2 or newer.
+2. MySQL, SQLite or PostgreSQL.
+3. Cron (optional).
 
-## Folder structure:
-- configs (all configuration)
-- public
-  - controllers (index.php uses these files)
-  - css (index.php uses these files)
-  - js (index.php uses these files)
-  - callback.php (receives a response from the server VK)
-  - index.php (frontend, to add new polls and other)
-  - init.php (initial setting, DB)
-  - parse.php (parse data from other sites) *cron
-  - run.php (primary boot file)
-  - vk.php (sending data to the VK server) *cron
-- resources
-  - card (contains folders, and in them on 50 files. Files contain a training card with a word. 1 file is loaded)
-  - fun (contains folders, and in them on 50 files. Files contain a a funny picture or a quote (mostly). 1 file is loaded)
-  - img (contains a folder with 50 folders. These 50 folders contain 1 to 10 files. Files of training nature. The entire folder is downloaded to the server)
-- src
-  - libs (downloaded outside the composer)
-  - vk (core)
-  - youtube
-  - other base files
-- templates (contains custom events - game, euro2017, etc.)
+## Getting started
+1. git clone git://github.com/Alexeykhr/Automation-Group-VK.git
+2. run composer install
+3. copy .env.example to .env and configure
+4. copy configs/tokens-example.php to configs/tokens.php and configure
+5. Import database.sql to itself
+6. Setup cron to file on every minute: /public/index.php
 
-## To-do list:
-- One video - several albums
-- Relations in DB
-- Transfer youtube_playlist from Config table in new own table
-- Check for file upload in VK server and error handling
-- Log file
-- ..
+## Request params:
+```
+To protect the file from accidentally running the script (.env - APP_SECRET):
+- secret
+
+Filters for selecting the correct token (configs/tokens.php):
+- t_site
+- t_type
+- t_access
+```
+
+*Example query:*
+```
+https://localhost/?t_site=vk&t_type=user&t_access=photo,video&secret=123456
+```
+
+## TODO
+Types of posts:
+- [ ] stories
+- [ ] exam
+- [ ] videos
+- [x] words
+- [x] photos
+- [x] verbs
+- [x] polls
+- [x] learn
 
 ## License
 MIT
