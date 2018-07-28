@@ -4,12 +4,12 @@ namespace src\controllers\polls\types;
 
 use src\controllers\polls\PollsController;
 
-class PollsTranslate extends PollsController
+class PollsMissing extends PollsController
 {
     /**
      * @var int
      */
-    protected $type = 0;
+    protected $type = 1;
 
     /**
      * @var int
@@ -19,7 +19,7 @@ class PollsTranslate extends PollsController
     /**
      * @var string
      */
-    protected $name = 'translate';
+    protected $name = 'missing';
 
     /**
      * @var string

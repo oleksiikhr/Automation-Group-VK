@@ -4,12 +4,12 @@ namespace src\controllers\polls\types;
 
 use src\controllers\polls\PollsController;
 
-class PollsTranslate extends PollsController
+class PollsFind extends PollsController
 {
     /**
      * @var int
      */
-    protected $type = 0;
+    protected $type = 2;
 
     /**
      * @var int
@@ -19,10 +19,10 @@ class PollsTranslate extends PollsController
     /**
      * @var string
      */
-    protected $name = 'translate';
+    protected $name = 'find';
 
     /**
      * @var string
      */
-    protected $defaultQuest;
+    protected $defaultQuest = 'Выберите правильный вариант.';
 }

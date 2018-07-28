@@ -1,13 +1,16 @@
 <?php declare(strict_types=1);
 
 //use src\controllers\words\types\WordsBadKnowing;
+//use src\controllers\polls\types\PollsTranslate;
 //use src\controllers\words\types\WordsFavorite;
 //use src\controllers\photos\types\PhotosLearn;
+//use src\controllers\polls\types\PollsMissing;
 //use src\controllers\words\types\WordsRepeat;
 //use src\controllers\photos\types\PhotosCard;
 //use src\controllers\photos\types\PhotosJoke;
 //use src\controllers\verbs\VerbsController;
 //use src\controllers\learn\LearnController;
+//use src\controllers\polls\types\PollsFind;
 //use src\controllers\words\types\WordsNew;
 
 require_once __DIR__ . '/../server.php';
@@ -15,6 +18,11 @@ require_once __DIR__ . '/../server.php';
 if (! \core\Protect::cron()) {
     die;
 }
+
+// Polls
+//(new PollsTranslate)->start();
+//(new PollsMissing)->start();
+//(new PollsFind)->start();
 
 // Learn
 //(new LearnController)->start(456241870);

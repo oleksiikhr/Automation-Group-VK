@@ -37,6 +37,11 @@ abstract class PollsController extends Controller
     protected $maxAnswers = 4;
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
      * @var PollModel
      */
     private $_model;
@@ -44,7 +49,7 @@ abstract class PollsController extends Controller
     public function __construct()
     {
         $this->_model = new PollModel;
-        $this->addHashtag("polls_type{$this->type}");
+        $this->addHashtag("polls_{$this->name}");
     }
 
     /**
