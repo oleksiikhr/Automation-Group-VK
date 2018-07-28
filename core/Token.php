@@ -4,15 +4,17 @@ namespace core;
 
 class Token
 {
+    private const STORAGE_TOKENS_FILE = D_ROOT . '/configs/tokens.php';
+
     /**
-     * @var string
+     * @var object
      */
     private static $_token;
 
     /**
-     * @var string
+     * @var array
      */
-    private const STORAGE_TOKENS_FILE = D_ROOT . '/configs/tokens.php';
+    private static $_additionalTokens;
 
     /**
      * Receiving the required token with filters from the incoming data.
@@ -27,9 +29,66 @@ class Token
         }
 
         $tokens = require D_ROOT . '/configs/tokens.php';
-        $filteredTokens = [];
+        $filteredTokens = self::filterTokens($tokens);
 
+        if (! $filteredTokens) {
+            throw new \Exception('Tokens are absent');
+        }
+
+        shuffle($filteredTokens);
+
+        self::$_token = array_pop($filteredTokens);
+        self::$_additionalTokens = $filteredTokens;
+    }
+
+    /**
+     * Get the main token.
+     *
+     * @return string
+     */
+    public static function getToken(): string
+    {
+        return self::$_token['token'];
+    }
+
+    /**
+     * Get additional tokens.
+     *
+     * @return array
+     */
+    public static function getAdditionalTokens(): array
+    {
+        $tokens = [];
+
+        foreach (self::$_additionalTokens as $token) {
+            $tokens[] = $token['token'];
+        }
+
+        return $tokens;
+
+    }
+
+    /**
+     * Are there additional tokens?
+     *
+     * @return bool
+     */
+    public static function hasAdditionalTokens(): bool
+    {
+        return count(self::$_additionalTokens) > 0;
+    }
+
+    /**
+     * Filter tokens using GET parameters.
+     *
+     * @param  array  $tokens
+     * @return array
+     */
+    private static function filterTokens(array $tokens)
+    {
         list($site, $type, $access) = self::getFilterTokensRequest();
+
+        $filteredTokens = [];
 
         if (! empty($access)) {
             $access = explode(',', $access);
@@ -55,21 +114,7 @@ class Token
             $filteredTokens[] = $token;
         }
 
-        if (! $filteredTokens) {
-            throw new \Exception('Tokens are absent');
-        }
-
-        self::$_token = $filteredTokens[array_rand($filteredTokens)]['token'];
-    }
-
-    /**
-     * Get current token.
-     *
-     * @return string
-     */
-    public static function getToken(): string
-    {
-        return self::$_token;
+        return $filteredTokens;
     }
 
     /**

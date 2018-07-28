@@ -1,6 +1,7 @@
 # Automation Group VK (in development)
 <p align="center">
-  <a href="https://vk.com/eng_day">Group in VK |
+  <a href="https://vk.com/eng_day">Group in VK</a>
+  |
   <a href="https://vk.com/alexeykhr">Author in VK</a>
 </p>
 <p>
